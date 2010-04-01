@@ -1,8 +1,8 @@
-This should serve as a little collated reference regarding graph visualization,
-analysis and storage. Toolboxes, software and libraries and more.
+A collated list of web references having to do with networks or graphs in its various aspects:
+software, visualization, analysis, storage, conferences, portals, storages,
+wikis, toolboxes, libraries, people, labs, layouting, varia.
 
-
-Software (Network Analysis Platforms)
+Software
 --------
 
 General
@@ -10,24 +10,6 @@ General
 
 * `Network Workbench Tool <http://nwb.slis.indiana.edu/>`_
 * `PyGraphViz <http://www.graphviz.org/>`_
-
-Systems Biology
-^^^^^^^^^^^^^^^^
-* Cytoscape (JAVA): http://www.cytoscape.org/
-CY, Cytoscape31;
-GM, GenMAPP26;
-VA, VisANT24;
-OS, Osprey23 (http://biodata.mshri.on.ca/osprey/);
-CD, CellDesigner25;
-AR, Ariadne Genomics Pathway Studio;
-IN, Ingenuity Pathways Analysis;
-GG, GeneGo;
-PI, PIANA
-(http://sbi.imim.es/piana/);
-PR, ProViz (http://cbi.labri.fr/eng/proviz.htm);
-BL, BioLayout; PA, PATIKA.
-http://vis.stanford.edu/protovis/
-
 * `Interactorium <http://cgi.cse.unsw.edu.au/~wyos/skyrails/>`_ `(very nice) <http://www.flickr.com/photos/14933315@N05/sets/72157610707590708/>`_
 * `Walrus - Graph Visualization Tool  <http://www.caida.org/tools/visualization/walrus/>`_
 * `GUESS - Graph Exploration System <http://graphexploration.cond.org/download.html#source>`_
@@ -35,6 +17,25 @@ http://vis.stanford.edu/protovis/
 * `ConnectomeViewer <http://www.connectomeviewer.org/>`_
 * `Gephi <http://gephi.org/>`_
 * `Map Generator <http://www.mapequation.org/>`_
+* `Pajek <http://pajek.imfm.si/doku.php>`_
+
+Systems Biology
+^^^^^^^^^^^^^^^^
+* `Cytoscape (JAVA) <http://www.cytoscape.org/>`_
+* `GenMAPP <http://www.genmapp.org/>`_
+* `VisANT <http://visant.bu.edu/>`_
+* `Osprey <http://biodata.mshri.on.ca/osprey/servlet/Index>`_
+* `CellDesigner <http://www.celldesigner.org/>`_
+* `Ariadne Genomics Pathway Studio <http://www.ariadnegenomics.com/products/pathway-studio/>`_
+* `Ingenuity Pathways Analysis <http://www.ingenuity.com/>`_
+* `PIANA <http://sbi.imim.es/piana/>`_
+* `ProViz <http://cbi.labri.fr/eng/proviz.htm>`_
+* `BioLayout <http://www.biolayout.org/>`_
+* `PATIKA <http://www.patika.org/>`_
+
+Social Network Analysis
+^^^^^^^^^^^^^^^^^^^^^^^
+* `vizster <http://hci.stanford.edu/jheer/projects/vizster/>`_
 
 Dynamic network software:
 * `SoNIA <http://www.stanford.edu/group/sonia/index.html>`_
@@ -52,14 +53,22 @@ Libraries
 * `Computational Geometry Algorithms Library <http://www.cgal.org/Manual/last/doc_html/cgal_manual/packages.html#part_XVIII>`_
 * `JUNG <http://jung.sourceforge.net/index.html>`_
 
-More tailored towards visualization:
+Mainly tailored towards visualization:
 * `Flare Prefuse <http://flare.prefuse.org/>`_
 * `UbiGraph <http://www.ubietylab.net/ubigraph/index.html>`_
+* `Protovis <http://vis.stanford.edu/protovis/>`_
 
+Labs
+----
+* `Center for Complex Network Research (CCNR)small logo <http://www.nd.edu/~networks/>`_
+* `Barabasi Lab <http://www.barabasilab.com/>`_
 
 People
 ------
-Various people that have done interesting work on network visualization.
+* `Mark Newman <http://www-personal.umich.edu/~mejn/>`_
+* `Aaron Clauset <http://tuvalu.santafe.edu/~aaronc/>`_
+
+Various people that have done interesting work on network visualization:
 * `Tamara Munzner <http://people.cs.ubc.ca/~tmm/>`_
 * `Danny Holten <http://www.win.tue.nl/~dholten/>`_
 * `Katharina A. Zweig <http://www.ninasnet.de/>`_
@@ -71,7 +80,9 @@ Conferences
 * `Graph Drawing 2009 <http://facweb.cs.depaul.edu/gd2009/gd2009.asp>`_
 * `Graph Drawing 2008 <http://www.ics.forth.gr/gd2008/>`_
 * `Graph Drawing 2001 <http://www.ads.tuwien.ac.at/gd2001/>`_
-
+* `NetSci 2010 <http://www.netsci2010.net/>`_
+* `2nd Workshop on Complex Networks <https://cs.fit.edu/Projects/complenet/CompleNet/Home.html>`_
+* `Simplifying Complex Networks <http://www.simplexconf.net/>`_
 
 Wikis, Portals, Blogs
 -----------------
