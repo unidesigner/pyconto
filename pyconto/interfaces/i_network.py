@@ -8,6 +8,7 @@ is_directed = Bool
 is_weighted = Bool
 is_signed = Bool
 is_connected = Bool
+is_hypergraph = Bool
 
 metadata = DictStrAny
 nodekeys = DictStrAny

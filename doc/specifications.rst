@@ -40,9 +40,8 @@ exponentially truncated power law model
 y_i = c*d_i**(alpha-1)*exp(-d_i/k)
 
 http://sites.google.com/site/randomnetworkplugin/
+
 - check hdf5 http://h5py.alfven.org/
 
 hierarchial networks:
 http://arxiv.org/abs/physics/0610051
-
-powerful clustering: http://micans.org/mcl/
