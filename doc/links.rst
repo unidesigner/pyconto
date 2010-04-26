@@ -71,6 +71,7 @@ People
 * `Aaron Clauset <http://tuvalu.santafe.edu/~aaronc/>`_
 * `Santo Fortunato <http://sites.google.com/site/santofortunato/home>`_
 * `Alex Arenas <http://deim.urv.cat/~aarenas/>`_
+* `Uri Alon <http://www.weizmann.ac.il/mcb/UriAlon/>`_
 
 Various people that have done interesting work on network visualization:
 * `Tamara Munzner <http://people.cs.ubc.ca/~tmm/>`_
@@ -79,12 +80,12 @@ Various people that have done interesting work on network visualization:
 
 Conferences
 -----------
+* `NetSci 2010 <http://www.netsci2010.net/>`_
 * `Graph Drawing Portal <http://graphdrawing.org/index.html>`_
 * `Graph Drawing 2010 <http://www.graphdrawing.org/gd2010/>`_
 * `Graph Drawing 2009 <http://facweb.cs.depaul.edu/gd2009/gd2009.asp>`_
 * `Graph Drawing 2008 <http://www.ics.forth.gr/gd2008/>`_
 * `Graph Drawing 2001 <http://www.ads.tuwien.ac.at/gd2001/>`_
-* `NetSci 2010 <http://www.netsci2010.net/>`_
 * `2nd Workshop on Complex Networks <https://cs.fit.edu/Projects/complenet/CompleNet/Home.html>`_
 * `Simplifying Complex Networks <http://www.simplexconf.net/>`_
 * `International Conference on Complex Networks <http://cnrc.snu.ac.kr/conference200812/index.html>`_
@@ -116,10 +117,13 @@ Varia
 -----
 * `Ideas for modern data visualization <http://www.smashingmagazine.com/2007/08/02/data-visualization-modern-approaches/>`_
 * `Information flow in science <http://www.visualcomplexity.com/vc/project_details.cfm?id=650&index=650&domain>`_
+* `Nature-inspired network design <http://culturingscience.com/2010/02/11/nature-inspired-network-design-recent-studies-in-slime-mold-and-leaf-veins/>`_
+* `Mocapy++ - A toolkit for inference and learning in dynamic Bayesian networks <http://www.biomedcentral.com/1471-2105/11/126>`_
+
+https://www.kitware.com/InfovisWiki/index.php/Graph_Algorithms_Roadmap
 http://www.cmol.nbi.dk/javaapp.php
 http://eigenfactor.org/methods.htm
 http://www.tp.umu.se/~rosvall/livemod.html
-* `Nature-inspired network design <http://culturingscience.com/2010/02/11/nature-inspired-network-design-recent-studies-in-slime-mold-and-leaf-veins/>`_
 
 Dynamical networks
 ------------------

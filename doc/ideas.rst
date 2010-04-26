@@ -1,7 +1,3 @@
-https://www.kitware.com/InfovisWiki/index.php/Graph_Algorithms_Roadmap
-
-- check hdf5 http://h5py.alfven.org/
-
 
 the fluctuations represent neuronal avalanches, which are spatio-temporal clusters
 of synchronized activity that follow a power law in size distributions as expected
@@ -20,3 +16,13 @@ A computer model is described which is used to assess the dynamical complexity o
 
 Dynamic phenotypes: time series analysis techniques for characterizing neuronal and behavioral dynamics.
 http://www.ncbi.nlm.nih.gov/pubmed/16595862?dopt=Abstract
+
+Most current models of neural network dynamics
+focus on maintaining the right balance of network activation and rest through functional interactions
+among populations of inhibitory and excitatory nodes (Beggs and Plenz, 2003). Alternative balancing
+mechanisms may be provided by broad external input from neuromodulatory systems or self-sustained
+neuronal activity (Muresan and Savin, 2007). However, the topology of neural networks may also
+contribute to critical network dynamics, even in the absence of explicit inhibition. For this reason, we
+are particularly interested in the relationship of different kinds of neural network topology to the
+condition of limited sustained activation (LSA). 
+http://frontiersin.org/neuroscience/neuroinformatics/paper/10.3389/fninf.2010.00008/
