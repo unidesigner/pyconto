@@ -1,154 +1,43 @@
 Typology of Networks
 --------------------
 
-CNetwork : Connectome Network
-
-SNetwork : Structural Network
-
-FNetwork : Functional Network
-
-SFNetwork : Structure-Function Network
-
-CNetwork : Causal Network
-
-HNetwork : Hierarchical Network
-
-PNetwork : Probabilistc Network
-
-TNetwork : Temporal Network
-point process vs. continous time
-
-MMNetwork : Multi-Modal Network, nodes/edges can have different roles
-
-FNetwork : Factor Graph Network
-
-PCNetwork : A Peter Cariani Network
-
-AONetwork : Alpha-Omega Network
-Brain-Body-Environment-History - All in one pack
-
-PRNetwork : Paul Rogister Network
-distance=energy/time networks. 
-
-Dense Networks : All edges have at least a value
-Sparse Networks : Only a few edges have a value
-
-Single part network vs. bipartite network
-
-Dimensions :
-* Binary
-* Directed
-* Signed
-* Weighted
-* Features on the nodes
-
-Global characteristics vs. Local characteristics
-
-Degree correlations:
-Assortative network, uncorrelated network, disassortative network
-
-The notion of "distance"
-
-Network attributes
-------------------
-- Important: What attributes exists is dependent of the class of network!
-The heritability structure must be correct.
-.number_of_nodes
-.number_of_edges
-.number_of_components
+* CNetwork : Connectome Network
+* SNetwork : Structural Network
+* FNetwork : Functional Network
+* SFNetwork : Structure-Function Network
+* CNetwork : Causal Network
+* HNetwork : Hierarchical Network
+* PNetwork : Probabilistc Network
+* TNetwork : Temporal Network, point process vs. continous time
+* MMNetwork : Multi-Modal Network, nodes/edges can have different roles
+* FNetwork : Factor Graph Network
+* PCNetwork : A Peter Cariani Network
+* AONetwork : Alpha-Omega Network, Brain-Body-Environment-History - All in one pack
+* PRNetwork : Paul Rogister Network, distance=energy/time networks. 
+* Dense Networks : All edges have at least a value; 
+* Sparse Networks : Only a few edges have a value
+* Single part network vs. bipartite network
+* EMNetwork : Erich Minch Network
+* Degree correlations: Assortative network, uncorrelated network, disassortative network
+* An edge that excites or inhibits another edge (instead of a node)
+seen on: http://cneuro.rmki.kfki.hu/sites/default/files/nnw6.pdf
+* Probabilistic causal networks, such as Boolean, Bayesian, and probabilistic
+Gaussian networks, include edges with direction, and therefore can represent
+causal relationships among genes when causality is known. The inclusion of this
+information can lead to improved predictions of response to various perturbation
+events [19,20]. Recently, significant research interest has shifted to the use of
+Bayesian networks to study causal interaction networks of biological systems based
+on gene expression data from time series and gene knockout experiments, protein–protein
+interaction data derived from predicted genomics features, and other direct experimental interaction data [3,21].
+http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.0030069
+* dynamic Bayesian networks [31], which explicitly allow for a temporal representation of how nodes in the network interact with one another. Rabiner LR (1989) A tutorial on Hidden Markov Models and selected applications in speech recognition. Proceedings of the 77th Meeting of the Institute of Electrical and Electronics Engineers, 15–18 May 1989; San Diego, California, United States. IEEE 77: 257–286.
+* provenance ontology that might have some insight for modeling dynamic networks' nodes and edges http://wiki.knoesis.org/index.php/Provenir_Ontology
 
 
-Attribute complexity
---------------------
-- simple types, simple bounded types
-- complex types, i.e. classes by themselves, allowing to store rich data
-e.g. files, probability density functions, units
-
-Need for a good attribute selection mechanism, and checking mechanism
-
-Creators
---------
-- Classes of generative models for given to construct networks
-
-Analyzers
----------
-- Have an intelligent caching/invalidation mechanism not to recompute intensive measures
-- Check for node identity to make comparison
-
-ComparisonAnalyzer
-- like Mutual Information
-
-TemporalAnalyzer
-- .extract_temporal_kernel_function()
-
-CommunityAnalyzer
-- .calculate_modularity_matrix()
-
-StructureFunctionAnalyzer
-- If node identity is sensibly given, one could conceive of several
-measures to characterize their relationship, e.g. simply the correlations
-
-StatisticalAnalyzer
-
-Measures:
-- weight-degree correlation
-Strength S_k: Is a measure of the inhomogeneities of the distribution of the weights among the nodes of the network.
-Disparity Y2_k: Is a measure of the inhomogeneities of the weights ending at a node of degree k.
-
-NetworkOperations
------------------
-
-NetworkUnion, ...
-
-SubNetworkExtractor
-
-MSTExtractor
-
-Manipulators
-------------
-- can define a sequence of basic operations (add/remove node/edge, change attribute,
-split/merge nodes, symmetrize, threshold), which can then be executed.
-
-each time slice might be represented (e.g. to fed in a temporal analyzer)
-- do it in-place (loosing the old network) or generating new network objects?
-- synchronous/asynchronous update scheme for node/edge values (also defined by a rule)
-- .prune (remove all unconnected, i.e. not connected to the largest component) nodes and edges
-
-Layouter
---------
-- either 2D or 3D
-- dealing with node / edge positions
-- selecting the value to be taken for specific layouting algorithms
-
-SpectralLayout
-
-ForceDirectedLayout
-
-
-Data representation
--------------------
-- Behind the scenes, there should be the option to interchange the data structure used
-for representing the network. For different algorithms, different representations might be
-more efficient.
-
-Interfaces
-==========
-
-Network IO from disk-stored files
----------------------------------
-- Reader/Writers, from NetworkX
-- Skip header lines for text files
-
-adjacency matrix, pairs file, GraphML
-
-Interfaces to other tools, Packages
------------------------------------
-
-NetworkInterfacer
-- e.g. can handle references of objects to other applications, packages
-neuron simulator (PyNN) objects, protein-protein (biological) networks,
-NetworkX graph object
-
-Link to Connectome File Format
-------------------------------
-network, surface, volume, time series, tracks
+Ideas
+-----
+* The notion of "distance"
+* Allow for associative access of nodes, i.e. Graph.node[0] or Graph.node["zero"] if
+"zero" is e.g. an attribute of node with index 0. For example, add an associative
+mapping function (saw something similar in Boost.BGL and DiPy)
+* Employ the Enthought Traits Framework

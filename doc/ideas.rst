@@ -26,3 +26,6 @@ contribute to critical network dynamics, even in the absence of explicit inhibit
 are particularly interested in the relationship of different kinds of neural network topology to the
 condition of limited sustained activation (LSA). 
 http://frontiersin.org/neuroscience/neuroinformatics/paper/10.3389/fninf.2010.00008/
+
+
+http://www.biomedcentral.com/1471-2105/11/233/abstract
