@@ -34,6 +34,17 @@ http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.0030069
 * provenance ontology that might have some insight for modeling dynamic networks' nodes and edges http://wiki.knoesis.org/index.php/Provenir_Ontology
 
 
+Class Ideas
+-----------
+AttributeClass
+
+
+* NetworkXExtractor
+* AttributeChoose
+* LevelSelector (extract one Level)
+
+
+
 Ideas
 -----
 * The notion of "distance"
@@ -41,3 +52,5 @@ Ideas
 "zero" is e.g. an attribute of node with index 0. For example, add an associative
 mapping function (saw something similar in Boost.BGL and DiPy)
 * Employ the Enthought Traits Framework
+* Do you have a node or a edge-centric view of graphs?
+* References to python function, e.g. include def functions as attributes with parameter values!

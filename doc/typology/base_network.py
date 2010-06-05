@@ -3,7 +3,7 @@ Base network
 
 Basic properties:
 
-* Binary / Weighted
+* Binary / Weighted / Valued
 * Polarity (uni-polar, bi-polar, multi-polar?): Directed, Undirected
 * Signed / Non-Signed
 * Features on the node

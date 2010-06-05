@@ -12,6 +12,8 @@ Aims
 ----
 * Provide a easy-to-use datastructure to represent and analyse networks of the
 hierarchical type
+* Meeting the multi-scale approach, hierarchical levels are apt to structure
+datasets at different levels of abstraction, affording data navigation and exploration
 
 * ...
 
