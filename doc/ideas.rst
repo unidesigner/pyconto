@@ -26,3 +26,40 @@ contribute to critical network dynamics, even in the absence of explicit inhibit
 are particularly interested in the relationship of different kinds of neural network topology to the
 condition of limited sustained activation (LSA). 
 http://frontiersin.org/neuroscience/neuroinformatics/paper/10.3389/fninf.2010.00008/
+
+Merging of groups which represent partitions in a hierarchical networks can similarily be manipulated, e.g merged.
+The operations should be transparent (one should see/know what is happening) as if one applies these operations on
+"leaf" nodes, or on partition-representation nodes. If one merges two partition-representations nodes, the function
+should be intelligent enough to recognize that if it is a hierarchial network, also lower level nodes get repartitioned.
+(former, later or new group label?)
+
+Hidden variables mechanism
+Chung & Lu 2002, Caldarelli et al. 2002,
+ Park & Newman 2003
+
+Finite scale network, J. P Onnela  PNAS 2007
+
+Cliques (fully connected subgraphs) of size c
+
+A K-core of a network 
+is the subgraph of a network obtained by removing the nodes with connectivity ki<K iteratively until the network 
+has only nodes with ki>K. K-core of the Internet-DIMES Internet data Visualization: Alvarez-Hamelin et al. 2005
+
+LaNet-Vi
+xavier.informatics.indiana.edu/lanet-vi
+
+A community of a network define a set of nodes with similar connectivity pattern.
+
+Minimal-Spanning-Trees
+
+Planar maximally filtered graphs
+
+Network loop structure
+
+Link probabilities
+Constraints are expressed by link probabilities
+Anand & Bianconi PRE 2009
+
+term difference:
+network structure vs. structural network
+

@@ -40,5 +40,18 @@ Allow for associative access of nodes, i.e. Graph.node[0] or Graph.node["zero"] 
 "zero" is e.g. an attribute of node with index 0. For example, add an associative
 mapping function (saw something similar in Boost.BGL and DiPy)
 
+Conform to NetworkX API!
+
+Logging mechanism. The user needs to be informed exactly WHAT measures and how it is computed.
+
+arange vs. xrange?
+
+Compare to Matlab Toolboxes:
+- Granger Causal Connectivity Analysis: A MATLAB Toolbox
+- Brain Connectivity Toolbox
+- Functional Connectivity Toolbox
+- Chronux (Mitra Lab)
+
+
 
 
