@@ -41,5 +41,5 @@ a = Network('myconnectome')
 a.add_node('node1', weight=34, fname='/home/sg/my.py', tup=(3,3))
 a.add_node('node2', weight=343)
 
-a.nodes[0].attr.print_traits()
+print a.nodes[0].attr.print_traits()
 

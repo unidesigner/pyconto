@@ -6,7 +6,7 @@ Basic properties:
 * Binary / Weighted / Valued
 * Polarity (uni-polar, bi-polar, multi-polar?): Directed, Undirected
 * Signed / Non-Signed
-* Features on the node
+* Features on the node/edges
 * Loops / No-Loops or Cycles, defines whether it is tree
 
 
@@ -30,12 +30,18 @@ Network Attributes
 Network Methods
 ---------------
 *Derived from NetworkX API*
-* Freeze graph so that no node/edge addition/removal possible
+* Freeze graph so that no node/edge addition/removal possible (why useful?)
 
-Graph data storage
-------------------
+Graph Implementation in Memory
+-------------------------------
+*Depending for what purpose, you can choose*
 *Depending on the requirements for data-structure richness and computation-speed
 for different algorithms, sensible memory storage strategies have to be choosen*
 
 * (Sparse) Connectivity Matrix
 * NetworkX Graph
+
+
+Persistent Graph data storage
+------------------------------
+* See ML discussion (SQLLite storage, BigGraph)
