@@ -28,7 +28,7 @@ Exposition of a class hierarchy including static and dynamic networks based on T
 abstracting from actual implementation of the graph data structures (replacable depending
 on ones needs).
 
-Creation of NetworkAnalyzerObjects (see `nitime') for a pipelined network analysis approach with maximum
+Creation of NetworkAnalyzerObjects (see `nitime`) for a pipelined network analysis approach with maximum
 flexibility for different types of networks, different algorithms for similar problems,
 implementations of algorithms in different languages, caching mechanism to store computationally
 intensive network measures on large graphs. Creation of easy-to-read network analysis pipelines

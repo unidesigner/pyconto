@@ -27,6 +27,7 @@ are particularly interested in the relationship of different kinds of neural net
 condition of limited sustained activation (LSA). 
 http://frontiersin.org/neuroscience/neuroinformatics/paper/10.3389/fninf.2010.00008/
 
+
 Merging of groups which represent partitions in a hierarchical networks can similarily be manipulated, e.g merged.
 The operations should be transparent (one should see/know what is happening) as if one applies these operations on
 "leaf" nodes, or on partition-representation nodes. If one merges two partition-representations nodes, the function
@@ -62,4 +63,8 @@ Anand & Bianconi PRE 2009
 
 term difference:
 network structure vs. structural network
+
+=======
+
+http://www.biomedcentral.com/1471-2105/11/233/abstract
 

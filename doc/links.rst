@@ -1,6 +1,6 @@
 A collated list of web references having to do with networks or graphs in its various aspects:
 software, visualization, analysis, storage, conferences, portals, storages,
-wikis, toolboxes, libraries, people, labs, layouting, varia.
+wikis, toolboxes, libraries, labs, layouting, varia.
 
 Software
 --------
@@ -65,18 +65,6 @@ Labs
 * `Barabasi Lab <http://www.barabasilab.com/>`_
 * `Complex Networks Collaboratory <http://sites.google.com/site/cxnets/>`_
 
-People
-------
-* `Mark Newman <http://www-personal.umich.edu/~mejn/>`_
-* `Aaron Clauset <http://tuvalu.santafe.edu/~aaronc/>`_
-* `Santo Fortunato <http://sites.google.com/site/santofortunato/home>`_
-* `Alex Arenas <http://deim.urv.cat/~aarenas/>`_
-* `Uri Alon <http://www.weizmann.ac.il/mcb/UriAlon/>`_
-
-Various people that have done interesting work on network visualization:
-* `Tamara Munzner <http://people.cs.ubc.ca/~tmm/>`_
-* `Danny Holten <http://www.win.tue.nl/~dholten/>`_
-* `Katharina A. Zweig <http://www.ninasnet.de/>`_
 
 Conferences
 -----------
