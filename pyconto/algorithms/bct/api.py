@@ -24,7 +24,6 @@ bct.gsl_free(fve30)
 """
 
 import sys
-
 # check for linux support
 if sys.platform == 'linux2':   
     # examine the architecture
