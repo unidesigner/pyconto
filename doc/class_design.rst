@@ -4,6 +4,7 @@ Typology of Networks
 * CNetwork : Connectome Network
 * SNetwork : Structural Network
 * FNetwork : Functional Network
+allow multiple FN @ same time, occupying the same anatomical nodes
 * SFNetwork : Structure-Function Network
 * CNetwork : Causal Network
 * HNetwork : Hierarchical Network

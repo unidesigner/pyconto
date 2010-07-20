@@ -1,64 +1,54 @@
 """ The measures of the Brain Connectivity Toolbox with an unified
-and simplified interface. Memory management. Optional network typechecking """
+and simplified interface. Memory management."""
 
-# add: Wrapped to Python by Stephan Gerhard, EPFL, 2010
-# within function, matrix type check only upon request (check=False)
+# Wrapped to Python by Stephan Gerhard, EPFL/UNIL-CHUV, 2010
 
-import sys
-# check for linux support
-if sys.platform == 'linux2':   
-    # examine the architecture
-    import platform as pf
-    if '32' in pf.architecture()[0]:
-        import bit32.bct as bct
-    elif '64' in pf.architecture()[0]:
-        import bit64.bct as bct
-    else:
-        raise('Can not determine your architecture settings.')
+# use for docstring
+# - page http://sites.google.com/a/brain-connectivity-toolbox.net/bct/metrics/list-of-measures
+# - what is inside the matlab function
+# - what is inside the c++ function
 
-def check_matrix(cmatrix, type):
-    """ Checks if the cmatrix expresses type.
+# questions
+# - what does wmax mean in normalized_path_length(const gsl_matrix* D, double wmax)  ?
+# - compare with networkx measures (problem with e.g. degree)
+
+import bct
+import numpy as np
+
+def set_safe_mode(status):
+    """ Validity of cmatrix tested
     
-    Valid types are:
-    bu : binary undirected
-    wu : weighted undirected
-    bd : binary directed
-    wd : weighted directed
-
-    If not, exceptions are thrown.
+    By default, bct-cpp checks the status of any connection matrix passed
+    to a specialized function (i.e., one such as bct::clustering_coef_bu
+    which is only intended to work on binary undirected matrices).
+    If this status check fails, a message is printed to stderr, but the
+    function still attempts to complete the calculation. To disable this behavior
+    and avoid the minor computational overhead, call bct::set_safe_mode(false). 
     
     """
-    
-    # valid types, XXX: functions that require only definition of d or u?
-    # ev. split into: weighttype, weighted, directionality
-    vtype = ['bu', 'wu', 'bd', 'wd']
-    if not type.lower() in vtype:
-        raise Exception('Not a valid type. Valid types are: bu, wu, bd, wd')
+    bct.set_safe_mode(status)
 
-    # SEE: bct-cpp: status.cpp!
-
-    # check if NumPy array or matrix!
-
-    # check binary or weighted
+def assortativity(cmatrix, edgetype = 'undirected', weighted = False):
+    """ Assortativity coefficient. Essentially, the assortativity a correlation
+    coefficient for the degrees of linked nodes. A positive assortativity coefficient
+    indicates that nodes tend to link to other nodes with the same or similar degree.
+    The function accepts weighted networks, but the connection weights are ignored.
     
-    # check if matrix contains NaNs
-    
-    # check if directed or undirected
-    
-    # check if square
-
-def assortativity(cmatrix, type = 'bu'):
-    """
     Parameters
     ----------
     
-    inputs:
-                  CIJ       connection matrix
-                  flag      1 = directed graph; 0 = non-directed graph
-    outputs:
-                  r         assortativity
-    
-    assortativity, computed after Newman (2002)
+    cmatrix : connection matrix
+   
+    edgetype : {'undirected', 'directed'} 
+   
+   
+    Returns
+    -------
+
+    r : assortativity
+     
+        
+    Computed after Newman (2003)
     
     Note: Weights are discarded, no edges on main diagonal
     
@@ -67,61 +57,129 @@ def assortativity(cmatrix, type = 'bu'):
     
     """
     
-def degree(cmatrix):
-    """ Density is the proportion of the number of present connections in the
-    network, to the maximum possible number of connections.  Connection weights
-    are ignored. See e.g. Sporns (2002). Contributor: OS.
+    if edgetype == 'undirected':
+        m = bct.to_gslm(cmatrix.tolist())
+        ass = bct.assortativity_und(m)
+        r = bct.from_gsl(ass)
+        if np.isnan(ass):
+            return 0
+        bct.gsl_free(m)
+        bct.gsl_free(ass)
+        return r
+    else:
+        m = bct.to_gslm(cmatrix.tolist())
+        ass = bct.assortativity_dir(m)
+        if np.isnan(ass):
+            return 0
+        r = bct.from_gsl(ass)
+        bct.gsl_free(m)
+        bct.gsl_free(ass)
+        return r
     
-    % input:  
-%         CIJ  = connection/adjacency matrix
-% output: 
-%         id   = indegree for all vertices
-%         od   = outdegree for all vertices
-%         deg  = degree for all vertices
-%
-% Computes the indegree, outdegree, and degree (indegree + outdegree) for a
-% directed binary matrix.  Weights are discarded.
-%
-% Note: Inputs of CIJ are assumed to be on the columns of the matrix.
-%
-% Olaf Sporns, Indiana University, 2002/2006/2008
+def degree(cmatrix, edgetype):
+    """ In an undirected graph, the degree is the number of connections for individual nodes.
+    In a directed graph, the indegree (outdegree) is the number of incoming (outgoing) connections
+    for individual nodes.  The degree is the sum of indegree and outdegree.Connection weights are ignored.
+    
+    Parameters
+    ----------  
+    cmatrix : connection/adjacency matrix
 
-% input:  
-%         CIJ  = connection/adjacency matrix
-% output: 
-%         deg  = degree for all vertices
-%
-% Computes the degree for a nondirected binary matrix.  Weights are
-% discarded.
-%
-% Olaf Sporns, Indiana University, 2002/2006/2008
 
+    Returns
+    -------
+    
+    edgetype == 'directed':
+    
+        id   = indegree for all vertices
+        od   = outdegree for all vertices
+        deg  = degree for all vertices
+    
+        Computes the indegree, outdegree, and degree (indegree + outdegree) for a
+        directed binary matrix.  Weights are discarded.
+    
+        Note: Inputs of CIJ are assumed to be on the columns of the matrix.
+    
+        Olaf Sporns, Indiana University, 2002/2006/2008
+
+    edgetype == 'undirected'
+  
+        deg : degree for all vertices
+    
+        Computes the degree for a nondirected binary matrix.  Weights are
+        discarded.
+    
+        Olaf Sporns, Indiana University, 2002/2006/2008
 
     """
-    m = bct.to_gslm(cmatrix.tolist())
-    deg = bct.degrees_und(m)
-    rdeg = bct.from_gsl(deg)  # [2.0, 2.0, 2.0]
-    bct.gsl_free(m)
-    bct.gsl_free(deg)
-    return rdeg
+    if edgetype == 'undirected':
+        m = bct.to_gslm(cmatrix.tolist())
+        deg = bct.degrees_und(m)
+        rdeg = bct.from_gsl(deg)
+        bct.gsl_free(m)
+        bct.gsl_free(deg)
+        return rdeg
+    else:
+        m = bct.to_gslm(cmatrix.tolist())
+        deg = bct.degrees_dir(m)
+        # XXX how are multiple return values handle in this case?
+        rdeg = bct.from_gsl(deg)
+        bct.gsl_free(m)
+        bct.gsl_free(deg)
+        return rdeg
+        
+def efficiency(cmatrix, local = False, edgetype = 'undirected', weighted = False):
+    """ A measure similar to the clustering coefficient, based upon the calculation of the harmonic mean
+    of neighbor-neighbor distances. For directed networks, this function works on the out-degree.
+    
+    A global efficiency matrix is the inverse of the distance matrix (with self-self distances set to 0).
+    Calculating the global efficiency is advantageous over distance in disconnected networks:
+    the efficiency between disconnected pairs of nodes is set to 0 (the inverse of infinity),
+    hence enabling the calculation of network wide averages (which become meaningless on distance matrices).
 
-def efficiency(cmatrix, local = False, type = 'bu'):
-    """ function E=efficiency(G,local)
-    %Global and local efficiency for binary undirected graph G.
-    %
-    %Eglob=efficiency(G); outputs the inverse distance matrix: the mean of this
-    %matrix (excluding main diagonal) is equivalent to the global efficiency.
-    %
-    %Eloc=efficiency(G,1); outputs individual nodal local efficiency.
-    %For directed networks, local efficiency works with the out-degree.
-    %
-    %Reference: Latora and Marchiori, 2001, Phys Rev Lett 87:198701.
-    %
-    %Algebraic shortest path algorithm.
-    %
-    %Mika Rubinov, UNSW, 2008 (last modified September 2008).
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
+    
+    edgetype : {'undirected'} 
+
+    weighted : {False}
+
+
+    Returns
+    -------
+    local == True:
+    
+        Eglob : outputs the inverse distance matrix: the mean of this
+                matrix (excluding main diagonal) is equivalent to the global efficiency.
+    
+    local == False:
+    
+        Eloc : outputs individual nodal local efficiency.
+               For directed networks, local efficiency works with the out-degree. 
+               
+               
+    Reference: Latora and Marchiori, 2001, Phys Rev Lett 87:198701.
+    
+    Algebraic shortest path algorithm.
+    
+    Mika Rubinov, UNSW, 2008 (last modified September 2008).
     """
-    pass
+    if edgetype == 'undirected' and weighted == False:
+        if local:
+            m = bct.to_gslm(cmatrix.tolist())
+            eloc = bct.efficiency_local(m)
+            elocnp = bct.from_gsl(eloc)
+            bct.gsl_free(m)
+            bct.gsl_free(eloc)
+            return np.asarray(elocnp)
+        else:
+            m = bct.to_gslm(cmatrix.tolist())
+            eloc = bct.efficiency_global(m)
+            elocnp = bct.from_gsl(eloc)
+            bct.gsl_free(m)
+            bct.gsl_free(eloc)
+            return np.asarray(elocnp)
 
 def betweenness(cmatrix, type):
     """ Weighted:
@@ -283,73 +341,114 @@ function [fcyc,pcyc] = cycprob(Pq)
     """
     pass
 
+def density(cmatrix, edgetype):
+    """ Density is the proportion of the number of present connections in the network,
+    to the maximum possible number of connections.  Connection weights are ignored.
+    
+    Parameters
+    ----------
+    
+    cmatrix : connection/adjacency matrix
+    
+    Returns
+    -------
+    
+    edgetype == 'undirected':
 
-def density(cmatrix, type):
-    """
-    function [kden,N,K] = density_dir(CIJ)
+        kden : connection density, number of connections present out of all possible (N^2-N)
 
-% input:  
-%           CIJ  = connection/adjacency matrix
-% output: 
-%           kden = connection density, number of connections present out of all possible (N^2-N)
-%           N    = number of vertices
-%           K    = number of edges for the entire graph
+        Note: Assumes that cmatrix is undirected and that there are no self-connections.
+        Note: Function always returns average binary density, regardless of weights.
+        
+        Olaf Sporns, Indiana University, 2002/2007/2008
 
-% Note: Assumes that CIJ is directed and that there are no self-connections.
-% Note: Function always returns average binary density, regardless of
-% weights.
-%
-% Olaf Sporns, Indiana University, 2002/2007/2008
+        Modification history:
+        2009-10: K fixed to sum over one half of cmatrix [Tony Herdman, SFU]
 
+    edgetype == 'directed'
 
-function [kden,N,K] = density_und(CIJ)
-
-% input:  
-%           CIJ  = connection/adjacency matrix
-% output: 
-%           kden = connection density, number of connections present out of all possible (N^2-N)
-%           N    = number of vertices
-%           K    = number of edges for the entire graph
-
-% Note: Assumes that CIJ is undirected and that there are no self-connections.
-% Note: Function always returns average binary density, regardless of
-% weights.
-%
-% Olaf Sporns, Indiana University, 2002/2007/2008
-
-% Modification history:
-% 2009-10: K fixed to sum over one half of CIJ [Tony Herdman, SFU]
+        kden : connection density, number of connections present out of all possible (N^2-N)
+    
+        Note: Assumes that cmatrix is directed and that there are no self-connections.
+        Note: Function always returns average binary density, regardless of weights.
+    
+        Olaf Sporns, Indiana University, 2002/2007/2008
 
     """
-    pass
+    if edgetype == 'undirected':
+        m = bct.to_gslm(cmatrix.tolist())
+        val =  bct.density_und(m)
+        bct.gsl_free(m)
+        return val
 
-def distance(cmatrix, type):
+    elif edgetype == 'directed':
+        m = bct.to_gslm(cmatrix.tolist())
+        val = bct.density_dir(m)
+        bct.gsl_free(m)
+        return val
+
+def distance(cmatrix, weighted):
+    """ Computes the distance matrix for a weighted or binary graph.
+    
+    Distance matrix for weighted networks. The input matrix must be a mapping from weight to distance.
+    For instance, in a weighted correlation network, higher correlations are more naturally interpreted
+    as shorter distances. Consequently, in this case, the input matrix should be some inverse of the connectivity matrix.
+    
+    Distance matrix for binary graphs. If any two nodes u and v are disconnected,
+    the value of the entry (u,v) is set to infinity. The value of self-self distances (u,u)
+    is set to 0. Consequently, two nodes are connected if they have a finite non-zero distance.
+    
+    Parameters
+    ----------
+    
+    cmatrix : connection/adjacency matrix
+    
+    weighted : {True, False}
+               Apply the distance computation for weighted or unweighted (binary) matrices
+    
+    Returns
+    -------
+    
+    weighted == True:
+        
+        D : distance matrix for a weighted directed graph -
+            the mean distance is the characteristic path length.
+    
+        The input matrix must be a mapping from weight to distance (eg. higher
+        correlations may be interpreted as short distances via an inverse mapping).
+    
+        Dijkstra's Algorithm.
+    
+        Mika Rubinov, UNSW
+    
+        Modification history
+        2007: original
+        2009-08-04: min() function vectorized
+
+    weighted == False:
+
+        D : distance matrix for binary undirected graph G
+            Mean distance (excluding the main diagonal) equals the characteristic path length
+    
+        Algebraic shortest path algorithm.
+    
+        Mika Rubinov, UNSW, 2007 (last modified September 2008).
+
     """
-function D=distance_bin(G)
-%D=distance_bin(G); distance matrix for binary undirected graph G
-%Mean distance (excluding the main diagonal) equals the characteristic path length
-%
-%Algebraic shortest path algorithm.
-%
-%Mika Rubinov, UNSW, 2007 (last modified September 2008).
-
-function D=distance_wei(G)
-%D=distance_wei(G); distance matrix for a weighted directed graph -
-%the mean distance is the characteristic path length.
-%
-%The input matrix must be a mapping from weight to distance (eg. higher
-%correlations may be interpreted as short distances via an inverse mapping).
-%
-%Dijkstra's Algorithm.
-%
-%Mika Rubinov, UNSW
-
-%Modification history
-%2007: original
-%2009-08-04: min() function vectorized
-
-    """
-    pass
+    if weighted:
+        m = bct.to_gslm(cmatrix.tolist())
+        dist = bct.distance_wei(m)
+        distnp = bct.from_gsl(dist)
+        bct.gsl_free(m)
+        bct.gsl_free(dist)
+        return np.asarray(distnp)
+    else:
+        m = bct.to_gslm(cmatrix.tolist())
+        dist = bct.distance_bin(m)
+        distnp = bct.from_gsl(dist)
+        bct.gsl_free(m)
+        bct.gsl_free(dist)
+        return np.asarray(distnp)
 
 def edge_betweenness(cmatrix, type):
     """
@@ -382,25 +481,92 @@ function [EBC BC]=edge_betweenness_wei(G)
     pass
 
 def erange(cmatrix):
-    """
-    function  [Erange,eta,Eshort,fs] = erange(CIJ)
+    """ Computes the range for each edge (i.e., the shortest path length between the
+    nodes it connects after the edge has been removed from the graph).
+    Shorcuts are links which significantly reduce the characteristic path length
+    This function detects shortcuts, hence being a variant of edge betweenness centrality.
+    
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
+    
+    
+    Returns
+    -------
 
-% input:  
-%           CIJ      connection/adjacency matrix
-% outputs:   
-%           Erange   range for each edge, i.e. the length of the 
-%                    shortest path from i to j for edge c(i,j) AFTER the edge 
-%                    has been removed from the graph.
+    Erange : range for each edge, i.e. the length of the 
+             shortest path from i to j for edge c(i,j) AFTER the edge 
+             has been removed from the graph.
+
 %           eta      average range for entire graph.
 %           Eshort   entries are ones for edges that are shortcuts.
 %           fs       fraction of shortcuts in the graph.
-%
-% Follows the treatment of 'shortcuts' by Duncan Watts
-%
-% Olaf Sporns, Indiana University, 2002/2007/2008
-% =========================================================================
+
+    Follows the treatment of 'shortcuts' by Duncan Watts (1999)
+    
+    Olaf Sporns, Indiana University, 2002/2007/2008
+
     """
-    pass
+    m = bct.to_gslm(cmatrix.tolist())
+    era = bct.erange(m)
+    eranp = bct.from_gsl(era)
+    bct.gsl_free(m)
+    bct.gsl_free(era)
+    return np.asarray(eranp)
+
+def jdegree(cmatrix, edgetype = 'directed'):
+    """ Joint degree distribution. This function returns a matrix, in which the value of each 
+    element (u,v) corresponds to the number of nodes that have u outgoing connections and v incoming connections.
+    Connection weights are ignored.
+
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
+    
+    Returns
+    -------
+
+    J : joint degree distribution matrix (shifted by one)
+    
+    Note: This function only makes sense for directed matrices.  Weights are
+    discarded.
+
+    Olaf Sporns, Indiana University, 2002/2006/2008
+
+    """
+    m = bct.to_gslm(cmatrix.tolist())
+    jdeg = bct.jdegree(m)
+    jdegnp = bct.from_gsl(jdeg)
+    bct.gsl_free(m)
+    bct.gsl_free(jdeg)
+    return np.asarray(jdegnp)
+
+def jdegree_bl(cmatrix):
+    """ Given a joint degree distribution matrix, returns the number of nodes with
+    in-degree = out-degree.
+    """
+    m = bct.to_gslm(cmatrix.tolist())
+    val = bct.jdegree_bl(m)
+    bct.gsl_free(m)
+    return val
+
+def jdegree_id(cmatrix):
+    """ Given a joint degree distribution matrix, returns the number of nodes with
+    in-degree > out-degree.
+    """
+    m = bct.to_gslm(cmatrix.tolist())
+    val = bct.jdegree_id(m)
+    bct.gsl_free(m)
+    return val
+
+def jdegree_od(cmatrix):
+    """ Given a joint degree distribution matrix, returns the number of nodes with
+    out-degree > in-degree.
+    """
+    m = bct.to_gslm(cmatrix.tolist())
+    val = bct.jdegree_od(m)
+    bct.gsl_free(m)
+    return val
 
 def find_motif34(m,n):
     """
@@ -474,286 +640,79 @@ function [Wq,twalk,wlq] = findwalks(CIJ)
     """
     pass
 
-def jdegree(cmatrix, type = 'd'):
-    """
-    function [J,J_od,J_id,J_bl] = jdegree(CIJ)
+def matching_ind(cmatrix):
+    """ Matching index. For any two nodes u and v, the matching index computes
+    the amount of overlap in the connection patterns of u and v. Self-connections
+    and cross-connections between u and v are ignored.  For undirected networks,
+    all outputs of this function are identical.  The matching index is a symmetric
+    quantity, similar to a correlation or a dot product, the function returns only
+    the upper triangle of the matching matrix.
+    
+    Parameters
+    ----------
 
-% input
-%         CIJ  = connection/adjacency matrix
-% output
-%         J    = joint degree distribution matrix (shifted by one)
-%         J_od = number of vertices with od>id.
-%         J_id = number of vertices with id>od.
-%         J_bl = number of vertices with id=od.
-%
-% Note: This function only makes sense for directed matrices.  Weights are
-% discarded.
-%
-% Olaf Sporns, Indiana University, 2002/2006/2008
+    cmatrix : connection/adjacency matrix
 
-    """
-    pass
+    Returns
+    -------
+    
+    Mall : matching index for all connections    
 
-def latmio_dir(r, iter):
-    """
-    function R=latmio_dir(R,ITER)
-%R=latmio_dir(G,ITER); 'latticized' graph R, with equivalent degree
-%sequence to the original weighted directed graph G.
-%
-%Each edge is rewired (on average) ITER times. The out-strength (but not
-%the in-strength) distribution is preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%Latticizing algorithm: Sporns and Zwi (2004); Neuroinformatics 2:145
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008).
-    """
-    pass
+    Does not use self- or cross connections for comparison.
+    Does not use connections that are not present in BOTH i and j.
+    All output matrices are calculated for upper triangular only (symmetrical).
 
-def latmio_dir_connected(cmatrix):
-    """
-    function R=latmio_dir_connected(R, ITER)
-%R=latmio_dir_connected(G,ITER); 'latticized' graph R, with equivalent degree
-%sequence to the original weighted directed graph G, and with preserved
-%connectedness (hence the input graph must be connected).
-%
-%Each edge is rewired (on average) ITER times. The out-strength (but not
-%the in-strength) distribution is preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%Latticizing algorithm: Sporns and Zwi (2004); Neuroinformatics 2:145
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008).
-    """
-    pass
+    Reference: Hilgetag et al. (2002).
 
-def latmio_und(r, iter):
+    Olaf Sporns, Indiana University, 2002/2007/2008
+    
     """
-    function R=latmio_und(R, ITER)
-%R=latmio_und(G,ITER); 'latticized' graph R, with equivalent degree
-%sequence to the original weighted undirected graph G.
-%
-%Each edge is rewired (on average) ITER times. The strength distributions 
-%are not preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%Latticizing algorithm: Sporns and Zwi (2004); Neuroinformatics 2:145
-%
-%Mika Rubinov, UNSW
-%
-%Modification History:
-%Jun 2007: Original
-%Apr 2008: Edge c-d is flipped with 50% probability, allowing to explore
-%          all potential rewirings (Jonathan Power, WUSTL)
+    m = bct.to_gslm(cmatrix.tolist())
+    mi = bct.matching_ind(m)
+    minp = bct.from_gsl(mi)
+    bct.gsl_free(m)
+    bct.gsl_free(mi)
+    return np.asarray(minp)
+
+def matching_ind_in(cmatrix):
+    """ Computes matching index for incoming connections.
+    
+    Parameters
+    ----------
+
+    cmatrix : connection/adjacency matrix
+    
+    Returns
+    -------
+    Min : matching index for incoming connections
+    
     """
-    pass
+    m = bct.to_gslm(cmatrix.tolist())
+    mi = bct.matching_ind_in(m)
+    minp = bct.from_gsl(mi)
+    bct.gsl_free(m)
+    bct.gsl_free(mi)
+    return np.asarray(minp)
+        
+def matching_ind_out(cmatrix):
+    """ Computes matching index for outgoing connections.
+    
+    Parameters
+    ----------
 
-def latmio_und_connected(r, iter):
+    cmatrix : connection/adjacency matrix
+    
+    Returns
+    -------
+    Mout : matching index for outgoing connections
+    
     """
-    function R=latmio_und_connected(R, ITER)
-%R=latmio_und_connected(G,ITER); 'latticized' graph R, with equivalent degree
-%sequence to the original weighted undirected graph G, and with preserved
-%connectedness (hence the input graph must be connected).
-%
-%Each edge is rewired (on average) ITER times. The strength distributions 
-%are not preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%Latticizing algorithm: Sporns and Zwi (2004); Neuroinformatics 2:145
-%
-%Mika Rubinov, UNSW
-%
-%Modification History:
-%Jun 2007: Original
-%Apr 2008: Edge c-d is flipped with 50% probability, allowing to explore
-%          all potential rewirings (Jonathan Power, WUSTL)
-    """
-    pass
-
-def makeevenCIJ(N,K,sz_cl):
-    """
-    function  [CIJ] = makeevenCIJ(N,K,sz_cl)
-
-% inputs:
-%           N        number of vertices (must be power of 2)
-%           K        number of edges
-%           sz_cl    size of clusters (power of 2)
-% outputs:
-%           CIJ      connection matrix
-%
-% Makes a connection matrix with equal sized clusters placed on the
-% diagonal, and the remaining connections distributed evenly (randomly) among them
-% NOTE: 
-% Only works if N is a power of 2.
-% A warning is generated if the clusters contain more connections than K.
-% Cluster size is 2^sz_cl;
-%
-% Olaf Sporns, Indiana University, 2005/2007
-
-    """
-    pass
-
-def makefractalCIJ(mx_lvl,E,sz_cl):
-    """
-    function  [CIJ,K] = makefractalCIJ(mx_lvl,E,sz_cl)
-
-% inputs:
-%           mx_lvl   number of hierarchical levels, N = 2^mx_lvl
-%           E        connection density fall-off per level
-%           sz_cl    size of clusters (power of 2)
-% outputs:
-%           CIJ      connection matrix
-%           K        number of connections present in the output CIJ
-%
-% NOTE: 
-% Clusters have by default a connection density of 1
-% Connection density decays as 1/(E^n), with n = index of hierarchical level
-%
-% Olaf Sporns, Indiana University, 2005/2007
-    """
-    pass
-
-def makelatticeCIJ(N,K):
-    """
-    function [CIJ] = makelatticeCIJ(N,K)
-
-% inputs:
-%           N        number of vertices
-%           K        number of edges
-% outputs:
-%           CIJ      connection matrix
-%
-% makes one lattice CIJ matrix, with size = N,K. The lattice is made by
-% placing connections as close as possible to the main diagonal, without
-% wrapping around, so it is NOT a ring. No connections are made on the main
-% diagonal. In/Outdegree is kept approx. constant at K/N
-%
-% Olaf Sporns, Indiana University, 2005/2007
-    """
-    pass
-
-def make_motif34lib():
-    # see bct-cpp:
-    pass
-
-def makerandCIJdegreesfixed(in,out):
-    """
-    function [cij,flag] = makerandCIJdegreesfixed(in,out)
-
-% input:
-%    in = indegree vector
-%    out = outdegree vector
-%
-% output:
-%    cij = binary directed connectivity matrix
-%    flag = indicates if the algorithm succeeded ('flag' = 1) or failed
-%    ('flag' = 0).
-%
-% NOTE: necessary conditions include:
-%
-%   length(in) = length(out) = n
-%   sum(in) = sum(out) = k
-%   in(i), out(i) < n-1
-%   in(i) + out(j) < n+2
-%   in(i) + out(i) < n
-%
-% No connections are generated on the main diagonal
-%
-% Aviad Rubinstein, Indiana University 2005/2007
-    """
-    pass
-
-def makerandCIJ_dir(N,K):
-    """
-    function [CIJ] = makerandCIJ_dir(N,K)
-
-% inputs:
-%           N = number of vertices
-%           K = number of edges
-% output:
-%           CIJ = directed random connection matrix
-%
-% Generates a random directed binary connection matrix, with size (N,K) and
-% no connections on the main diagonal
-%
-% Olaf Sporns, Indiana University, 2007/2008
-    """
-    pass
-
-def makerandCIJ_und(N,K):
-    """
-    function [CIJ] = makerandCIJ_und(N,K)
-
-% inputs:
-%           N = number of vertices
-%           K = number of edges
-% output:
-%           CIJ = random connection matrix, nondirected (symmetrical)
-%
-% This function generates a random binary CIJ matrix, with size (N,K) and
-% no connections on the main diagonal
-%
-% Olaf Sporns, Indiana University, 2007/2008
-    """
-    pass
-
-def makeringlatticeCIJ(N,K):
-    """
-    function [CIJ] = makeringlatticeCIJ(N,K)
-
-% inputs:
-%           N        number of vertices
-%           K        number of edges
-% outputs:
-%           CIJ      connection matrix
-%
-% makes one lattice CIJ matrix, with size = N,K. The lattice is made by
-% placing connections as close as possible to the main diagonal, with
-% wrap-around, so it IS a ring. No connections are made on the main
-% diagonal. In/Outdegree is kept approx. constant at K/N
-%
-% Olaf Sporns, Indiana University, 2005/2007
-    """
-    pass
-
-def maketoeprand(N,K,s):
-    """
-    function  [CIJ] = maketoeprandCIJ(N,K,s)
-
-% inputs:
-%           N        number of vertices
-%           K        number of edges
-%           s        standard deviation of toeplitz
-% outputs:
-%           CIJ      connection matrix
-%
-% makes one CIJ matrix, with size = N,K, that has K connections arranged in
-% a toeplitz form.
-% NO RING
-% no connections on main diagonal
-%
-% Olaf Sporns, Indiana University, 2005/2007
-    """
-    pass
-
-def matching_ind(CIJ):
-    """
-    function [Min,Mout,Mall] = matching_ind(CIJ)
-
-% input:
-%           CIJ  = connection/adjacency matrix
-% output:
-%           Min  = matching index for incoming connections
-%           Mout = matching index for outgoing connections
-%           Mall = matching index for all connections
-
-% Does not use self- or cross connections for comparison.
-% Does not use connections that are not present in BOTH i and j.
-% All output matrices are calculated for upper triangular only (symmetrical).
-%
-% Olaf Sporns, Indiana University, 2002/2007/2008
-    """
-    pass
+    m = bct.to_gslm(cmatrix.tolist())
+    mi = bct.matching_ind_out(m)
+    minp = bct.from_gsl(mi)
+    bct.gsl_free(m)
+    bct.gsl_free(mi)
+    return np.asarray(minp)
 
 def modularity(cmatrix):
     """
@@ -813,12 +772,47 @@ def module_degree_zscore(A,Ci):
 
 
 # in bct-cpp: utility.cpp
-def number_of_links_und(cmatrix):
-    pass
-def number_of_links_dir(cmatrix):
-    pass
+
+def number_of_edges_und(cmatrix):
+    """ Returns the number of edges in an undirected graph.
+    
+    No checking of the edgetype of the cmatrix.
+    
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
+    
+    """
+    m = bct.to_gslm(cmatrix.tolist())
+    n = bct.number_of_edges_und(m)
+    bct.gsl_free(m)
+    return n
+
+def number_of_edges_dir(cmatrix):
+    """ Returns the number of edges in a directed graph.
+    
+    No checking of the edgetype of the cmatrix.
+    
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
+    """
+    m = bct.to_gslm(cmatrix.tolist())
+    n = bct.number_of_edges_dir(m)
+    bct.gsl_free(m)
+    return n
+
 def number_of_nodes(cmatrix):
-    pass
+    """ Returns the number of nodes in a graph, assuming the given connection matrix is square.
+    
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
+    """
+    m = bct.to_gslm(cmatrix.tolist())
+    n = bct.number_of_nodes(m)
+    bct.gsl_free(m)
+    return n
 
 def motif3funct(cmatrix):
     """
@@ -887,85 +881,28 @@ def participation_coef(cmatrix, Ci):
     """
     pass
 
-# in bct-cpp
-def norm_avr_shortest_path_length_wei(cmatrix, wmax):
-    """
-     * Computes the normalized average shortest path length for a weighted graph.
-    """
-    pass
+def normalized_path_length(cmatrix, wmax):
+    """ Given a distance matrix, computes the normalized shortest path length.
 
-def norm_avr_shortest_path_length_bin(cmatrix):
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
+    
+    wmax : double
+           ???
+    
+    Results
+    -------
+    
+    n : normalized shortest path length
+    
     """
-    Computes the normalized average shortest path length for a binary graph.
-    """
-    pass
 
-def randmio(r, iter):
-    """
-    function R=randmio_dir(R, ITER)
-%R=randmio_dir(G,ITER); randomized graph R, with equivalent degree
-%sequence to the original weighted directed graph G.
-%
-%Each edge is rewired (on average) ITER times. The out-strength (but not
-%the in-strength) distribution is preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008).
-
-function R=randmio_und(R, ITER)
-%R=randmio_und(G,ITER); randomized graph R, with equivalent degree
-%sequence to the original weighted undirected graph G.
-%
-%Each edge is rewired (on average) ITER times. The strength distributions 
-%are not preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%
-%Mika Rubinov, UNSW
-%
-%Modification History:
-%Jun 2007: Original
-%Apr 2008: Edge c-d is flipped with 50% probability, allowing to explore
-%          all potential rewirings (Jonathan Power, WUSTL)
-    """
-    pass
-
-def randmio_connected(r, iter):
-    """
-    function R=randmio_dir_connected(R, ITER)
-%R=randmio_dir_connected(G,ITER); randomized graph R, with equivalent degree
-%sequence to the original weighted directed graph G, and with preserved
-%connectedness (hence the input graph must be connected).
-%
-%Each edge is rewired (on average) ITER times. The out-strength (but not
-%the in-strength) distribution is preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008).
-
-function R = randmio_und_connected(R, ITER)
-%R=randmiou_und_connected(G,ITER); 'latticized' graph R, with equivalent degree
-%sequence to the original weighted undirected graph G, and with preserved
-%connectedness (hence the input graph must be connected).
-%
-%Each edge is rewired (on average) ITER times. The strength distributions 
-%are not preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%Latticizing algorithm: Sporns and Zwi (2004); Neuroinformatics 2:145
-%
-%Mika Rubinov, UNSW
-%
-%Modification History:
-%Jun 2007: Original
-%Apr 2008: Edge c-d is flipped with 50% probability, allowing to explore
-%          all potential rewirings (Jonathan Power, WUSTL)
-
-    """
-    pass
-
+    m = bct.to_gslm(cmatrix.tolist())
+    n = bct.normalized_path_length(m)
+    bct.gsl_free(m)
+    return n
+        
 def reachdist(cmatrix):
     """
     function  [R,D] = reachdist(CIJ)
@@ -998,33 +935,52 @@ def reorderMAT(MAT,H,cost):
     """
     pass
 
-def strenghts(cmatrix):
-    """
-    function [is,os,str] = strengths_dir(CIJ)
+def strengths(cmatrix, edgetype):
+    """ Computes strength for an undirected or directed graph.
+    
+    Strength is the sum of all connection weights for individual nodes.
 
-% input:  
-%         CIJ  = connection/adjacency matrix
-% output: 
+    In a directed graph, instrength (outstrength) is the sum of incoming
+    (outgoing) connection weights for individual nodes. The strength is the
+    sum of instrength and outstrength.
+    
+
+    Parameters
+    ----------
+
+    cmatrix : connection/adjacency matrix
+    
+    
+    Returns
+    -------
+    
+    edgetype == 'undirected'
+    
+        str : strength for all vertices
+    
+    edgetype == 'directed
+    
+        str : strength for all vertices (indegree + outdegree)
+
 %         is   = instrength for all vertices
 %         os   = outstrength for all vertices
-%         str  = strength for all vertices
-%
-% Computes the instrength, outstrength, and strength (indegree + outdegree)
-% for a directed weighted matrix.
-%
-% Olaf Sporns, Indiana University, 2007/2008
 
-function [str] = strengths_und(CIJ)
+    Reference: Barrat et al. (2004). Contributor: OS.
 
-% input:  
-%         CIJ  = connection/adjacency matrix
-% output: 
-%         str  = strength for all vertices
-%
-% Computes the strength for a nondirected weighted matrix.
-%
-% Olaf Sporns, Indiana University, 2007/2008
+    Olaf Sporns, Indiana University, 2007/2008
 
     """
-    pass
-
+    if edgetype == 'undirected':
+        m = bct.to_gslm(cmatrix.tolist())
+        str = bct.strengths_und(m)
+        strnp = bct.from_gsl(str)
+        bct.gsl_free(m)
+        bct.gsl_free(str)
+        return np.asarray(strnp)
+    else:
+        m = bct.to_gslm(cmatrix.tolist())
+        str = bct.strengths_dir(m)
+        strnp = bct.from_gsl(str)
+        bct.gsl_free(m)
+        bct.gsl_free(str)
+        return np.asarray(strnp)
