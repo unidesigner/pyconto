@@ -118,7 +118,16 @@ http://www.tp.umu.se/~rosvall/livemod.html
 Dynamical networks
 ------------------
 * `Dynamics of evolving networks <http://cneuro.rmki.kfki.hu/projects/dynnet>`_
+* `libgexf <http://gexf.net/format/>`_
+
 
 Graph storage
 -------------
 * `Neon4j graph database <http://neo4j.org/>`_
+
+Visualization tools
+-------------------
+* `Neuroptikon <http://www.neuroptikon.org>`_
+* `BrainGazer <http://www.cg.tuwien.ac.at/research/publications/2009/bruckner-2009-BVQ/>`_
+* `Gephi <http://gephi.org/>`_
+* `BrainNetVis <http://code.google.com/p/brainnetvis/>`_
