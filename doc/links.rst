@@ -131,3 +131,5 @@ Visualization tools
 * `BrainGazer <http://www.cg.tuwien.ac.at/research/publications/2009/bruckner-2009-BVQ/>`_
 * `Gephi <http://gephi.org/>`_
 * `BrainNetVis <http://code.google.com/p/brainnetvis/>`_
+* `Interactorium <http://www.interactorium.net>`_
+* `Visual Molecular Dynamics <http://www.ks.uiuc.edu/Research/vmd/>`_
