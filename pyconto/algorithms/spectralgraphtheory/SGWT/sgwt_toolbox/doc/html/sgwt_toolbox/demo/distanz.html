@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of distanz</title>
+  <meta name="keywords" content="distanz">
+  <meta name="description" content="DISTANZ : calculates the distances between all vectors in x and y.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">sgwt_toolbox</a> &gt; <a href="index.html">demo</a> &gt; distanz.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sgwt_toolbox/demo&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>distanz
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>DISTANZ : calculates the distances between all vectors in x and y.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function d = distanz(x,y,type) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DISTANZ : calculates the distances between all vectors in x and y.
+
+ usage:
+    d = distanz(x,y);
+
+ inputs:
+    x      matrix with col vectors
+    y      matrix with col vectors (default == x)
+    type   the type of algorithm that is used (default==3)
+
+ outputs:
+    d      distance matrix, not squared
+
+ note:
+    part of the code is inspired by dist.m of the nntoolbox, other
+    part adapted from Francis Bach who took it from Roland
+    Bunschoten.
+
+ sth * 19apr2002
+ Adapted from create.m, originally written by
+ (c) Stefan Harmeling, 2006</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="create_synthetic_dataset.html" class="code" title="function data = create_synthetic_dataset(data)">create_synthetic_dataset</a>	create_synthetic_dataset creates test data for running nldr algorithms.</li><li><a href="sgwt_demo1.html" class="code" title="function sgwt_demo1">sgwt_demo1</a>	sgwt_demo1 : SGWT for swiss roll data set</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function d = distanz(x,y,type)</a>
+0002 <span class="comment">% DISTANZ : calculates the distances between all vectors in x and y.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% usage:</span>
+0005 <span class="comment">%    d = distanz(x,y);</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% inputs:</span>
+0008 <span class="comment">%    x      matrix with col vectors</span>
+0009 <span class="comment">%    y      matrix with col vectors (default == x)</span>
+0010 <span class="comment">%    type   the type of algorithm that is used (default==3)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% outputs:</span>
+0013 <span class="comment">%    d      distance matrix, not squared</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% note:</span>
+0016 <span class="comment">%    part of the code is inspired by dist.m of the nntoolbox, other</span>
+0017 <span class="comment">%    part adapted from Francis Bach who took it from Roland</span>
+0018 <span class="comment">%    Bunschoten.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% sth * 19apr2002</span>
+0021 <span class="comment">% Adapted from create.m, originally written by</span>
+0022 <span class="comment">% (c) Stefan Harmeling, 2006</span>
+0023 
+0024 <span class="keyword">if</span> exist(<span class="string">'type'</span>)~=1|isempty(type), type = 3; <span class="keyword">end</span>
+0025 <span class="keyword">switch</span> type
+0026  <span class="keyword">case</span> 1  <span class="comment">% inspired by dist.m</span>
+0027   <span class="keyword">if</span> exist(<span class="string">'y'</span>)~=1|isempty(y)
+0028     <span class="comment">% here comes code just for x</span>
+0029     [rx,cx] = size(x);
+0030     d = zeros(cx,cx);
+0031     nuller = zeros(cx,1);
+0032     <span class="keyword">for</span> c = 1:cx
+0033       d(c,:) = sum((x-x(:,c+nuller)).^2,1);
+0034     <span class="keyword">end</span>
+0035   <span class="keyword">else</span>
+0036     <span class="comment">% here comes code for x and y</span>
+0037     [rx,cx] = size(x);
+0038     [ry,cy] = size(y);
+0039     <span class="keyword">if</span> rx~=ry, error(<span class="string">'x and y do not fit'</span>), <span class="keyword">end</span>
+0040     d = zeros(cx,cy);
+0041     <span class="keyword">if</span> cx&gt;cy
+0042       nuller = zeros(cx,1);
+0043       <span class="keyword">for</span> c = 1:cy
+0044     d(:,c) = sum((x-y(:,c+nuller)).^2,1)';
+0045       <span class="keyword">end</span>
+0046     <span class="keyword">else</span>
+0047       nuller = zeros(cy,1);
+0048       <span class="keyword">for</span> c = 1:cx
+0049     d(c,:) = sum((x(:,c+nuller)-y).^2,1);
+0050       <span class="keyword">end</span>
+0051     <span class="keyword">end</span>
+0052   <span class="keyword">end</span>
+0053  
+0054  <span class="keyword">case</span> 2  <span class="comment">% same as case 1, but with repmat instead of nuller</span>
+0055   <span class="keyword">if</span> exist(<span class="string">'y'</span>)~=1|isempty(y)
+0056     <span class="comment">% here comes code just for x</span>
+0057     [rx,cx] = size(x);
+0058     d = zeros(cx,cx);
+0059     nuller = zeros(cx,1);
+0060     <span class="keyword">for</span> c = 1:cx
+0061       d(c,:) = sum((x-repmat(x(:,c),[1 cx])).^2,1);
+0062     <span class="keyword">end</span>
+0063   <span class="keyword">else</span>
+0064     <span class="comment">% here comes code for x and y</span>
+0065     [rx,cx] = size(x);
+0066     [ry,cy] = size(y);
+0067     <span class="keyword">if</span> rx~=ry, error(<span class="string">'x and y do not fit'</span>), <span class="keyword">end</span>
+0068     d = zeros(cx,cy);
+0069     <span class="keyword">if</span> cx&gt;cy
+0070       nuller = zeros(cx,1);
+0071       <span class="keyword">for</span> c = 1:cy
+0072     d(:,c) = sum((x-repmat(y(:,c),[1 cx])).^2,1)';
+0073       <span class="keyword">end</span>
+0074     <span class="keyword">else</span>
+0075       nuller = zeros(cy,1);
+0076       <span class="keyword">for</span> c = 1:cx
+0077     d(c,:) = sum((repmat(x(:,c),[1 cy])-y).^2,1);
+0078       <span class="keyword">end</span>
+0079     <span class="keyword">end</span>
+0080   <span class="keyword">end</span>
+0081   
+0082  <span class="keyword">case</span> 3  <span class="comment">% inspired by Roland Bunschoten</span>
+0083   <span class="keyword">if</span> exist(<span class="string">'y'</span>)~=1|isempty(y)
+0084     <span class="comment">% here comes code just for x</span>
+0085     cx = size(x,2);
+0086     xx = sum(x.*x,1); xz = x'*x;
+0087     d = abs(repmat(xx',[1 cx]) - 2*xz + repmat(xx,[cx 1]));
+0088   <span class="keyword">else</span>
+0089     <span class="comment">% here comes code for x and y</span>
+0090     [rx,cx] = size(x);
+0091     [ry,cy] = size(y);
+0092     <span class="keyword">if</span> rx~=ry, error(<span class="string">'x and y do not fit'</span>), <span class="keyword">end</span>
+0093     xx = sum(x.*x,1); yy = sum(y.*y,1);  xy = x'*y;  
+0094     d = abs(repmat(xx',[1 cy]) + repmat(yy,[cx 1]) - 2*xy);
+0095   <span class="keyword">end</span>
+0096 <span class="keyword">end</span>
+0097 
+0098 d = sqrt(d);
+0099</pre></div>
+<hr><address>Generated on Tue 04-May-2010 16:00:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

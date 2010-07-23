@@ -1,0 +1,7 @@
+Thanks to Stephan Harmeling for agreeing to allow redistribution of
+code contained in the files demo/distanz.m and
+demo/create_synthetic_dataset.m
+
+Thanks to David Gleich for allowing redistribution of the
+minnesota.mat file containing the minnesota traffic graph (originally
+distributed with the matlab_bgl software package).

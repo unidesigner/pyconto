@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sgwt_show_im</title>
+  <meta name="keywords" content="sgwt_show_im">
+  <meta name="description" content="sgwt_show_im : Display image, with correct pixel zoom">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">sgwt_toolbox</a> &gt; <a href="index.html">utils</a> &gt; sgwt_show_im.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sgwt_toolbox/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>sgwt_show_im
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>sgwt_show_im : Display image, with correct pixel zoom</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function sgwt_show_im(im,range,zoom) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> sgwt_show_im : Display image, with correct pixel zoom 
+
+ sgwt_show_im(im,range,zoom)
+
+ Inputs :
+ im - 2-d image
+ range - 2 element vector giving display color map range, 
+ range(1) maps to black, range(2) maps to white
+ If range not given, or empty matrix given for range, then
+ the default is to set it to the minimum and maximum of input image.
+ zoom - # of screen pixels taken by single image pixel. Default is 1</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../sgwt_toolbox/demo/sgwt_demo3.html" class="code" title="function sgwt_demo3">sgwt_demo3</a>	sgwt_demo3 : Image decomposition with SGWT wavelets based on local adjacency.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% sgwt_show_im : Display image, with correct pixel zoom</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% sgwt_show_im(im,range,zoom)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Inputs :</span>
+0006 <span class="comment">% im - 2-d image</span>
+0007 <span class="comment">% range - 2 element vector giving display color map range,</span>
+0008 <span class="comment">% range(1) maps to black, range(2) maps to white</span>
+0009 <span class="comment">% If range not given, or empty matrix given for range, then</span>
+0010 <span class="comment">% the default is to set it to the minimum and maximum of input image.</span>
+0011 <span class="comment">% zoom - # of screen pixels taken by single image pixel. Default is 1</span>
+0012 
+0013 <span class="comment">% This file is part of the SGWT toolbox (Spectral Graph Wavelet Transform toolbox)</span>
+0014 <span class="comment">% Copyright (C) 2010, David K. Hammond.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% The SGWT toolbox is free software: you can redistribute it and/or modify</span>
+0017 <span class="comment">% it under the terms of the GNU General Public License as published by</span>
+0018 <span class="comment">% the Free Software Foundation, either version 3 of the License, or</span>
+0019 <span class="comment">% (at your option) any later version.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% The SGWT toolbox is distributed in the hope that it will be useful,</span>
+0022 <span class="comment">% but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0023 <span class="comment">% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+0024 <span class="comment">% GNU General Public License for more details.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% You should have received a copy of the GNU General Public License</span>
+0027 <span class="comment">% along with the SGWT toolbox.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0028 
+0029 <a name="_sub0" href="#_subfunctions" class="code">function sgwt_show_im(im,range,zoom)</a>
+0030   <span class="keyword">if</span> nargin&lt;3
+0031     zoom=1;
+0032   <span class="keyword">end</span>
+0033   <span class="keyword">if</span> ( nargin&lt;2 || isempty(range) )
+0034     range(1)=min(im(:));
+0035     range(2)=max(im(:));
+0036   <span class="keyword">end</span>
+0037   
+0038   nshades=256;
+0039   d_im = ( im-range(1) ) *(nshades-1) /(range(2)-range(1));
+0040   dsize=size(im)*zoom; <span class="comment">% size in pixels to show on screen</span>
+0041   image( d_im );   
+0042   colormap(gray(nshades));
+0043   
+0044   ax=gca;
+0045   oldunits=get(ax,<span class="string">'Units'</span>);
+0046   set(ax,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0047   pos = get(ax,<span class="string">'Position'</span>);
+0048   axis(<span class="string">'off'</span>);
+0049   ctr = pos(1:2)+pos(3:4)/2;
+0050   set(ax,<span class="string">'Position'</span>,[floor(ctr-dsize/2)+0.5, dsize] );
+0051   axis(<span class="string">'equal'</span>); 
+0052 
+0053   <span class="comment">% restore units</span>
+0054   set(ax,<span class="string">'Units'</span>,oldunits);</pre></div>
+<hr><address>Generated on Tue 04-May-2010 16:00:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

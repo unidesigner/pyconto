@@ -5,7 +5,7 @@ wikis, toolboxes, libraries, labs, layouting, varia.
 Software
 --------
 
-* `Selection Tool <http://gvsr.polytech.univ-nantes.fr/GVSR/task?action=browse>`_
+* `Selection Tool <http://gvsr.polytech.univ-nantes.fr/GVSR/task?action=home>`_
 
 General
 ^^^^^^^

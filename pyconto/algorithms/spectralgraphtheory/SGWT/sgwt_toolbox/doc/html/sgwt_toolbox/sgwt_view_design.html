@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sgwt_view_design</title>
+  <meta name="keywords" content="sgwt_view_design">
+  <meta name="description" content="sgwt_view_design : display filter design in spectral domain">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">sgwt_toolbox</a> &gt; sgwt_view_design.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sgwt_toolbox&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>sgwt_view_design
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>sgwt_view_design : display filter design in spectral domain</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function sgwt_view_design(g,t,arange) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> sgwt_view_design : display filter design in spectral domain
+
+ function sgwt_view_design(g,t,arange)
+
+ This function graphs the input scaling function and wavelet
+ kernels, indicates the wavelet scales by legend, and also shows
+ the sum of squares G and corresponding frame bounds for the transform.
+
+ Inputs :
+ g - cell array of function handles for scaling function and
+   wavelet kernels
+ t - array of wavelet scales corresponding to wavelet kernels in g
+ arange - approximation range</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="sgwt_framebounds.html" class="code" title="function [A,B,sg2,x]=sgwt_framebounds(g,lmin,lmax)">sgwt_framebounds</a>	sgwt_framebounds : Compute approximate frame bounds for given sgw transform</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../sgwt_toolbox/demo/sgwt_demo1.html" class="code" title="function sgwt_demo1">sgwt_demo1</a>	sgwt_demo1 : SGWT for swiss roll data set</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function hline(y,varargin)</a></li></ul>
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% sgwt_view_design : display filter design in spectral domain</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% function sgwt_view_design(g,t,arange)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% This function graphs the input scaling function and wavelet</span>
+0006 <span class="comment">% kernels, indicates the wavelet scales by legend, and also shows</span>
+0007 <span class="comment">% the sum of squares G and corresponding frame bounds for the transform.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Inputs :</span>
+0010 <span class="comment">% g - cell array of function handles for scaling function and</span>
+0011 <span class="comment">%   wavelet kernels</span>
+0012 <span class="comment">% t - array of wavelet scales corresponding to wavelet kernels in g</span>
+0013 <span class="comment">% arange - approximation range</span>
+0014 
+0015 <span class="comment">% This file is part of the SGWT toolbox (Spectral Graph Wavelet Transform toolbox)</span>
+0016 <span class="comment">% Copyright (C) 2010, David K. Hammond.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% The SGWT toolbox is free software: you can redistribute it and/or modify</span>
+0019 <span class="comment">% it under the terms of the GNU General Public License as published by</span>
+0020 <span class="comment">% the Free Software Foundation, either version 3 of the License, or</span>
+0021 <span class="comment">% (at your option) any later version.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% The SGWT toolbox is distributed in the hope that it will be useful,</span>
+0024 <span class="comment">% but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0025 <span class="comment">% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+0026 <span class="comment">% GNU General Public License for more details.</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% You should have received a copy of the GNU General Public License</span>
+0029 <span class="comment">% along with the SGWT toolbox.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0030 
+0031 <a name="_sub0" href="#_subfunctions" class="code">function sgwt_view_design(g,t,arange)</a>
+0032 x=linspace(arange(1),arange(2),1e3);
+0033 clf
+0034 hold on
+0035 
+0036 J=numel(g)-1;
+0037 co=get(gca,<span class="string">'ColorOrder'</span>);
+0038 G=0*x;
+0039 <span class="keyword">for</span> n=0:J
+0040     plot(x,g{1+n}(x),<span class="string">'Color'</span>,co(1+n,:));
+0041     G=G+g{1+n}(x).^2;
+0042 <span class="keyword">end</span>
+0043 plot(x,G,<span class="string">'k'</span>);
+0044 [A,B]=<a href="sgwt_framebounds.html" class="code" title="function [A,B,sg2,x]=sgwt_framebounds(g,lmin,lmax)">sgwt_framebounds</a>(g,arange(1),arange(2));
+0045 
+0046 <a href="#_sub1" class="code" title="subfunction hline(y,varargin)">hline</a>(A,<span class="string">'m:'</span>);
+0047 <a href="#_sub1" class="code" title="subfunction hline(y,varargin)">hline</a>(B,<span class="string">'g:'</span>);
+0048 leglabels{1}=<span class="string">'h'</span>;
+0049 <span class="keyword">for</span> j=1:J
+0050     leglabels{1+j}=sprintf(<span class="string">'t=%.2f'</span>,t(j));
+0051 <span class="keyword">end</span>
+0052 leglabels{J+2}=<span class="string">'G'</span>;
+0053 leglabels{J+3}=<span class="string">'A'</span>;
+0054 leglabels{J+4}=<span class="string">'B'</span>;
+0055 
+0056 <span class="comment">%set(gca,'Ytick',0:3);</span>
+0057 
+0058 legend(leglabels)
+0059 title([<span class="string">'Scaling function kernel h(x), Wavelet kernels g(t_j x), Sum '</span> <span class="keyword">...</span>
+0060        <span class="string">'of Squares G, and Frame Bounds'</span>]);
+0061 
+0062 <a name="_sub1" href="#_subfunctions" class="code">function hline(y,varargin)</a>
+0063   xl=xlim;
+0064   plot(xl,y*[1 1],varargin{:});</pre></div>
+<hr><address>Generated on Tue 04-May-2010 16:00:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of demo2</title>
+  <meta name="keywords" content="demo2">
+  <meta name="description" content="demo2 : Allows exploring wavelet scale and approximation accuracy">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">sgwt_toolbox</a> &gt; <a href="index.html">demo</a> &gt; demo2.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sgwt_toolbox/demo&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>demo2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>demo2 : Allows exploring wavelet scale and approximation accuracy</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function demo2 </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> demo2 : Allows exploring wavelet scale and approximation accuracy
+
+ This demo builds the SGWT for the minnesota traffic graph, a graph
+ representing the connectivity of the minnesota highway system. One center
+ vertex is chosen, and then the exact (naive forward transform) and the
+ approximate (via chebyshev polynomial approximation) wavelet transforms
+ are computed for a particular value of the wavelet scale t. The relative
+ error of the exact and approximate wavelets is computed. The user may
+ then adjust the value of t, the degree m of the chebyshev polynomial
+ approximation, and the center vertex in order to explore their effects.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="argmin.html" class="code" title="function i = argmin(x)">argmin</a>	</li><li><a href="../../sgwt_toolbox/sgwt_cheby_coeff.html" class="code" title="function c=sgwt_cheby_coeff(g,m,N,arange)">sgwt_cheby_coeff</a>	sgwt_cheby_coeff : Compute Chebyshev coefficients of given function</li><li><a href="../../sgwt_toolbox/sgwt_cheby_eval.html" class="code" title="function r=sgwt_cheby_eval(x,c,arange)">sgwt_cheby_eval</a>	sgwt_cheby_eval : Evaluate shifted Chebyshev polynomial on given domain</li><li><a href="../../sgwt_toolbox/sgwt_cheby_op.html" class="code" title="function r=sgwt_cheby_op(f,L,c,arange)">sgwt_cheby_op</a>	sgwt_cheby_op : Chebyshev polynomial of Laplacian applied to vector</li><li><a href="../../sgwt_toolbox/sgwt_delta.html" class="code" title="function r=sgwt_delta(N,j)">sgwt_delta</a>	sgwt_delta : Return vector with one nonzero entry equal to 1.</li><li><a href="../../sgwt_toolbox/sgwt_ftsd.html" class="code" title="function r=sgwt_ftsd(f,g,t,L)">sgwt_ftsd</a>	sgwt_ftsd : Compute forward transform in spectral domain</li><li><a href="../../sgwt_toolbox/sgwt_kernel.html" class="code" title="function g=sgwt_kernel(x,varargin)">sgwt_kernel</a>	sgwt_kernel : Compute sgwt kernel</li><li><a href="../../sgwt_toolbox/sgwt_laplacian.html" class="code" title="function L = sgwt_laplacian(A,varargin)">sgwt_laplacian</a>	sgwt_laplacian :  Compute graph laplacian from connectivity matrix</li><li><a href="../../sgwt_toolbox/sgwt_rough_lmax.html" class="code" title="function lmax=sgwt_rough_lmax(L)">sgwt_rough_lmax</a>	sgwt_rough_lmax : Rough upper bound on maximum eigenvalue of L</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function update_graphfig</a></li><li><a href="#_sub2" class="code">function update_kernel</a></li><li><a href="#_sub3" class="code">function update_waveletfigs</a></li><li><a href="#_sub4" class="code">function show_wavelet(wp,x,y)</a></li><li><a href="#_sub5" class="code">function update_uitext</a></li><li><a href="#_sub6" class="code">function tslider_callback(source,eventdata)</a></li><li><a href="#_sub7" class="code">function mslider_callback(source,eventdata)</a></li><li><a href="#_sub8" class="code">function jbutton_callback(source,eventdata)</a></li></ul>
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% demo2 : Allows exploring wavelet scale and approximation accuracy</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This demo builds the SGWT for the minnesota traffic graph, a graph</span>
+0004 <span class="comment">% representing the connectivity of the minnesota highway system. One center</span>
+0005 <span class="comment">% vertex is chosen, and then the exact (naive forward transform) and the</span>
+0006 <span class="comment">% approximate (via chebyshev polynomial approximation) wavelet transforms</span>
+0007 <span class="comment">% are computed for a particular value of the wavelet scale t. The relative</span>
+0008 <span class="comment">% error of the exact and approximate wavelets is computed. The user may</span>
+0009 <span class="comment">% then adjust the value of t, the degree m of the chebyshev polynomial</span>
+0010 <span class="comment">% approximation, and the center vertex in order to explore their effects.</span>
+0011 
+0012 <a name="_sub0" href="#_subfunctions" class="code">function demo2</a>
+0013 close all
+0014 fprintf(<span class="string">'Welcome to SGWT demo #2\n'</span>);
+0015 
+0016 <span class="comment">% touch variables to be shared among sub-functions</span>
+0017 gb=[]; c=[]; 
+0018 
+0019 <span class="comment">% create UI elements</span>
+0020 fh=figure(<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'Name'</span>,<span class="string">'demo 2 ui'</span>,<span class="string">'Position'</span>,[425,920,400,150]);
+0021 uipanelh=uipanel(<span class="string">'Parent'</span>,fh,<span class="string">'Title'</span>,<span class="string">''</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'BorderType'</span>,<span class="string">'none'</span>);
+0022 tsliderh=uicontrol(uipanelh,<span class="string">'style'</span>,<span class="string">'slider'</span>,<span class="string">'max'</span>,50,<span class="string">'min'</span>,0,<span class="string">'value'</span>,1,<span class="keyword">...</span>
+0023                    <span class="string">'sliderstep'</span>,[.005 .1],<span class="string">'position'</span>,[25,10,300,20],<span class="keyword">...</span>
+0024                    <span class="string">'callback'</span>,{@<a href="#_sub6" class="code" title="subfunction tslider_callback(source,eventdata)">tslider_callback</a>});
+0025 msliderh=uicontrol(uipanelh,<span class="string">'style'</span>,<span class="string">'slider'</span>,<span class="string">'max'</span>,100,<span class="string">'min'</span>,1,<span class="string">'value'</span>,20,<span class="keyword">...</span>
+0026                    <span class="string">'sliderstep'</span>,[.001 .1],<span class="string">'position'</span>,[25,60,300,20],<span class="keyword">...</span>
+0027                    <span class="string">'callback'</span>,{@<a href="#_sub7" class="code" title="subfunction mslider_callback(source,eventdata)">mslider_callback</a>});
+0028 jbuttonh=uicontrol(uipanelh,<span class="string">'style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'position'</span>,[50,110,150,20],<span class="keyword">...</span>
+0029                    <span class="string">'string'</span>,<span class="string">'Select center vertex'</span>,<span class="string">'callback'</span>,{@<a href="#_sub8" class="code" title="subfunction jbutton_callback(source,eventdata)">jbutton_callback</a>});
+0030 ttexth=uicontrol(uipanelh,<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'string'</span>,<span class="string">''</span>,<span class="string">'position'</span>,[325,10,100,20]);
+0031 mtexth=uicontrol(uipanelh,<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'string'</span>,<span class="string">''</span>,<span class="string">'position'</span>,[325,60,100,20]);
+0032 jtexth=uicontrol(uipanelh,<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'string'</span>,<span class="string">''</span>,<span class="string">'position'</span>,[325,100,100,20]);
+0033 uicontrol(uipanelh,<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'string'</span>,<span class="keyword">...</span>
+0034           <span class="string">'Chebyshev polynomial order (m)'</span>,<span class="string">'position'</span>,<span class="keyword">...</span>
+0035            [60,80,200,20]);
+0036 uicontrol(uipanelh,<span class="string">'style'</span>,<span class="string">'text'</span>,<span class="string">'string'</span>,<span class="keyword">...</span>
+0037           <span class="string">'Wavelet scale (t)'</span>,<span class="string">'position'</span>,<span class="keyword">...</span>
+0038           [60,30,200,20]);
+0039 
+0040 
+0041 <span class="comment">%% Load graph and compute Laplacian</span>
+0042 fprintf(<span class="string">'Loading minnesota traffic graph\n'</span>);
+0043 Q=load(<span class="string">'minnesota.mat'</span>);
+0044 xy=Q.xy;
+0045 A=Q.A;
+0046 N=size(A,1);
+0047 x=xy(:,1);
+0048 y=xy(:,2);
+0049 
+0050 fprintf(<span class="string">'Computing graph laplacian\n'</span>)
+0051 [ki,kj]=find(A);
+0052 L=<a href="../../sgwt_toolbox/sgwt_laplacian.html" class="code" title="function L = sgwt_laplacian(A,varargin)">sgwt_laplacian</a>(A);
+0053 fprintf(<span class="string">'Measuring largest eigenvalue, lmax = '</span>);
+0054 lmax=<a href="../../sgwt_toolbox/sgwt_rough_lmax.html" class="code" title="function lmax=sgwt_rough_lmax(L)">sgwt_rough_lmax</a>(L);
+0055 fprintf(<span class="string">'%g\n'</span>,lmax);
+0056 arange=[0 lmax];
+0057 
+0058 msize=100;
+0059 
+0060 <span class="comment">% initial values</span>
+0061 t=3; <span class="comment">% wavelet scale</span>
+0062 
+0063 m=20; <span class="comment">% chebyshev polynomial order, for approximation</span>
+0064 jcenter=550;
+0065 
+0066 fprintf(<span class="string">'\n'</span>);
+0067 <a href="#_sub5" class="code" title="subfunction update_uitext">update_uitext</a>;
+0068 <a href="#_sub1" class="code" title="subfunction update_graphfig">update_graphfig</a>
+0069 <a href="#_sub2" class="code" title="subfunction update_kernel">update_kernel</a>
+0070 <a href="#_sub3" class="code" title="subfunction update_waveletfigs">update_waveletfigs</a>
+0071 
+0072 <a name="_sub1" href="#_subfunctions" class="code">function update_graphfig</a>
+0073   figure(2)
+0074   set(gcf,<span class="string">'renderer'</span>,<span class="string">'zbuffer'</span>);
+0075   fprintf(<span class="string">'Displaying traffic graph\n'</span>);
+0076   set(gcf,<span class="string">'position'</span>,[0,600,400,400]);
+0077   <span class="comment">%clf('reset');</span>
+0078   hold on
+0079   scatter(x,y,msize,[.5 .5 .5],<span class="string">'.'</span>);
+0080   plot([x(ki)';x(kj)'],[y(ki)';y(kj)'],<span class="string">'k'</span>);
+0081   set(gca,<span class="string">'Xtick'</span>,[]);
+0082   set(gca,<span class="string">'Ytick'</span>,[]);
+0083   axis equal
+0084   axis off
+0085   scatter(x(jcenter),y(jcenter),msize,<span class="string">'r.'</span>);
+0086   drawnow
+0087   <span class="keyword">end</span>
+0088 
+0089   <span class="keyword">function</span> <a href="#_sub2" class="code" title="subfunction update_kernel">update_kernel</a>
+0090   <span class="comment">% select wavelet kernel</span>
+0091   t1=1;
+0092   t2=2;
+0093   a=2;
+0094   b=2;
+0095   tmin=t1/lmax; 
+0096 <span class="comment">% scales t&lt;tmin will show same wavelet shape as t=tmin, as</span>
+0097 <span class="comment">% wavelet kernel g is monomial in interval [0,1)</span>
+0098 set(tsliderh,<span class="string">'min'</span>,tmin);
+0099   gb= @(x) <a href="../../sgwt_toolbox/sgwt_kernel.html" class="code" title="function g=sgwt_kernel(x,varargin)">sgwt_kernel</a>(x,<span class="string">'a'</span>,a,<span class="string">'b'</span>,b,<span class="string">'t1'</span>,t1,<span class="string">'t2'</span>,t2);
+0100   g=@(x) gb(t*x);
+0101   <span class="comment">% polynomial approximation</span>
+0102   <span class="keyword">for</span> k=1:numel(g)
+0103     c=<a href="../../sgwt_toolbox/sgwt_cheby_coeff.html" class="code" title="function c=sgwt_cheby_coeff(g,m,N,arange)">sgwt_cheby_coeff</a>(g,m,m+1,arange);
+0104   <span class="keyword">end</span>
+0105   lambda=linspace(0,lmax,1e3);
+0106   figure(3)
+0107   set(gcf,<span class="string">'position'</span>,[425,580,600,250])
+0108   plot(lambda,g(lambda),lambda,<a href="../../sgwt_toolbox/sgwt_cheby_eval.html" class="code" title="function r=sgwt_cheby_eval(x,c,arange)">sgwt_cheby_eval</a>(lambda,c,arange));
+0109   legend(<span class="string">'Exact Wavelet kernel'</span>,<span class="string">'Chebyshev polynomial approximation'</span>);
+0110 <span class="keyword">end</span>
+0111 
+0112 <a name="_sub2" href="#_subfunctions" class="code">function update_waveletfigs</a>
+0113   
+0114   fprintf(<span class="string">'\nReomputing wavelets with t=%g, m=%g\n'</span>,t,m);
+0115   d=<a href="../../sgwt_toolbox/sgwt_delta.html" class="code" title="function r=sgwt_delta(N,j)">sgwt_delta</a>(N,jcenter);
+0116   fprintf(<span class="string">'Computing wavelet by naive forward transform\n'</span>);
+0117   figure(4)
+0118   set(gcf,<span class="string">'position'</span>,[0,100,400,400])
+0119   wp_e=<a href="../../sgwt_toolbox/sgwt_ftsd.html" class="code" title="function r=sgwt_ftsd(f,g,t,L)">sgwt_ftsd</a>(d,gb,t,L);
+0120   <a href="#_sub4" class="code" title="subfunction show_wavelet(wp,x,y)">show_wavelet</a>(wp_e,x,y);
+0121   <span class="comment">% show wavelet (naive)</span>
+0122   title(<span class="string">'exact wavelet (naive forward transform)'</span>);  
+0123   fprintf(<span class="string">'Computing wavelet by Chebyshev approximation\n'</span>);
+0124   figure(5)
+0125   set(gcf,<span class="string">'position'</span>,[425,100,400,400])
+0126   <span class="comment">% show wavelet (chebyshev)</span>
+0127   wp_c=<a href="../../sgwt_toolbox/sgwt_cheby_op.html" class="code" title="function r=sgwt_cheby_op(f,L,c,arange)">sgwt_cheby_op</a>(d,L,c,arange);
+0128   <a href="#_sub4" class="code" title="subfunction show_wavelet(wp,x,y)">show_wavelet</a>(wp_c,x,y);
+0129   title(<span class="string">'approximate wavelet (transform via chebyshev approximation)'</span>);
+0130   relerr=norm(wp_e-wp_c)/norm(wp_e);
+0131   fprintf(<span class="string">'Relative error between exact and approximate wavelet %g\n'</span>,relerr)
+0132 <span class="keyword">end</span>
+0133 
+0134 <a name="_sub3" href="#_subfunctions" class="code">function show_wavelet(wp,x,y)</a>
+0135 [Fs,s_ind]=sort(abs(wp),<span class="string">'descend'</span>);
+0136 scatter(x(s_ind),y(s_ind),msize,wp(s_ind),<span class="string">'.'</span>);
+0137 caxis([-1 1]*max(abs(wp)));
+0138 hcb=colorbar(<span class="string">'location'</span>,<span class="string">'north'</span>);
+0139 set(gca,<span class="string">'Xtick'</span>,[]);
+0140 set(gca,<span class="string">'Ytick'</span>,[]);
+0141 cxt=get(hcb,<span class="string">'Xtick'</span>);
+0142 cxt=[cxt(1),0,cxt(end)];
+0143 set(hcb,<span class="string">'Xtick'</span>,cxt);
+0144 cpos=get(hcb,<span class="string">'Position'</span>);
+0145 cpos(4)=.02; <span class="comment">% make colorbar thinner</span>
+0146 set(hcb,<span class="string">'Position'</span>,cpos);
+0147 axis equal
+0148 axis off
+0149 <span class="keyword">end</span>
+0150 
+0151 <a name="_sub4" href="#_subfunctions" class="code">function update_uitext</a>
+0152 set(ttexth,<span class="string">'string'</span>,sprintf(<span class="string">'t=%0.3f'</span>,t));
+0153 set(mtexth,<span class="string">'string'</span>,sprintf(<span class="string">'m=%g'</span>,m));
+0154 set(jtexth,<span class="string">'string'</span>,sprintf(<span class="string">'j=%g'</span>,jcenter));
+0155 <span class="keyword">end</span>
+0156 
+0157 <a name="_sub5" href="#_subfunctions" class="code">function tslider_callback(source,eventdata)</a>
+0158 t=get(tsliderh,<span class="string">'value'</span>);
+0159 <a href="#_sub5" class="code" title="subfunction update_uitext">update_uitext</a>;
+0160 <a href="#_sub2" class="code" title="subfunction update_kernel">update_kernel</a>;
+0161 <a href="#_sub3" class="code" title="subfunction update_waveletfigs">update_waveletfigs</a>;
+0162 <span class="keyword">end</span>
+0163 
+0164 <a name="_sub6" href="#_subfunctions" class="code">function mslider_callback(source,eventdata)</a>
+0165 newm=get(msliderh,<span class="string">'value'</span>);
+0166 <span class="keyword">if</span> newm&lt;m
+0167   m=floor(newm);
+0168 <span class="keyword">else</span>
+0169   m=ceil(newm);
+0170 <span class="keyword">end</span>
+0171 set(msliderh,<span class="string">'value'</span>,m);
+0172 <a href="#_sub5" class="code" title="subfunction update_uitext">update_uitext</a>;
+0173 <a href="#_sub2" class="code" title="subfunction update_kernel">update_kernel</a>;
+0174 <a href="#_sub3" class="code" title="subfunction update_waveletfigs">update_waveletfigs</a>;
+0175 <span class="keyword">end</span>
+0176 
+0177 <a name="_sub7" href="#_subfunctions" class="code">function jbutton_callback(source,eventdata)</a>
+0178 figure(2)
+0179 fprintf(<span class="string">'Select new center vertex\n'</span>);
+0180 [xp,yp]=ginput(1);
+0181 oldjcenter=jcenter;
+0182 jcenter=<a href="argmin.html" class="code" title="function i = argmin(x)">argmin</a>((xp-x).^2+(yp-y).^2);
+0183 scatter(x(jcenter),y(jcenter),msize,<span class="string">'r.'</span>);
+0184 scatter(x(oldjcenter),y(oldjcenter),msize,[.5 .5 .5],<span class="string">'.'</span>);
+0185 drawnow
+0186 <a href="#_sub5" class="code" title="subfunction update_uitext">update_uitext</a>
+0187 <a href="#_sub3" class="code" title="subfunction update_waveletfigs">update_waveletfigs</a>
+0188 <span class="keyword">end</span>
+0189 
+0190 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 30-Apr-2010 17:49:57 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

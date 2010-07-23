@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of demo3</title>
+  <meta name="keywords" content="demo3">
+  <meta name="description" content="demo3 : Image decomposition with SGWT wavelets based on local adjacency.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">sgwt_toolbox</a> &gt; <a href="index.html">demo</a> &gt; demo3.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sgwt_toolbox/demo&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>demo3
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>demo3 : Image decomposition with SGWT wavelets based on local adjacency.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function demo3 </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> demo3 : Image decomposition with SGWT wavelets based on local adjacency.
+
+ This demo builds the SGWT transform on a graph representing 
+ adjacency on a pixel mesh with 4-nearest neighbor connectivity.
+ This demonstrates inverse on problem with large dimension.
+
+ The demo loads an image file and decomposes the image with the SGWT,
+ showing the coefficients as images at each scale. The demo does not show
+ the individual wavelets (this could be done by replacing the input 
+ image by a &quot;delta image&quot; with a single unit nonzero pixel) .
+
+ The inverse is then computed, from the original coefficients as well as 
+ from a modified set of coefficients where only coefficients at one
+ scale are preserved. This shows that the SGWT can generate a
+ multiresolution decomposition for images. We don't claim that this
+ particular local-adjacency based transform is better for image
+ processing than other available wavelet image decompositions, but it
+ demonstrates the flexibility of the SGWT.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../sgwt_toolbox/sgwt_cheby_coeff.html" class="code" title="function c=sgwt_cheby_coeff(g,m,N,arange)">sgwt_cheby_coeff</a>	sgwt_cheby_coeff : Compute Chebyshev coefficients of given function</li><li><a href="../../sgwt_toolbox/sgwt_cheby_op.html" class="code" title="function r=sgwt_cheby_op(f,L,c,arange)">sgwt_cheby_op</a>	sgwt_cheby_op : Chebyshev polynomial of Laplacian applied to vector</li><li><a href="../../sgwt_toolbox/sgwt_filter_design.html" class="code" title="function [g,gp,t]=sgwt_filter_design(lmax,Nscales,varargin)">sgwt_filter_design</a>	sgwt_filter_design : Return list of scaled wavelet kernels and derivatives</li><li><a href="../../sgwt_toolbox/sgwt_inverse.html" class="code" title="function r=sgwt_inverse(y,L,c,arange,varargin)">sgwt_inverse</a>	sgwt_inverse : Compute inverse sgw transform, via conjugate gradients</li><li><a href="../../sgwt_toolbox/sgwt_laplacian.html" class="code" title="function L = sgwt_laplacian(A,varargin)">sgwt_laplacian</a>	sgwt_laplacian :  Compute graph laplacian from connectivity matrix</li><li><a href="../../sgwt_toolbox/sgwt_meshmat.html" class="code" title="function A=sgwt_meshmat(dim,varargin)">sgwt_meshmat</a>	sgwt_meshmat : Adjacency matrix for regular 2d mesh</li><li><a href="../../sgwt_toolbox/sgwt_rough_lmax.html" class="code" title="function lmax=sgwt_rough_lmax(L)">sgwt_rough_lmax</a>	sgwt_rough_lmax : Rough upper bound on maximum eigenvalue of L</li><li><a href="../../sgwt_toolbox/utils/sgwt_show_im.html" class="code" title="function sgwt_show_im(im,range,zoom)">sgwt_show_im</a>	sgwt_show_im : Display image, with correct pixel zoom</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% demo3 : Image decomposition with SGWT wavelets based on local adjacency.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This demo builds the SGWT transform on a graph representing</span>
+0004 <span class="comment">% adjacency on a pixel mesh with 4-nearest neighbor connectivity.</span>
+0005 <span class="comment">% This demonstrates inverse on problem with large dimension.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% The demo loads an image file and decomposes the image with the SGWT,</span>
+0008 <span class="comment">% showing the coefficients as images at each scale. The demo does not show</span>
+0009 <span class="comment">% the individual wavelets (this could be done by replacing the input</span>
+0010 <span class="comment">% image by a &quot;delta image&quot; with a single unit nonzero pixel) .</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% The inverse is then computed, from the original coefficients as well as</span>
+0013 <span class="comment">% from a modified set of coefficients where only coefficients at one</span>
+0014 <span class="comment">% scale are preserved. This shows that the SGWT can generate a</span>
+0015 <span class="comment">% multiresolution decomposition for images. We don't claim that this</span>
+0016 <span class="comment">% particular local-adjacency based transform is better for image</span>
+0017 <span class="comment">% processing than other available wavelet image decompositions, but it</span>
+0018 <span class="comment">% demonstrates the flexibility of the SGWT.</span>
+0019 
+0020 
+0021 <a name="_sub0" href="#_subfunctions" class="code">function demo3</a>
+0022 close all;
+0023 fprintf(<span class="string">'Welcome to SGWT demo #3\n'</span>);
+0024 <span class="comment">% load image</span>
+0025 imname=<span class="string">'paques_attack.png'</span>;
+0026 fprintf(<span class="string">'loading image %s\n'</span>,imname);
+0027 im = double( imread(imname) );
+0028 <span class="comment">% build mesh adjacency graph</span>
+0029 fprintf(<span class="string">'Building mesh adjacency graph\n'</span>);
+0030 A=<a href="../../sgwt_toolbox/sgwt_meshmat.html" class="code" title="function A=sgwt_meshmat(dim,varargin)">sgwt_meshmat</a>(size(im));
+0031 <span class="comment">% transform</span>
+0032 fprintf(<span class="string">'Calculating graph Laplacian\n'</span>);
+0033 L=<a href="../../sgwt_toolbox/sgwt_laplacian.html" class="code" title="function L = sgwt_laplacian(A,varargin)">sgwt_laplacian</a>(A);
+0034 fprintf(<span class="string">'Measuring largest eigenvalue, lmax = '</span>);
+0035 lmax=<a href="../../sgwt_toolbox/sgwt_rough_lmax.html" class="code" title="function lmax=sgwt_rough_lmax(L)">sgwt_rough_lmax</a>(L);
+0036 arange=[0,lmax];
+0037 fprintf(<span class="string">'%g\n'</span>,lmax);
+0038 
+0039 Nscales=5;
+0040 fprintf(<span class="string">'Designing transform in spectral domain\n'</span>);
+0041 [g,gp,t]=<a href="../../sgwt_toolbox/sgwt_filter_design.html" class="code" title="function [g,gp,t]=sgwt_filter_design(lmax,Nscales,varargin)">sgwt_filter_design</a>(lmax,Nscales);
+0042 
+0043 m=25; <span class="comment">% order of polynomial approximation</span>
+0044 fprintf(<span class="string">'Computing Chebyshev polynomials of order %g for fast transform \n'</span>,m);
+0045 <span class="keyword">for</span> k=1:numel(g)
+0046     c{k}=<a href="../../sgwt_toolbox/sgwt_cheby_coeff.html" class="code" title="function c=sgwt_cheby_coeff(g,m,N,arange)">sgwt_cheby_coeff</a>(g{k},m,m+1,arange);
+0047 <span class="keyword">end</span>
+0048 
+0049 fprintf(<span class="string">'Computing forward transform\n'</span>);
+0050 wpall=<a href="../../sgwt_toolbox/sgwt_cheby_op.html" class="code" title="function r=sgwt_cheby_op(f,L,c,arange)">sgwt_cheby_op</a>(im(:),L,c,arange);
+0051 
+0052 <span class="comment">% invert with all subbands</span>
+0053 fprintf(<span class="string">'Computing inverse transform with all coefficients\n'</span>);
+0054 imr1=<a href="../../sgwt_toolbox/sgwt_inverse.html" class="code" title="function r=sgwt_inverse(y,L,c,arange,varargin)">sgwt_inverse</a>(wpall,L,c,arange);
+0055 imr1=reshape(imr1,size(im));
+0056 
+0057 ks=3; <span class="comment">% scale at which to keep coefficients, set all others to zero.</span>
+0058 fprintf(<span class="string">'\nsetting all coefficients to zero except wavelet scale %g\n'</span>,ks-1);
+0059 <span class="comment">% invert with only one scale</span>
+0060 <span class="keyword">for</span> k=1:numel(wpall)
+0061     wpall2{k}=zeros(size(wpall{k}));
+0062 <span class="keyword">end</span>
+0063 wpall2{ks}=wpall{ks};
+0064 fprintf(<span class="string">'Computing inverse transform with coefficients from wavelet scale %g only\n'</span>,ks-1);
+0065 imr2=<a href="../../sgwt_toolbox/sgwt_inverse.html" class="code" title="function r=sgwt_inverse(y,L,c,arange,varargin)">sgwt_inverse</a>(wpall2,L,c,arange);
+0066 imr2=reshape(imr2,size(im));
+0067 
+0068 <span class="comment">%% display results</span>
+0069 figure(1)
+0070 set(gcf,<span class="string">'position'</span>,[ 5   730   350   350]);
+0071 <a href="../../sgwt_toolbox/utils/sgwt_show_im.html" class="code" title="function sgwt_show_im(im,range,zoom)">sgwt_show_im</a>(im)
+0072 title(<span class="string">'original image'</span>);
+0073 set(gcf,<span class="string">'menubar'</span>,<span class="string">'none'</span>)
+0074 figure(2)
+0075 set(gcf,<span class="string">'position'</span>,[365 730 350 350]);
+0076 <a href="../../sgwt_toolbox/utils/sgwt_show_im.html" class="code" title="function sgwt_show_im(im,range,zoom)">sgwt_show_im</a>(imr1)
+0077 title(<span class="string">'reconstuction from all coefficients'</span>);
+0078 set(gcf,<span class="string">'menubar'</span>,<span class="string">'none'</span>)
+0079 
+0080 figure(3)
+0081 set(gcf,<span class="string">'position'</span>,[725 730 350 350]);
+0082 <a href="../../sgwt_toolbox/utils/sgwt_show_im.html" class="code" title="function sgwt_show_im(im,range,zoom)">sgwt_show_im</a>(imr2);
+0083 title(sprintf(<span class="string">'reconstruction only from wavelets at scale %g'</span>,ks-1));
+0084 set(gcf,<span class="string">'menubar'</span>,<span class="string">'none'</span>)
+0085 
+0086 figure(4)
+0087 set(gcf,<span class="string">'position'</span>,[0 0 1150 700]);
+0088 set(gcf,<span class="string">'menubar'</span>,<span class="string">'none'</span>)
+0089 <span class="keyword">for</span> k=1:Nscales+1
+0090     subplot(2,3,k);
+0091     <a href="../../sgwt_toolbox/utils/sgwt_show_im.html" class="code" title="function sgwt_show_im(im,range,zoom)">sgwt_show_im</a>(reshape(wpall{k},size(im)));
+0092     <span class="keyword">if</span> k==1
+0093         title(<span class="string">'Scaling function coefficients'</span>);
+0094     <span class="keyword">else</span>
+0095         title(sprintf(<span class="string">'Wavelet coefficients at scale %g'</span>,k-1));
+0096     <span class="keyword">end</span>
+0097 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 30-Apr-2010 17:49:57 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

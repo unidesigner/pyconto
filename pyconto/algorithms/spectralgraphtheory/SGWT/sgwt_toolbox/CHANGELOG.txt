@@ -1,0 +1,2 @@
+May 1, 2010 - initial release
+May 4, 2010 - Added GPL license text

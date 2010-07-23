@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sgwt_filter_design</title>
+  <meta name="keywords" content="sgwt_filter_design">
+  <meta name="description" content="sgwt_filter_design : Return list of scaled wavelet kernels and derivatives">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">sgwt_toolbox</a> &gt; sgwt_filter_design.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sgwt_toolbox&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>sgwt_filter_design
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>sgwt_filter_design : Return list of scaled wavelet kernels and derivatives</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [g,gp,t]=sgwt_filter_design(lmax,Nscales,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> sgwt_filter_design : Return list of scaled wavelet kernels and derivatives
+ g{1} is scaling function kernel, 
+ g{2} ... g{Nscales+1} are wavelet kernels
+
+ function [g,gp]=sgwt_filter_design(lmax,Nscales,varargin)
+
+ Inputs :
+ lmax - upper bound on spectrum
+ Nscales - number of wavelet scales
+
+ selectable parameters : 
+ designtype
+ lpfactor - default 20. lmin=lmax/lpfactor will be used to determine
+            scales, then scaling function kernel will be created to
+            fill the lowpass gap.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="sgwt_kernel.html" class="code" title="function g=sgwt_kernel(x,varargin)">sgwt_kernel</a>	sgwt_kernel : Compute sgwt kernel</li><li><a href="sgwt_setscales.html" class="code" title="function s=sgwt_setscales(lmin,lmax,Nscales)">sgwt_setscales</a>	sgwt_setscales : Compute a set of wavelet scales adapted to spectrum bounds</li><li><a href="../sgwt_toolbox/utils/argselectAssign.html" class="code" title="function argselectAssign(variable_value_pairs)">argselectAssign</a>	argselectAssign : Assign variables in calling workspace</li><li><a href="../sgwt_toolbox/utils/argselectCheck.html" class="code" title="function argselectCheck(control_params,varargin_in)">argselectCheck</a>	argselectCheck : Check if control parameters are valid</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../sgwt_toolbox/demo/sgwt_demo1.html" class="code" title="function sgwt_demo1">sgwt_demo1</a>	sgwt_demo1 : SGWT for swiss roll data set</li><li><a href="../sgwt_toolbox/demo/sgwt_demo3.html" class="code" title="function sgwt_demo3">sgwt_demo3</a>	sgwt_demo3 : Image decomposition with SGWT wavelets based on local adjacency.</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% sgwt_filter_design : Return list of scaled wavelet kernels and derivatives</span>
+0002 <span class="comment">% g{1} is scaling function kernel,</span>
+0003 <span class="comment">% g{2} ... g{Nscales+1} are wavelet kernels</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% function [g,gp]=sgwt_filter_design(lmax,Nscales,varargin)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs :</span>
+0008 <span class="comment">% lmax - upper bound on spectrum</span>
+0009 <span class="comment">% Nscales - number of wavelet scales</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% selectable parameters :</span>
+0012 <span class="comment">% designtype</span>
+0013 <span class="comment">% lpfactor - default 20. lmin=lmax/lpfactor will be used to determine</span>
+0014 <span class="comment">%            scales, then scaling function kernel will be created to</span>
+0015 <span class="comment">%            fill the lowpass gap.</span>
+0016 
+0017 <span class="comment">% This file is part of the SGWT toolbox (Spectral Graph Wavelet Transform toolbox)</span>
+0018 <span class="comment">% Copyright (C) 2010, David K. Hammond.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% The SGWT toolbox is free software: you can redistribute it and/or modify</span>
+0021 <span class="comment">% it under the terms of the GNU General Public License as published by</span>
+0022 <span class="comment">% the Free Software Foundation, either version 3 of the License, or</span>
+0023 <span class="comment">% (at your option) any later version.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% The SGWT toolbox is distributed in the hope that it will be useful,</span>
+0026 <span class="comment">% but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0027 <span class="comment">% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+0028 <span class="comment">% GNU General Public License for more details.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% You should have received a copy of the GNU General Public License</span>
+0031 <span class="comment">% along with the SGWT toolbox.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0032 
+0033 <a name="_sub0" href="#_subfunctions" class="code">function [g,gp,t]=sgwt_filter_design(lmax,Nscales,varargin)</a>
+0034 control_params={<span class="string">'designtype'</span>,<span class="string">'default'</span>,<span class="string">'lpfactor'</span>,20,<span class="keyword">...</span>
+0035     <span class="string">'a'</span>,2,<span class="keyword">...</span>
+0036     <span class="string">'b'</span>,2,<span class="keyword">...</span>
+0037     <span class="string">'t1'</span>,1,<span class="keyword">...</span>
+0038     <span class="string">'t2'</span>,2,<span class="keyword">...</span>
+0039     };
+0040 <a href="../sgwt_toolbox/utils/argselectAssign.html" class="code" title="function argselectAssign(variable_value_pairs)">argselectAssign</a>(control_params);
+0041 <a href="../sgwt_toolbox/utils/argselectCheck.html" class="code" title="function argselectCheck(control_params,varargin_in)">argselectCheck</a>(control_params,varargin);
+0042 <a href="../sgwt_toolbox/utils/argselectAssign.html" class="code" title="function argselectAssign(variable_value_pairs)">argselectAssign</a>(varargin);
+0043 
+0044 <span class="keyword">switch</span> designtype
+0045     <span class="keyword">case</span> <span class="string">'default'</span>
+0046         lmin=lmax/lpfactor;
+0047         t=<a href="sgwt_setscales.html" class="code" title="function s=sgwt_setscales(lmin,lmax,Nscales)">sgwt_setscales</a>(lmin,lmax,Nscales);
+0048         gl = @(x) exp(-x.^4);
+0049         glp = @(x) -4*x.^3 .*exp(-x.^4);
+0050         gb= @(x) <a href="sgwt_kernel.html" class="code" title="function g=sgwt_kernel(x,varargin)">sgwt_kernel</a>(x,<span class="string">'a'</span>,a,<span class="string">'b'</span>,b,<span class="string">'t1'</span>,t1,<span class="string">'t2'</span>,t2);
+0051         gbp = @(x) sgwt_kernel_derivative(x,<span class="string">'a'</span>,a,<span class="string">'b'</span>,b,<span class="string">'t1'</span>,t1,<span class="string">'t2'</span>,t2);
+0052         <span class="keyword">for</span> j=1:Nscales
+0053             g{j+1}=@(x) gb(t(end+1-j)*x);
+0054             gp{j+1}=@(x) gbp(t(end+1-j)*x)*t(end+1-j); <span class="comment">% derivative</span>
+0055         <span class="keyword">end</span>
+0056         <span class="comment">% find maximum of g's ...</span>
+0057         <span class="comment">% I could get this analytically as it is a cubic spline, but</span>
+0058         <span class="comment">% this also works.</span>
+0059         f=@(x) -gb(x);
+0060         xstar=fminbnd(f,1,2);
+0061         gamma_l=-f(xstar);
+0062         lminfac=.6*lmin;
+0063         g{1}=@(x) gamma_l*gl(x/lminfac);
+0064         gp{1} = @(x) gamma_l*glp(x/lminfac)/lminfac; <span class="comment">% derivative</span>
+0065  <span class="keyword">case</span> <span class="string">'mh'</span>
+0066   lmin=lmax/lpfactor;
+0067   t=<a href="sgwt_setscales.html" class="code" title="function s=sgwt_setscales(lmin,lmax,Nscales)">sgwt_setscales</a>(lmin,lmax,Nscales);
+0068   gb=@(x) <a href="sgwt_kernel.html" class="code" title="function g=sgwt_kernel(x,varargin)">sgwt_kernel</a>(x,<span class="string">'gtype'</span>,<span class="string">'mh'</span>);
+0069   gl = @(x) exp(-x.^4);
+0070   <span class="keyword">for</span> j=1:Nscales
+0071     g{j+1}=@(x) gb(t(end+1-j)*x);
+0072   <span class="keyword">end</span>
+0073   lminfac=.4*lmin;
+0074   g{1}=@(x) 1.2*exp(-1)*gl(x/lminfac);
+0075   
+0076  <span class="keyword">otherwise</span>
+0077   
+0078         keyboard
+0079         error(<span class="string">'Unknown design type'</span>);
+0080 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 04-May-2010 16:00:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

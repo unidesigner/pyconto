@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of demo1</title>
+  <meta name="keywords" content="demo1">
+  <meta name="description" content="demo1 : SGWT for swiss roll data set">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">sgwt_toolbox</a> &gt; <a href="index.html">demo</a> &gt; demo1.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sgwt_toolbox/demo&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>demo1
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>demo1 : SGWT for swiss roll data set</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function demo1 </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> demo1 : SGWT for swiss roll data set
+
+ This demo builds the SGWT for the swiss roll synthetic data set. It
+ computes a set of scales adapted to the computed upper bound on the
+ spectrum of the graph Laplacian, and displays the scaling function and
+ the scaled wavlet kernels, as well as the corresponding frame bounds. It
+ then computes the wavelets centered on a single vertex, and displays
+ them. This essentally reproduces figure 3 from 
+ Hammond,Vangergheynst, Gribonval 2010.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="create_synthetic_dataset.html" class="code" title="function data = create_synthetic_dataset(data)">create_synthetic_dataset</a>	create_synthetic_dataset creates test data for running nldr algorithms.</li><li><a href="distanz.html" class="code" title="function d = distanz(x,y,type)">distanz</a>	DISTANZ calcs the distances between all vectors in x and y.</li><li><a href="rescale_center.html" class="code" title="function r=rescale_center(x)">rescale_center</a>	rescale_center</li><li><a href="../../sgwt_toolbox/sgwt_cheby_coeff.html" class="code" title="function c=sgwt_cheby_coeff(g,m,N,arange)">sgwt_cheby_coeff</a>	sgwt_cheby_coeff : Compute Chebyshev coefficients of given function</li><li><a href="../../sgwt_toolbox/sgwt_cheby_op.html" class="code" title="function r=sgwt_cheby_op(f,L,c,arange)">sgwt_cheby_op</a>	sgwt_cheby_op : Chebyshev polynomial of Laplacian applied to vector</li><li><a href="../../sgwt_toolbox/sgwt_delta.html" class="code" title="function r=sgwt_delta(N,j)">sgwt_delta</a>	sgwt_delta : Return vector with one nonzero entry equal to 1.</li><li><a href="../../sgwt_toolbox/sgwt_filter_design.html" class="code" title="function [g,gp,t]=sgwt_filter_design(lmax,Nscales,varargin)">sgwt_filter_design</a>	sgwt_filter_design : Return list of scaled wavelet kernels and derivatives</li><li><a href="../../sgwt_toolbox/sgwt_laplacian.html" class="code" title="function L = sgwt_laplacian(A,varargin)">sgwt_laplacian</a>	sgwt_laplacian :  Compute graph laplacian from connectivity matrix</li><li><a href="../../sgwt_toolbox/sgwt_rough_lmax.html" class="code" title="function lmax=sgwt_rough_lmax(L)">sgwt_rough_lmax</a>	sgwt_rough_lmax : Rough upper bound on maximum eigenvalue of L</li><li><a href="../../sgwt_toolbox/sgwt_view_design.html" class="code" title="function sgwt_view_design(g,t,arange)">sgwt_view_design</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function clean_axes(cp)</a></li></ul>
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% demo1 : SGWT for swiss roll data set</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This demo builds the SGWT for the swiss roll synthetic data set. It</span>
+0004 <span class="comment">% computes a set of scales adapted to the computed upper bound on the</span>
+0005 <span class="comment">% spectrum of the graph Laplacian, and displays the scaling function and</span>
+0006 <span class="comment">% the scaled wavlet kernels, as well as the corresponding frame bounds. It</span>
+0007 <span class="comment">% then computes the wavelets centered on a single vertex, and displays</span>
+0008 <span class="comment">% them. This essentally reproduces figure 3 from</span>
+0009 <span class="comment">% Hammond,Vangergheynst, Gribonval 2010.</span>
+0010 
+0011 <span class="comment">% Create swiss roll point cloud</span>
+0012 <a name="_sub0" href="#_subfunctions" class="code">function demo1 </a>
+0013 close all
+0014 fprintf(<span class="string">'Welcome to SGWT demo #1\n'</span>);
+0015 
+0016 npoints=500;
+0017 fprintf(<span class="string">'Creating Swiss Roll point cloud with %g points\n'</span>,npoints);
+0018 dataparams=struct(<span class="string">'n'</span>,npoints,<span class="string">'dataset'</span>,-1',<span class="string">'noise'</span>,0,<span class="string">'state'</span>,0);
+0019 r=<a href="create_synthetic_dataset.html" class="code" title="function data = create_synthetic_dataset(data)">create_synthetic_dataset</a>(dataparams);
+0020 x=<a href="rescale_center.html" class="code" title="function r=rescale_center(x)">rescale_center</a>(r.x);
+0021 
+0022 
+0023 fprintf(<span class="string">'Computing edge weights and graph Laplacian\n'</span>);
+0024 <span class="comment">% Compute Weighted graph adjacency matrix, and graph Laplacian</span>
+0025 d=<a href="distanz.html" class="code" title="function d = distanz(x,y,type)">distanz</a>(x);
+0026 s=.1;
+0027 A=exp(-d.^2/(2*s^2)); 
+0028 L=full(<a href="../../sgwt_toolbox/sgwt_laplacian.html" class="code" title="function L = sgwt_laplacian(A,varargin)">sgwt_laplacian</a>(A));
+0029 
+0030 fprintf(<span class="string">'Measuring largest eigenvalue, lmax = '</span>);
+0031 
+0032 <span class="comment">%% Design filters for transform</span>
+0033 Nscales=4;
+0034 lmax=<a href="../../sgwt_toolbox/sgwt_rough_lmax.html" class="code" title="function lmax=sgwt_rough_lmax(L)">sgwt_rough_lmax</a>(L);
+0035 fprintf(<span class="string">'%g\n'</span>,lmax);
+0036 
+0037 fprintf(<span class="string">'Designing transform in spectral domain\n'</span>); 
+0038 [g,gp,t]=<a href="../../sgwt_toolbox/sgwt_filter_design.html" class="code" title="function [g,gp,t]=sgwt_filter_design(lmax,Nscales,varargin)">sgwt_filter_design</a>(lmax,Nscales);
+0039 arange=[0 lmax];
+0040 <span class="comment">%% Display filter design in spectral domain</span>
+0041 figure
+0042 <a href="../../sgwt_toolbox/sgwt_view_design.html" class="code" title="function sgwt_view_design(g,t,arange)">sgwt_view_design</a>(g,t,arange);
+0043 ylim([0 3])
+0044 set(gcf,<span class="string">'position'</span>,[0 780,600,300])
+0045 <span class="comment">%% Chebyshev polynomial approximation</span>
+0046 m=50; <span class="comment">% order of polynomial approximation</span>
+0047 fprintf(<span class="string">'Computing Chebyshev polynomials of order %g for fast transform \n'</span>,m);
+0048 <span class="keyword">for</span> k=1:numel(g)
+0049   c{k}=<a href="../../sgwt_toolbox/sgwt_cheby_coeff.html" class="code" title="function c=sgwt_cheby_coeff(g,m,N,arange)">sgwt_cheby_coeff</a>(g{k},m,m+1,arange);
+0050 <span class="keyword">end</span>
+0051 
+0052 <span class="comment">%% compute transform of delta at one vertex</span>
+0053 jcenter=32; <span class="comment">% vertex to center wavelets to be shown</span>
+0054 fprintf(<span class="string">'Computing forward transform of delta at vertex %g\n'</span>,jcenter);
+0055 N=size(L,1);
+0056 d=<a href="../../sgwt_toolbox/sgwt_delta.html" class="code" title="function r=sgwt_delta(N,j)">sgwt_delta</a>(N,jcenter);
+0057 <span class="comment">% forward transform, using chebyshev approximation</span>
+0058 wpall=<a href="../../sgwt_toolbox/sgwt_cheby_op.html" class="code" title="function r=sgwt_cheby_op(f,L,c,arange)">sgwt_cheby_op</a>(d,L,c,arange);
+0059 
+0060 fprintf(<span class="string">'Displaying wavelets\n'</span>);
+0061 msize=100;
+0062 cp=[-1.4,-16.9,3.4]; <span class="comment">% camera position</span>
+0063 <span class="comment">%% Visualize result</span>
+0064 
+0065 <span class="comment">% show original point</span>
+0066 ws=300;
+0067 figure;
+0068 xp=0; yp=ws+100;
+0069 set(gcf,<span class="string">'position'</span>,[xp,yp,ws-10,ws+10]);
+0070 scatter3(x(1,:),x(2,:),x(3,:),msize,d,<span class="string">'.'</span>);
+0071 set(gcf,<span class="string">'Colormap'</span>,[.5 .5 .5;1 0 0]);
+0072 <a href="#_sub1" class="code" title="subfunction clean_axes(cp)">clean_axes</a>(cp);
+0073 title(sprintf(<span class="string">'Vertex %g'</span>,jcenter));
+0074 
+0075 <span class="comment">% show wavelets</span>
+0076 <span class="keyword">for</span> n=1:Nscales+1
+0077     wp=wpall{n};
+0078     figure
+0079     xp=mod(n,3)*(ws+10);
+0080     yp=(1-floor((n)/3))*(ws+100);
+0081     set(gcf,<span class="string">'position'</span>,[xp,yp,ws-10,ws+10]);
+0082     scatter3(x(1,:),x(2,:),x(3,:),msize,wp,<span class="string">'.'</span>);
+0083     colormap jet
+0084     caxis([-1 1]*max(abs(wp)));
+0085     <a href="#_sub1" class="code" title="subfunction clean_axes(cp)">clean_axes</a>(cp);
+0086 
+0087     hcb=colorbar(<span class="string">'location'</span>,<span class="string">'north'</span>);
+0088     cxt=get(hcb,<span class="string">'Xtick'</span>);
+0089     cxt=[cxt(1),0,cxt(end)];
+0090     set(hcb,<span class="string">'Xtick'</span>,cxt);
+0091     cpos=get(hcb,<span class="string">'Position'</span>);
+0092     cpos(4)=.02; <span class="comment">% make colorbar thinner</span>
+0093     set(hcb,<span class="string">'Position'</span>,cpos);
+0094     set(hcb,<span class="string">'Position'</span>,[.25 .91 .6 .02]);
+0095     
+0096     <span class="keyword">if</span> n==1
+0097       title(<span class="string">'Scaling function'</span>);
+0098     <span class="keyword">else</span>      
+0099       title(sprintf(<span class="string">'Wavelet at scale j=%g, t_j = %0.2f'</span>,n-1,t(end+1-(n-1))));
+0100 
+0101     <span class="keyword">end</span>
+0102 <span class="keyword">end</span>
+0103 
+0104 
+0105 <a name="_sub1" href="#_subfunctions" class="code">function clean_axes(cp)</a>
+0106 xlim([-1 1]);ylim([-1 1]);zlim([-1 1]);
+0107 set(gca,<span class="string">'Xtick'</span>,[-1 0 1]);
+0108 set(gca,<span class="string">'Ytick'</span>,[-1 0 1]);
+0109 set(gca,<span class="string">'Ztick'</span>,[-1 0 1]);
+0110 axis square
+0111 set(gca,<span class="string">'CameraPosition'</span>,cp);</pre></div>
+<hr><address>Generated on Fri 30-Apr-2010 17:49:57 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

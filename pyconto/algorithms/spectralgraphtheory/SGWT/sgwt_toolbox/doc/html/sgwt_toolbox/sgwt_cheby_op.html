@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sgwt_cheby_op</title>
+  <meta name="keywords" content="sgwt_cheby_op">
+  <meta name="description" content="sgwt_cheby_op : Chebyshev polynomial of Laplacian applied to vector">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">sgwt_toolbox</a> &gt; sgwt_cheby_op.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sgwt_toolbox&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>sgwt_cheby_op
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>sgwt_cheby_op : Chebyshev polynomial of Laplacian applied to vector</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function r=sgwt_cheby_op(f,L,c,arange) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> sgwt_cheby_op : Chebyshev polynomial of Laplacian applied to vector
+
+ function r=sgwt_cheby_op(f,L,c,arange)
+
+ Compute (possibly multiple) polynomials of laplacian (in Chebyshev
+ basis) applied to input.
+
+ Coefficients for multiple polynomials may be passed as a cell array. This is
+ equivalent to setting
+ r{1}=sgwt_cheby_op(f,L,c{1},arange);
+ r{2}=sgwt_cheby_op(f,L,c{2},arange);
+ ...
+ 
+ but is more efficient as the Chebyshev polynomials of L applied
+ to f can be computed once and shared.
+
+ Inputs:
+ f- input vector
+ L - graph laplacian (should be sparse)
+ c - Chebyshev coefficients. If c is a plain array, then they are
+     coefficients for a single polynomial. If c is a cell array, 
+     then it contains coefficients for multiple polynomials, such 
+     that c{j}(1+k) is k'th Chebyshev coefficient the j'th polynomial.
+ arange - interval of approximation
+
+ Outputs:
+ r - result. If c is cell array, r will be cell array of vectors
+     size of f. If c is a plain array, r will be a vector the size
+     of f.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="sgwt_cheby_op.html" class="code" title="function r=sgwt_cheby_op(f,L,c,arange)">sgwt_cheby_op</a>	sgwt_cheby_op : Chebyshev polynomial of Laplacian applied to vector</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../sgwt_toolbox/demo/sgwt_demo1.html" class="code" title="function sgwt_demo1">sgwt_demo1</a>	sgwt_demo1 : SGWT for swiss roll data set</li><li><a href="../sgwt_toolbox/demo/sgwt_demo2.html" class="code" title="function sgwt_demo2">sgwt_demo2</a>	sgwt_demo2 : Allows exploring wavelet scale and approximation accuracy</li><li><a href="../sgwt_toolbox/demo/sgwt_demo3.html" class="code" title="function sgwt_demo3">sgwt_demo3</a>	sgwt_demo3 : Image decomposition with SGWT wavelets based on local adjacency.</li><li><a href="sgwt_cheby_eval.html" class="code" title="function r=sgwt_cheby_eval(x,c,arange)">sgwt_cheby_eval</a>	sgwt_cheby_eval : Evaluate shifted Chebyshev polynomial on given domain</li><li><a href="sgwt_cheby_op.html" class="code" title="function r=sgwt_cheby_op(f,L,c,arange)">sgwt_cheby_op</a>	sgwt_cheby_op : Chebyshev polynomial of Laplacian applied to vector</li><li><a href="sgwt_inverse.html" class="code" title="function r=sgwt_inverse(y,L,c,arange,varargin)">sgwt_inverse</a>	sgwt_inverse : Compute inverse sgw transform, via conjugate gradients</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% sgwt_cheby_op : Chebyshev polynomial of Laplacian applied to vector</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% function r=sgwt_cheby_op(f,L,c,arange)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Compute (possibly multiple) polynomials of laplacian (in Chebyshev</span>
+0006 <span class="comment">% basis) applied to input.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Coefficients for multiple polynomials may be passed as a cell array. This is</span>
+0009 <span class="comment">% equivalent to setting</span>
+0010 <span class="comment">% r{1}=sgwt_cheby_op(f,L,c{1},arange);</span>
+0011 <span class="comment">% r{2}=sgwt_cheby_op(f,L,c{2},arange);</span>
+0012 <span class="comment">% ...</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% but is more efficient as the Chebyshev polynomials of L applied</span>
+0015 <span class="comment">% to f can be computed once and shared.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Inputs:</span>
+0018 <span class="comment">% f- input vector</span>
+0019 <span class="comment">% L - graph laplacian (should be sparse)</span>
+0020 <span class="comment">% c - Chebyshev coefficients. If c is a plain array, then they are</span>
+0021 <span class="comment">%     coefficients for a single polynomial. If c is a cell array,</span>
+0022 <span class="comment">%     then it contains coefficients for multiple polynomials, such</span>
+0023 <span class="comment">%     that c{j}(1+k) is k'th Chebyshev coefficient the j'th polynomial.</span>
+0024 <span class="comment">% arange - interval of approximation</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Outputs:</span>
+0027 <span class="comment">% r - result. If c is cell array, r will be cell array of vectors</span>
+0028 <span class="comment">%     size of f. If c is a plain array, r will be a vector the size</span>
+0029 <span class="comment">%     of f.</span>
+0030 
+0031 <span class="comment">% This file is part of the SGWT toolbox (Spectral Graph Wavelet Transform toolbox)</span>
+0032 <span class="comment">% Copyright (C) 2010, David K. Hammond.</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% The SGWT toolbox is free software: you can redistribute it and/or modify</span>
+0035 <span class="comment">% it under the terms of the GNU General Public License as published by</span>
+0036 <span class="comment">% the Free Software Foundation, either version 3 of the License, or</span>
+0037 <span class="comment">% (at your option) any later version.</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% The SGWT toolbox is distributed in the hope that it will be useful,</span>
+0040 <span class="comment">% but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0041 <span class="comment">% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+0042 <span class="comment">% GNU General Public License for more details.</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% You should have received a copy of the GNU General Public License</span>
+0045 <span class="comment">% along with the SGWT toolbox.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0046 
+0047 <a name="_sub0" href="#_subfunctions" class="code">function r=sgwt_cheby_op(f,L,c,arange)</a>
+0048 
+0049 <span class="keyword">if</span> ~iscell(c)
+0050   r=<a href="sgwt_cheby_op.html" class="code" title="function r=sgwt_cheby_op(f,L,c,arange)">sgwt_cheby_op</a>(f,L,{c},arange);
+0051   r=r{1};
+0052   <span class="keyword">return</span>;
+0053 <span class="keyword">end</span>
+0054 
+0055 Nscales=numel(c);
+0056 M=zeros(size(Nscales));
+0057 <span class="keyword">for</span> j=1:Nscales
+0058     M(j)=numel(c{j});
+0059 <span class="keyword">end</span>
+0060 assert(all(M&gt;=2));
+0061 
+0062 maxM=max(M);
+0063 <span class="comment">%Twf_new = T_j(L) f</span>
+0064 <span class="comment">%Twf_cur T_{j-1}(L) f</span>
+0065 <span class="comment">%TWf_old T_{j-2}(L) f</span>
+0066 
+0067 a1=(arange(2)-arange(1))/2;
+0068 a2=(arange(2)+arange(1))/2;
+0069 
+0070 Twf_old=f; <span class="comment">%j=0;</span>
+0071 Twf_cur=(L*f-a2*f)/a1; <span class="comment">% j=1;</span>
+0072 <span class="keyword">for</span> j=1:Nscales
+0073     r{j}=.5*c{j}(1)*Twf_old + c{j}(2)*Twf_cur;
+0074 <span class="keyword">end</span>
+0075 
+0076 <span class="keyword">for</span> k=2:maxM
+0077     Twf_new = (2/a1)*(L*Twf_cur-a2*Twf_cur)-Twf_old;
+0078     <span class="keyword">for</span> j=1:Nscales
+0079         <span class="keyword">if</span> 1+k&lt;=M(j)
+0080             r{j}=r{j}+c{j}(k+1)*Twf_new;
+0081         <span class="keyword">end</span>
+0082     <span class="keyword">end</span>
+0083     Twf_old=Twf_cur;
+0084     Twf_cur=Twf_new;
+0085 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 04-May-2010 16:00:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

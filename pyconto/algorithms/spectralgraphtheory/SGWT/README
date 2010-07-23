@@ -1,0 +1,16 @@
+Welcome to the Spectral Graph Wavelet Transform (SGWT) toolbox page.
+
+This site contains a brief description of the Spectral Graph Wavelets, as well as the MATLAB toolbox implementing the SGWT.
+
+Details of the SGWT are in the paper
+
+"Wavelets on Graphs via Spectral Graph Theory"
+
+David Hammond, Pierre Vandergheynst, Remi Gribonval,
+
+Applied Computational and Harmonic Analysis 2010 :  dx.doi.org/10.1016/j.acha.2010.04.005
+
+A version of the paper is also available on arxiv : arxiv.org/abs/0912.3848
+
+If you have any questions about the SGWT or the toolbox, please contact David Hammond (hammond@uoregon.edu)
+

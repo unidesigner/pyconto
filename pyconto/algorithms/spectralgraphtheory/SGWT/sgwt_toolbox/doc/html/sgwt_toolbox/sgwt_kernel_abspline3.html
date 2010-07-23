@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sgwt_kernel_abspline3</title>
+  <meta name="keywords" content="sgwt_kernel_abspline3">
+  <meta name="description" content="sgwt_kernel_abspline3 : Monic polynomial / cubic spline / power law decay kernel">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">sgwt_toolbox</a> &gt; sgwt_kernel_abspline3.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sgwt_toolbox&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>sgwt_kernel_abspline3
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>sgwt_kernel_abspline3 : Monic polynomial / cubic spline / power law decay kernel</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function r = sgwt_kernel_abspline3(x,alpha,beta,t1,t2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> sgwt_kernel_abspline3 : Monic polynomial / cubic spline / power law decay kernel
+
+ function r = sgwt_kernel_abspline3(x,alpha,beta,t1,t2)
+
+ defines function g(x) with g(x) = c1*x^alpha for 0&lt;x&lt;x1
+ g(x) = c3/x^beta for x&gt;t2
+ cubic spline for t1&lt;x&lt;t2,
+ Satisfying g(t1)=g(t2)=1
+
+ Inputs :
+ x : array of independent variable values
+ alpha : exponent for region near origin
+ beta : exponent decay
+ t1, t2 : determine transition region
+
+ Outputs :
+ r - result (same size as x)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="sgwt_kernel.html" class="code" title="function g=sgwt_kernel(x,varargin)">sgwt_kernel</a>	sgwt_kernel : Compute sgwt kernel</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% sgwt_kernel_abspline3 : Monic polynomial / cubic spline / power law decay kernel</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% function r = sgwt_kernel_abspline3(x,alpha,beta,t1,t2)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% defines function g(x) with g(x) = c1*x^alpha for 0&lt;x&lt;x1</span>
+0006 <span class="comment">% g(x) = c3/x^beta for x&gt;t2</span>
+0007 <span class="comment">% cubic spline for t1&lt;x&lt;t2,</span>
+0008 <span class="comment">% Satisfying g(t1)=g(t2)=1</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Inputs :</span>
+0011 <span class="comment">% x : array of independent variable values</span>
+0012 <span class="comment">% alpha : exponent for region near origin</span>
+0013 <span class="comment">% beta : exponent decay</span>
+0014 <span class="comment">% t1, t2 : determine transition region</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Outputs :</span>
+0017 <span class="comment">% r - result (same size as x)</span>
+0018 
+0019 <span class="comment">% This file is part of the SGWT toolbox (Spectral Graph Wavelet Transform toolbox)</span>
+0020 <span class="comment">% Copyright (C) 2010, David K. Hammond.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% The SGWT toolbox is free software: you can redistribute it and/or modify</span>
+0023 <span class="comment">% it under the terms of the GNU General Public License as published by</span>
+0024 <span class="comment">% the Free Software Foundation, either version 3 of the License, or</span>
+0025 <span class="comment">% (at your option) any later version.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% The SGWT toolbox is distributed in the hope that it will be useful,</span>
+0028 <span class="comment">% but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0029 <span class="comment">% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+0030 <span class="comment">% GNU General Public License for more details.</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% You should have received a copy of the GNU General Public License</span>
+0033 <span class="comment">% along with the SGWT toolbox.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0034 
+0035 <a name="_sub0" href="#_subfunctions" class="code">function r = sgwt_kernel_abspline3(x,alpha,beta,t1,t2)</a>
+0036   r=zeros(size(x));
+0037   <span class="comment">% compute spline coefficients</span>
+0038   <span class="comment">% M a = v</span>
+0039   M=[[1 t1 t1^2 t1^3];<span class="keyword">...</span>
+0040      [1 t2 t2^2 t2^3];<span class="keyword">...</span>
+0041      [0 1 2*t1 3*t1^2];<span class="keyword">...</span>
+0042      [0 1 2*t2 3*t2^2]];
+0043   <span class="comment">%v=[t1^alpha ; t2^(-beta) ; alpha*t1^(alpha-1) ; -beta*t2^(-beta-1)];</span>
+0044   v=[1 ; 1 ; t1^(-alpha)*alpha*t1^(alpha-1) ; -beta*t2^(-beta-1)*t2^beta];
+0045   a=M\v;
+0046 
+0047   r1=find(x&gt;=0 &amp; x&lt;t1);
+0048   r2=find(x&gt;=t1 &amp; x&lt;t2);
+0049   r3=find(x&gt;=t2);
+0050   r(r1)=x(r1).^alpha*t1^(-alpha);
+0051   r(r3)=x(r3).^(-beta)*t2^(beta);
+0052   
+0053   x2=x(r2);
+0054   r(r2)=a(1)+a(2)*x2+a(3)*x2.^2+a(4)*x2.^3;
+0055 <span class="comment">%  tmp=polyval(flipud(a),x2);</span>
+0056 <span class="comment">%  keyboard</span></pre></div>
+<hr><address>Generated on Tue 04-May-2010 16:00:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

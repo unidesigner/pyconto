@@ -1,0 +1,357 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of create_synthetic_dataset</title>
+  <meta name="keywords" content="create_synthetic_dataset">
+  <meta name="description" content="create_synthetic_dataset creates test data for running nldr algorithms.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">sgwt_toolbox</a> &gt; <a href="index.html">demo</a> &gt; create_synthetic_dataset.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sgwt_toolbox/demo&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>create_synthetic_dataset
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>create_synthetic_dataset creates test data for running nldr algorithms.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function data = create_synthetic_dataset(data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> create_synthetic_dataset creates test data for running nldr algorithms.
+
+ inputs:
+    data      a struct describing the test data
+              .dataset the number of the example, see code for more infos
+              .n       the number of data points (default=400)
+              .state   the initial state for the random numbers (default=0)
+              .noise   the variance of Gaussian noise to add (default=0)
+              other options for some of the data sets (see code)
+              alternatively, data = 1 chooses the dataset directly,
+              the number of points defaults to 1000
+
+ outputs:
+    data      a struct containing .x the generated data, each column is
+              a data point, and other stuff:
+              .z     the &quot;correct&quot; embedding
+              .e     some random noise of same dimensionality
+              .x_noisefree  the noisefree version of .x, i.e.
+                     .x = .xnoise_free + sqrt(.noise) * .e
+
+ Adapted from create.m, originally written by
+ (c) Stefan Harmeling, 2006
+ using the examples of the original LLE and ISOMAP code.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="distanz.html" class="code" title="function d = distanz(x,y,type)">distanz</a>	DISTANZ : calculates the distances between all vectors in x and y.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="sgwt_demo1.html" class="code" title="function sgwt_demo1">sgwt_demo1</a>	sgwt_demo1 : SGWT for swiss roll data set</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data = create_synthetic_dataset(data)</a>
+0002 <span class="comment">% create_synthetic_dataset creates test data for running nldr algorithms.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% inputs:</span>
+0005 <span class="comment">%    data      a struct describing the test data</span>
+0006 <span class="comment">%              .dataset the number of the example, see code for more infos</span>
+0007 <span class="comment">%              .n       the number of data points (default=400)</span>
+0008 <span class="comment">%              .state   the initial state for the random numbers (default=0)</span>
+0009 <span class="comment">%              .noise   the variance of Gaussian noise to add (default=0)</span>
+0010 <span class="comment">%              other options for some of the data sets (see code)</span>
+0011 <span class="comment">%              alternatively, data = 1 chooses the dataset directly,</span>
+0012 <span class="comment">%              the number of points defaults to 1000</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% outputs:</span>
+0015 <span class="comment">%    data      a struct containing .x the generated data, each column is</span>
+0016 <span class="comment">%              a data point, and other stuff:</span>
+0017 <span class="comment">%              .z     the &quot;correct&quot; embedding</span>
+0018 <span class="comment">%              .e     some random noise of same dimensionality</span>
+0019 <span class="comment">%              .x_noisefree  the noisefree version of .x, i.e.</span>
+0020 <span class="comment">%                     .x = .xnoise_free + sqrt(.noise) * .e</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Adapted from create.m, originally written by</span>
+0023 <span class="comment">% (c) Stefan Harmeling, 2006</span>
+0024 <span class="comment">% using the examples of the original LLE and ISOMAP code.</span>
+0025 
+0026 <span class="keyword">if</span> ~isfield(data, <span class="string">'dataset'</span>), 
+0027   number = data;
+0028   clear data
+0029   data.dataset = number;
+0030 <span class="keyword">end</span>
+0031 <span class="keyword">if</span> ~isfield(data, <span class="string">'n'</span>), data.n = 400; <span class="keyword">end</span>
+0032 <span class="keyword">if</span> ~isfield(data, <span class="string">'noise'</span>), data.noise = 0.0; <span class="keyword">end</span>
+0033 <span class="keyword">if</span> ~isfield(data, <span class="string">'state'</span>), data.state = 0; <span class="keyword">end</span>
+0034 
+0035 <span class="comment">% set the randomness</span>
+0036 rand(<span class="string">'state'</span>, data.state);
+0037 randn(<span class="string">'state'</span>, data.state);
+0038 
+0039 data.typ = <span class="string">'data'</span>;
+0040 <span class="keyword">switch</span> data.dataset
+0041  <span class="keyword">case</span> 0 <span class="comment">% &quot;swiss roll with hole&quot;</span>
+0042   data.name = <span class="string">'swiss roll with hole'</span>;
+0043   n = data.n;
+0044   a = 1;   <span class="comment">% swiss roll goes from a*pi to b*pi</span>
+0045   b = 4;   
+0046   y = rand(2,n);
+0047   <span class="comment">% punch a rectangular hole at the center</span>
+0048   l1 = 0.05; l2 = 0.15;
+0049   y = y - 0.5;
+0050   ok = find((abs(y(1,:))&gt;l1) | (abs(y(2,:))&gt;l2));
+0051   i = length(ok);
+0052   y(:, 1:i) = y(:, ok);
+0053   <span class="keyword">while</span> (i&lt;n)
+0054     p = rand(2,1) - 0.5;
+0055     <span class="keyword">if</span> (abs(p(1))&gt;l1) | (abs(p(2))&gt;l2)
+0056       i = i + 1;
+0057       y(:,i) = p;
+0058     <span class="keyword">end</span>
+0059   <span class="keyword">end</span>
+0060   y = y + 0.5;
+0061   tt = (b-a)*y(1,:) + a;
+0062   tt = pi*tt;
+0063   height = 21*y(2,:);
+0064   data.col = tt;
+0065   data.x = [tt.*cos(tt); height; tt.*sin(tt)];
+0066   data.z = [tt; height]; <span class="comment">% the ground truth</span>
+0067   data.az = -4;
+0068   data.el = 13;
+0069   
+0070  <span class="keyword">case</span> -1 <span class="comment">% &quot;swiss roll&quot; dataset extracted from LLE's swissroll.m</span>
+0071   data.name = <span class="string">'uniform swiss roll'</span>;
+0072   n = data.n;
+0073   a = 1;   <span class="comment">% swiss roll goes from a*pi to b*pi</span>
+0074   b = 4;   
+0075   y = rand(2,n);
+0076   data.z = y;  <span class="comment">% the ground truth</span>
+0077   <span class="keyword">switch</span> 1
+0078    <span class="keyword">case</span> 1
+0079     <span class="comment">% uniform distribution along the manifold (in data space)</span>
+0080     tt = sqrt((b*b-a*a)*y(1,:)+a*a);
+0081    <span class="keyword">case</span> 2
+0082 <span class="comment">%    error('do not use this case')</span>
+0083     <span class="comment">% nonuniform distribution along the manifold (in data space)</span>
+0084     tt = (b-a)*y(1,:) + a;  
+0085   <span class="keyword">end</span>
+0086   tt = pi*tt;
+0087   <span class="comment">% now tt should go from a*pi to b*pi</span>
+0088   height = 21*y(2,:);
+0089   data.col = tt;
+0090   data.x = [tt.*cos(tt); height; tt.*sin(tt)];
+0091   data.az = -4;
+0092   data.el = 13;
+0093 
+0094  <span class="keyword">case</span> 1 <span class="comment">% &quot;swiss roll (uniform in embedding space)&quot;</span>
+0095   <span class="comment">% dataset extracted from LLE's swissroll.m</span>
+0096   data.name = <span class="string">'classic swiss roll'</span>;
+0097   n = data.n;
+0098   a = 1;   <span class="comment">% swiss roll goes from a*pi to b*pi</span>
+0099   b = 4;   
+0100   y = rand(2,n);
+0101   tt = (b-a)*y(1,:) + a;
+0102   tt = pi*tt;
+0103   height = 21*y(2,:);
+0104   data.col = tt;
+0105   data.x = [tt.*cos(tt); height; tt.*sin(tt)];
+0106   data.z = [tt; height]; <span class="comment">% the ground truth</span>
+0107   data.az = -4;
+0108   data.el = 13;
+0109   
+0110  <span class="keyword">case</span> 11 <span class="comment">% &quot;undersampled swiss roll&quot;</span>
+0111   <span class="comment">% dataset extracted from LLE's swissroll.m</span>
+0112   data.name = <span class="string">'undersampled swiss roll'</span>;
+0113   data.n = 100;
+0114   n = data.n;
+0115   a = 1;   <span class="comment">% swiss roll goes from a*pi to b*pi</span>
+0116   b = 4;   
+0117   y = rand(2,n);
+0118   tt = (b-a)*y(1,:) + a;
+0119   tt = pi*tt;
+0120   height = 21*y(2,:);
+0121   data.col = tt;
+0122   data.x = [tt.*cos(tt); height; tt.*sin(tt)];
+0123   data.z = [tt; height]; <span class="comment">% the ground truth</span>
+0124   data.az = -4;
+0125   data.el = 13;
+0126   
+0127  <span class="keyword">case</span> 12 <span class="comment">% &quot;swiss roll&quot;</span>
+0128   <span class="comment">% dataset extracted from LLE's swissroll.m</span>
+0129   data.name = <span class="string">'classic swiss roll'</span>;
+0130   data.n = 400;
+0131   n = data.n;
+0132   a = 1;   <span class="comment">% swiss roll goes from a*pi to b*pi</span>
+0133   b = 4;   
+0134   y = rand(2,n);
+0135   tt = (b-a)*y(1,:) + a;
+0136   tt = pi*tt;
+0137   height = 21*y(2,:);
+0138   data.col = tt;
+0139   data.x = [tt.*cos(tt); height; tt.*sin(tt)];
+0140   data.z = [tt; height]; <span class="comment">% the ground truth</span>
+0141   data.az = -4;
+0142   data.el = 13;
+0143   
+0144  <span class="keyword">case</span> 2 <span class="comment">% &quot;scurve&quot; dataset extracted from LLE's scurve.m</span>
+0145   data.name = <span class="string">'scurve'</span>;
+0146   n = data.n;
+0147   <span class="comment">% I added 'ceil' and 'floor' to account for the case that n is odd</span>
+0148   angle = pi*(1.5*rand(1,ceil(n/2))-1); height = 5*rand(1,n);
+0149   data.x = [[cos(angle), -cos(angle(1:floor(n/2)))]; height;[ sin(angle), 2-sin(angle)]];
+0150   data.col = [angle, 1.5*pi + angle];
+0151   data.z = [angle, 1.5*pi+angle; height]; <span class="comment">% the ground truth</span>
+0152  
+0153  <span class="keyword">case</span> 3 <span class="comment">% &quot;square&quot; dataset, a uniformly sampled 2D square randomly</span>
+0154          <span class="comment">% rotated into higher dimensions</span>
+0155   data.name = <span class="string">'square'</span>;
+0156   n = data.n;
+0157   d = 2;     <span class="comment">% intrinsic dimension</span>
+0158   <span class="comment">% optional parameter for dataset==3</span>
+0159   <span class="comment">% data.D      dimension of the data</span>
+0160   <span class="keyword">if</span> ~isfield(data, <span class="string">'D'</span>), data.D = 3; <span class="keyword">end</span>
+0161   <span class="comment">% generate random rotation matrix</span>
+0162   D = data.D;
+0163   A = randn(D, D);
+0164   options.disp = 0;
+0165   [R, dummy] = eigs(A*A', d, <span class="string">'LM'</span>, options);
+0166   tt = rand(d, n);
+0167   data.col = tt(1,:);
+0168   data.x = R*tt;
+0169   data.z = tt;   <span class="comment">% the ground truth</span>
+0170   data.az = 7;
+0171   data.el = 40;
+0172   
+0173  <span class="keyword">case</span> 4 <span class="comment">% spiral: two dimensional &quot;swiss roll&quot;</span>
+0174   data.name = <span class="string">'spiral'</span>;
+0175   n = data.n;
+0176   tt = (3*pi/2)*(1+2*rand(1, n));
+0177   data.col = tt;
+0178   data.x = [tt.*cos(tt); tt.*sin(tt)];
+0179   data.z = tt; <span class="comment">% the ground truth</span>
+0180   
+0181  <span class="keyword">case</span> -4 <span class="comment">% spiral: two dimensional &quot;swiss roll&quot;</span>
+0182   data.name = <span class="string">'noisy spiral'</span>;
+0183   n = data.n;
+0184   tt = (3*pi/2)*(1+2*rand(1, n));
+0185   data.col = tt;
+0186   data.x = [tt.*cos(tt); tt.*sin(tt)];
+0187   data.x = data.x + randn(size(data.x));
+0188   data.z = tt; <span class="comment">% the ground truth</span>
+0189   
+0190  <span class="keyword">case</span> 5 <span class="comment">% hole: a dataset with a hole</span>
+0191   data.name = <span class="string">'hole'</span>;
+0192   n = data.n;
+0193   data.x = rand(2,n) - 0.5;
+0194   <span class="comment">% punch a rectangular hole at the center</span>
+0195   l1 = 0.2; l2 = 0.2;
+0196   ok = find((abs(data.x(1,:))&gt;l1) | (abs(data.x(2,:))&gt;l2));
+0197   i = length(ok);
+0198   data.x(:, 1:i) = data.x(:, ok);
+0199   <span class="keyword">while</span> (i&lt;n)
+0200     p = rand(2,1) - 0.5;
+0201     <span class="keyword">if</span> (abs(p(1))&gt;l1) | (abs(p(2))&gt;l2)
+0202       i = i + 1;
+0203       data.x(:,i) = p;
+0204     <span class="keyword">end</span>
+0205   <span class="keyword">end</span>
+0206   data.col = data.x(2,:);
+0207   data.z = data.x;
+0208   
+0209  <span class="keyword">case</span> 6 <span class="comment">% P : taken from Saul's slides</span>
+0210   <span class="comment">% note that for k=20, isomap and lle work fine which is very different</span>
+0211   <span class="comment">% from the plots that Saul showed in his slides.</span>
+0212   data.name = <span class="string">'P'</span>;
+0213   load x
+0214   x(2,:) = 500-x(2,:);
+0215   data.x = x;
+0216   data.z = x;
+0217   data.col = data.z(2,:);
+0218   data.n = size(x, 2);
+0219   
+0220  <span class="keyword">case</span> 7 <span class="comment">% fishbowl: uniform in data space</span>
+0221   gamma = 0.8;
+0222   data.name = <span class="string">'fishbowl (uniform in data space)'</span>;
+0223   n = data.n;
+0224   data.x = rand(3,n)-0.5;
+0225   <span class="comment">%project all data onto the surface of the unit sphere</span>
+0226   data.x = data.x ./ repmat(sqrt(sum(data.x.*data.x, 1)), [3 1]);
+0227   ok = find(data.x(3,:) &lt; gamma);
+0228   i = length(ok);
+0229   data.x(:, 1:i) = data.x(:, ok);
+0230   <span class="keyword">while</span> (i &lt; n)
+0231     p = rand(3,1)-0.5;
+0232     p = p / sqrt(p'*p);
+0233     <span class="keyword">if</span> (p(3) &lt; gamma)
+0234       i = i+1;
+0235       data.x(:, i) = p;
+0236     <span class="keyword">end</span>
+0237   <span class="keyword">end</span>
+0238   <span class="comment">% the projection on the plane works as follows:</span>
+0239   <span class="comment">% start a beam from (0,0,1) through each surface point on the sphere</span>
+0240   <span class="comment">% and look where it hits the xy plane.</span>
+0241   data.z = data.x(1:2,:) ./ repmat(1-data.x(3,:), [2 1]);
+0242   data.col = data.x(3,:);
+0243   data.az = -18;
+0244   data.el = 16;
+0245  <span class="keyword">case</span> 8 <span class="comment">% fishbowl: uniform in embedding space</span>
+0246   data.name = <span class="string">'fishbowl (uniform in embedding space)'</span>;
+0247   n = data.n;
+0248   data.z = rand(2, n) - 0.5;
+0249   <span class="comment">% keep the disc</span>
+0250   ok = find(sum(data.z .* data.z) &lt;= 0.25);
+0251   i = length(ok);
+0252   data.z(:, 1:i) = data.z(:, ok);
+0253   <span class="keyword">while</span> (i &lt; n)
+0254     p = rand(2,1) - 0.5;
+0255     <span class="keyword">if</span> (p'*p &lt;= 0.25)
+0256       i = i + 1;
+0257       data.z(:, i) = p;
+0258     <span class="keyword">end</span>
+0259   <span class="keyword">end</span>
+0260   gamma = 0.8;  <span class="comment">% same role/parameter as in case 7</span>
+0261   data.z = 2*sqrt((1+gamma)/(1-gamma))*data.z;
+0262   <span class="comment">% project the disc onto the sphere</span>
+0263   alpha = 2 ./ (1 + sum(data.z .* data.z, 1));
+0264   data.x = [repmat(alpha, [2 1]).*data.z; zeros(1, n)];
+0265   data.x(3,:) = 1-alpha;
+0266   data.col = data.x(3,:);
+0267   data.az = -18;
+0268   data.el = 16;
+0269   
+0270  <span class="keyword">case</span> 9  <span class="comment">% a gaussian blob</span>
+0271   data.name = <span class="string">'gaussian blob'</span>;
+0272   n = data.n;
+0273   data.x = randn(3,n);
+0274   data.z = data.x(2:3,:);
+0275   data.col = data.x(3,:);
+0276   
+0277 <span class="keyword">end</span>
+0278 
+0279 
+0280 data.D = size(data.x, 1);  <span class="comment">% dimensionality of the data</span>
+0281 <span class="comment">% finally generate noise</span>
+0282 data.e = randn(size(data.x));
+0283 data.x_noisefree = data.x;  <span class="comment">% the noise free data</span>
+0284 data.x = data.x_noisefree + sqrt(data.noise)*data.e;
+0285 
+0286 <span class="comment">% precalculate the distanzmatrix</span>
+0287 data.distances = <a href="distanz.html" class="code" title="function d = distanz(x,y,type)">distanz</a>(data.x);
+0288 
+0289</pre></div>
+<hr><address>Generated on Tue 04-May-2010 16:00:20 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>
