@@ -1,0 +1,17 @@
+http://code.google.com/p/flexigraph/
+
+
+A Java graph algorithms library, mainly developed in 2006-7.
+
+This is the old description of the project, briefly touching in few design aspects of it.
+
+Flexigraph is a general framework for graphs. It offers various advantages over most graph frameworks out there (for example, JDSL, JUNG), as for example:
+
+    * A much neater API (you will end up writing about half code you would need to write for JDSL to express the same thing).
+    * Node and edge instances can be shared among many graphs (in JDSL, the same thing would require to maintain ugly mappings from a logical "identity" to the nodes/edges of any graph, while in JUNG, well, that is just slow).
+    * Thorough graph event support. For example, in Flexigraph offers a DegreeSorter class which, well, maintains the nodes of a graph sorted on their degree (so you can e.g. process nodes starting with those with smallest degree, etc). If this was implemented in JDSL, one would have to remember every time that the graph is updated, to also re-run the bucket sort. In Flexigraph, you create the DegreeSorter on the graph, and forget! Due to the event model, the graph can be changed and the DegreeSorter remains always consistent with the given graph, with no further ado.
+    * A better node/edge decoration framework. In other graph frameworks, one can associate arbitrary data to nodes/edges by "put(key, value)" or similar calls. And it is great: it is much faster than having to create a big HashMap containing as keys all the nodes of a graph, for example (try it). So, if one is developing algorithms that operate on a graph and generate data (a simple DFS implementation for instance), he should associate data to nodes/edges this way. All fine and well, except for this being the ideal recipy for creating memory leaks. Because all you, the algorithm implementor, can do is to write a public "cleanup" method to manually erase your algorithm-specific data from nodes/edges (as you don't know when the algorithm's data are not needed any more), and rely on the users remembering to call that method (or else, a memory leak - and good luck debugging that). And worse yet, this depends on the assumption that when the "cleanup" method is called, the graph will be in the state it was when it was decorated with data - cleanup will not be performed on nodes/edges that were accidentally removed before the "cleanup" method. 
+
+This is an example of this problem - the DFS implementation of JDSL (notice the cleanup method), or a BFS algorithm of JUNG (notice the removeDecorations method). In Flexigraph, you can either associate strongly data in nodes/edges, like the other frameworks, or associate data weakly. That is, if the key will be garbage-collected (this is possible as it is not referenced strongly in the map inside node/edge), the value will also be automatically cleared. So it is possible to write algorithms that take advantage of node/edge decorations, in a memory-safe way, and with one less thing to remember for all users.
+
+

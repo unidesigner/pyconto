@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="FlexiGraph" default="default" basedir=".">
+    <description>Builds, tests, and runs the project Graph.</description>
+    <import file="nbproject/build-impl.xml"/>
+
+    <import file="../../../dependencies-manager/dependencies-manager.xml" optional="true"/>
+    
+    <target name="-post-init">
+        <available file="../../../dependencies-manager/dependencies-manager.xml" property="dependencies-manager-exists"/>
+    </target>
+    
+    <target name="-pre-jar" depends="-do-compile-test">
+        <delete dir="build/classes/examples"/>
+    </target>
+
+    <target name="-post-jar" if="dependencies-manager-exists">
+        <property name="deliverable" value="${dist.jar}"/>
+        <antcall target="publish" />
+    </target>
+    
+    <target name="dist" depends="clean,compile,jar,javadoc"
+            description="Create a self-contained, package with this project's artifacts">
+        <delete dir="nbproject/private"/>
+        <property name="zip.file" value="dist/FlexiGraph.zip"/>
+        <zip destfile="${zip.file}">
+            <zipfileset dir="src" prefix="src"/>
+            <zipfileset dir="examples" prefix="examples"/>
+            <zipfileset dir="test" prefix="test"/>
+            <zipfileset file="build.xml" prefix=""/>
+            <zipfileset file="LICENCE.txt" prefix=""/>
+            <zipfileset dir="nbproject" prefix="nbproject"/>
+            <zipfileset dir="dist/javadoc" prefix="docs"/>
+            <zipfileset file="${dist.jar}" prefix="dist"/>
+            <zipfileset file="lib/*.jar" prefix="lib"/>
+            <zipfileset file="testlib/*.jar" prefix="testlib"/>
+        </zip>
+    </target>
+</project>

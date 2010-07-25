@@ -1,0 +1,22 @@
+<project name="Zip graph sources" default="distribute">
+    <import file="build.xml"/>
+    <target name="zip">
+        <tstamp/>
+        <property name="zip.file" value="Graph-${DSTAMP}-${TSTAMP}.zip"/>
+        <zip destfile="${zip.file}">
+            <zipfileset dir="src" prefix="src"/>
+            <zipfileset dir="test" prefix="test"/>
+        </zip>
+        <copy file="${zip.file}" tofile="flexigraph.zip"/>
+    </target>
+    <target name="unzip">
+        <unzip src="flexigraph.zip" dest="."/>
+    </target>
+    <target name="distribute" depends="clean,compile,jar,javadoc">
+        <tstamp/>
+        <property name="zip.file" value="flexigraph.zip"/>
+        <delete file="${zip.file}"/>
+        <zip destfile="${zip.file}" basedir="." excludes="build/**">
+        </zip>
+    </target>
+</project>
