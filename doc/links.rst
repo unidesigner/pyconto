@@ -122,6 +122,10 @@ Dynamical networks
 * http://www.casos.cs.cmu.edu/projects/dynetml/
 * http://netwiki.amath.unc.edu/DataFormats/DynetML
 
+File Formats
+------------
+* Good and biased overview http://gephi.org/users/supported-graph-formats/
+
 Graph storage
 -------------
 * `Neon4j graph database <http://neo4j.org/>`_
