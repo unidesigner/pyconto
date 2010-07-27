@@ -27,3 +27,7 @@ used in PyProtocols) to allow access to graphs through various perspectives (suc
 adjacency maps, incidence maps, adjacency arrays, edge lists...). This would also allow
 graphs implementations with completely different interfaces to be adapted to a standard
 interface, and thus be used by generic graph algorithms. 
+
+File Formats
+------------
+* libsea http://www.caida.org/tools/visualization/libsea/

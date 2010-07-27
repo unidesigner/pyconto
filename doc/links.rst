@@ -119,7 +119,8 @@ Dynamical networks
 ------------------
 * `Dynamics of evolving networks <http://cneuro.rmki.kfki.hu/projects/dynnet>`_
 * `libgexf <http://gexf.net/format/>`_
-
+* http://www.casos.cs.cmu.edu/projects/dynetml/
+* http://netwiki.amath.unc.edu/DataFormats/DynetML
 
 Graph storage
 -------------
@@ -133,3 +134,5 @@ Visualization tools
 * `BrainNetVis <http://code.google.com/p/brainnetvis/>`_
 * `Interactorium <http://www.interactorium.net>`_
 * `Visual Molecular Dynamics <http://www.ks.uiuc.edu/Research/vmd/>`_
+* `Sonia <http://www.stanford.edu/group/sonia/>`_
+

@@ -11,6 +11,7 @@ and simplified interface. Memory management."""
 # questions
 # - what does wmax mean in normalized_path_length(const gsl_matrix* D, double wmax)  ?
 # - compare with networkx measures (problem with e.g. degree)
+# - what to do with parameter return variables? findwalks, findpaths, ...
 
 import bct
 import numpy as np
@@ -181,162 +182,221 @@ def efficiency(cmatrix, local = False, edgetype = 'undirected', weighted = False
             bct.gsl_free(eloc)
             return np.asarray(elocnp)
 
-def betweenness(cmatrix, type):
-    """ Weighted:
-    function BC=betweenness_wei(G)
-    %BC=betweenness_wei(G); betweenness centrality BC for weighted directed graph
-    %
-    %The input matrix must be a mapping from weight to distance (eg. higher
-    %correlations may be interpreted as short distances - hence an inverse
-    %mapping is appropriate in that case).
-    %
-    %Betweenness may be normalised to [0,1] via BC/[(N-1)(N-2)]
-    %
-    %Brandes's modified Dijkstra's algorithm; J Math Sociol (2001) 25:163-177.
-    %
-    %Mika Rubinov, UNSW, 2007 (last modified July 2008)
+def betweenness(cmatrix, edgetype = 'directed', weighted = False):
+    """ Betweenness centrality
     
-        Binary directed:
+    
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
+    
+    edgetype : {'directed'} 
+
+    weighted : {False, True}
+    
+    Returns
+    -------
+    
+    weighted == True:
+
+        BC : Betweenness centrality BC for weighted directed graph
         
-        %BC=betweenness_bin(G); betweenness centrality BC, for a binary directed graph G
-    %
-    %Betweenness may be normalised to [0,1] via BC/[(N-1)(N-2)]
-    %
-    %Algorithm of Kintali, generalised to directed and disconnected graphs
-    %http://www.cc.gatech.edu/~kintali/papers/bc.pdf
-    %
-    %Mika Rubinov, UNSW, 2007 (last modified July 2008)
+        The input matrix must be a mapping from weight to distance (eg. higher
+        correlations may be interpreted as short distances - hence an inverse
+        mapping is appropriate in that case).
+        
+        Betweenness may be normalised to [0,1] via BC/[(N-1)(N-2)]
+        
+        Brandes's modified Dijkstra's algorithm; J Math Sociol (2001) 25:163-177.
+        
+        Mika Rubinov, UNSW, 2007 (last modified July 2008)
+    
+    weighted == False:
+        
+        BC : betweenness centrality BC, for a binary directed graph G
+    
+        Betweenness may be normalised to [0,1] via BC/[(N-1)(N-2)]
+        
+        Algorithm of Kintali, generalised to directed and disconnected graphs
+        http://www.cc.gatech.edu/~kintali/papers/bc.pdf
+        
+        Mika Rubinov, UNSW, 2007 (last modified July 2008)
+        
     """
     pass
 
 def breadth(cmatrix, source):
-    """
-   function [distance,branch] = breadth(CIJ,source)
-
-    % input:   
-    %           CIJ = connection/adjacency matrix
-    %           source   = source vertex
-    % outputs:  
-    %           distance = distance between 'source' and i'th vertex
-    %                      (0 for source vertex)
-    %           branch   = vertex that precedes i in the breadth-first search tree
-    %                      (-1 for source vertex)
-    %        
-    % note: breadth-first search tree does not contain all paths 
-    % (or all shortest paths), but allows the determination of at least one 
-    % path with minimum distance.
-    % the entire graph is explored, starting from source vertex 'source'
-    %
-    % Olaf Sporns, Indiana University, 2002/2007/2008
+    """ Breadth-first search tree
+    
+     Performs a breadth-first search starting at the source node.  Because C++
+     indexing is zero-based, a value of 0 at branch(i) could mean either that node
+     0 precedes node i or that node i is unreachable.  Check distance(i) for
+     GSL_POSINF to differentiate between these two cases.
+ 
+    Parameters
+    ----------
+    cmatrix : connection matrix
+    
+    source : source vertex
+    
+    Returns
+    -------
+    
+    distance : distance between 'source' and i'th vertex
+               (0 for source vertex)
+    branch : vertex that precedes i in the breadth-first search tree
+             (-1 for source vertex)
+            
+    Note: breadth-first search tree does not contain all paths 
+    (or all shortest paths), but allows the determination of at least one 
+    path with minimum distance.
+    the entire graph is explored, starting from source vertex 'source'
+    
+    Olaf Sporns, Indiana University, 2002/2007/2008
     """
     pass
 
 def breadthdist(cmatrix):
-    """
-    function  [R,D] = breadthdist(CIJ)
+    """ Computes reachability and distance matrices using breadth-first search.
 
-    % input:  
-    %           CIJ = connection/adjacency matrix
-    % outputs: 
-    %           R   = reachability matrix
-    %           D   = distance matrix
+    Parameters
+    ----------
+    cmatrix : connection matrix
     
-    % This function is potentially less memory-hungry than 'reachdist.m',
-    % particularly if the characteristic path length is rather large.
-    %
-    % Olaf Sporns, Indiana University, 2002/2007/2008
+    Returns
+    ------- 
+    R : reachability matrix
+    D : distance matrix
+    
+    This function is potentially less memory-hungry than 'reachdist',
+    particularly if the characteristic path length is rather large.
+    
+    Olaf Sporns, Indiana University, 2002/2007/2008
     """
     pass
 
-def charpath(cmatrix):
-    """
-    function  [lambda,ecc,radius,diameter] = charpath(D)
+def charpath(D):
+    """ Distance based measures
 
-    % input:  
-    %           D          distance matrix
-    % outputs: 
-    %           lambda     characteristic path length
-    %           ecc        eccentricity (for each vertex)
-    %           radius     radius of graph
-    %           diameter   diameter of graph
-    %
-    % Characteristic path length is calculated as the global mean of the
-    % distance matrix D, not taking into account any 'Infs' but including the
-    % distances on the main diagonal.
-    %
-    % Olaf Sporns, Indiana University, 2002/2007/2008
+    This function outputs four distance based measures. Characteristic path length
+    is the average shortest path length. Node eccentricity is the maximal shortest
+    path length between a node and any other node. Network radius is the minimum 
+    ccentricity, while network diameter is the maximum eccentricity.
+
+    Parameters
+    ----------
+    D : distance matrix
+    
+    Returns
+    -------
+    lambda : characteristic path length
+    ecc : eccentricity (for each vertex)
+    radius : radius of graph
+    diameter : diameter of graph
+    
+    Characteristic path length is calculated as the global mean of the
+    distance matrix D, not taking into account any 'Infs' but including the
+    distances on the main diagonal.
+    
+    Olaf Sporns, Indiana University, 2002/2007/2008
     """
     pass
 
-def clustering_coef(cmatrix, type):
-    """
+def clustering_coef(cmatrix, edgetype, weighted):
+    """ Clustering coefficient C
     
-    function C=clustering_coef_bd(A)
-%C=clustering_coef_bd(A); clustering coefficient C, for binary directed graph A
-%
-%Reference: Fagiolo, 2007, Phys Rev E 76:026107.
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008)
+    For an individual node, the clustering coefficient is defined as the
+    fraction of the existing number, to the total possible number of
+    neighbor-neighbor links.
+    
+    Parameters
+    ----------
+    
+    cmatrix : connection/adjacency matrix
+    
+    edgetype : {'directed','undirected'} 
 
-%In directed graphs, 3 nodes generate up to 8 triangles (2*2*2 edges)
-%The number of existing triangles is the main diagonal of S^3/2
-%The number of all (in or out) neighbour pairs is K(K-1)/2
-%Each neighbour pair may generate two triangles
-%"False pairs" are i<->j edge pairs (these do not generate triangles)
-%The number of false pairs is the main diagonal of A^2
-%Thus the maximum possible number of triangles = 
-%  = (2 edges)*([ALL PAIRS] - [FALSE PAIRS]) =
-%  = 2 * (K(K-1)/2 - diag(A^2)) = K(K-1) - 2(diag(A^2))
+    weighted : {False, True}
+    
+    Returns
+    -------
+    
+    edgetype == 'undirected':
+    
+        weighted == True:
+            C : clustering coefficient C for weighted undirected graph W.
+            
+            Reference: Onnela et al. 2005, Phys Rev E 71:065103
+            
+            Mika Rubinov, UNSW, 2007 (last modified July 2008)
+        
+        weighted == False:
+            C : clustering coefficient C, for binary undirected graph G
+            
+            Reference: Watts and Strogatz, 1998, Nature 393:440-442
+            
+            Mika Rubinov, UNSW, 2007 (last modified September 2008)
 
+    edgetype == 'directed':
+    
+        weighted == True:
+            C : clustering coefficient C for weighted directed graph W.
+            
+            Reference: Fagiolo, 2007, Phys Rev E 76:026107
+            (also see Onnela et al. 2005, Phys Rev E 71:065103);
+            
+            Mika Rubinov, UNSW, 2007 (last modified July 2008)
 
-%C=clustering_coef_bu(G); clustering coefficient C, for binary undirected graph G
-%
-%Reference: Watts and Strogatz, 1998, Nature 393:440-442
-%
-%Mika Rubinov, UNSW, 2007 (last modified September 2008)
+            See comments for clustering_coef_bd
+            The weighted modification is as follows:
+            - The numerator: adjacency matrix is replaced with weights matrix ^ 1/3
+            - The denominator: no changes from the binary version
+            
+            The above reduces to symmetric and/or binary versions of the
+               clustering coefficient for respective graphs.
 
+        weighted == False:
+            C : clustering coefficient C, for binary directed graph A
+            
+            Reference: Fagiolo, 2007, Phys Rev E 76:026107.
+            
+            Mika Rubinov, UNSW, 2007 (last modified July 2008)
+            
+            In directed graphs, 3 nodes generate up to 8 triangles (2*2*2 edges)
+            The number of existing triangles is the main diagonal of S^3/2
+            The number of all (in or out) neighbour pairs is K(K-1)/2
+            Each neighbour pair may generate two triangles
+            "False pairs" are i<->j edge pairs (these do not generate triangles)
+            The number of false pairs is the main diagonal of A^2
+            Thus the maximum possible number of triangles = 
+              = (2 edges)*([ALL PAIRS] - [FALSE PAIRS]) =
+              = 2 * (K(K-1)/2 - diag(A^2)) = K(K-1) - 2(diag(A^2))
 
-%C=clustering_coef_wd(W); clustering coefficient C for weighted directed graph W.
-%
-%Reference: Fagiolo, 2007, Phys Rev E 76:026107
-%(also see Onnela et al. 2005, Phys Rev E 71:065103);
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008)
-
-%See comments for clustering_coef_bd
-%The weighted modification is as follows:
-%- The numerator: adjacency matrix is replaced with weights matrix ^ 1/3
-%- The denominator: no changes from the binary version
-%
-%The above reduces to symmetric and/or binary versions of the
-%   clustering coefficient for respective graphs.
-
-
-%C=clustering_coef_wu(W); clustering coefficient C for weighted undirected graph W.
-%
-%Reference: Onnela et al. 2005, Phys Rev E 71:065103
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008)
 
     """
     pass
 
 def cycprob(Py):
-    """
+    """ Cycle probability
     
-function [fcyc,pcyc] = cycprob(Pq)
+    Cycles are paths which begin and end at the same node. Cycle probability
+    for path length d, is the fraction of all paths of length d-1 that may
+    be extended to form cycles of length d.
+    
+    Parameters
+    ----------  
+    Pq : 3D matrix, with Pq(i,j,q) = number of paths from 
+         'i' to 'j' of length 'q' (produced by 'findpaths').
 
-% input:  
-%           Pq       3D matrix, with Pq(i,j,q) = number of paths from 
-%                    'i' to 'j' of length 'q' (produced by 'findpaths').
-% outputs: 
-%           fcyc     fraction of all paths that are cycles, 
-%                    for each path length 'q'. 
-%           pcyc     probability that a non-cyclic path of length 'q-1' 
-%                    can be extended to form a cycle of length 'q',
-%                    for each path length 'q', 
-%
-% Olaf Sporns, Indiana University, 2002/2007/2008
+    Returns
+    -------
+    fcyc : fraction of all paths that are cycles, 
+           for each path length 'q'. 
+    pcyc : probability that a non-cyclic path of length 'q-1'
+           can be extended to form a cycle of length 'q',
+           for each path length 'q', 
+
+    Olaf Sporns, Indiana University, 2002/2007/2008
 
     """
     pass
@@ -450,32 +510,50 @@ def distance(cmatrix, weighted):
         bct.gsl_free(dist)
         return np.asarray(distnp)
 
-def edge_betweenness(cmatrix, type):
-    """
-    function [EBC BC]=edge_betweenness_bin(G)
-%EBC=edge_betweenness_bin(G); edge betweenness centrality EBC, for a binary graph G
-%[EBC BC]=edge_betweenness_bin(G), also outputs vertex betweenness centrality BC
-%
-%Betweenness may be normalised to [0,1] via EBC/[(N-1)(N-2)]
-%
-%Brandes's modified breadth-first search; J Math Sociol (2001) 25:163-177.
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008).
+def edge_betweenness(cmatrix, weighted):
+    """ Edge betweenness centrality
+    
+    The fraction of all shortest paths in the network that traverse a given edge (link).
+    This function outputs an edge betweenness matrix. Note that zero entries may
+    correspond to an absence of an edge, or to an edge with betweenness of 0 -- a
+    comparison with the connectivity matrix will clear up potential confusion.
+    This function may also return nodal betweenness centrality.
+    
+    Parameters
+    ----------
+    
+    cmatrix : connection matrix, (distance matrix in weighted case)
+    
+    weighted : {True, False}
+    
+    Returns
+    -------
+        
+    weighted == False:
+    
+        EBC : edge betweenness centrality EBC, for a binary graph G
+        BC : vertex betweenness centrality BC
 
-function [EBC BC]=edge_betweenness_wei(G)
-%EBC=edge_betweenness_wei(G); edge betweenness centrality EBC for weighted directed graph
-%[EBC BC]=edge_betweenness_wei(G), also outputs vertex betweenness centrality BC
-%
-%The input matrix must be a mapping from weight to distance (eg. higher
-%correlations may be interpreted as short distances - hence an inverse
-%mapping is appropriate in that case).
-%
-%Betweenness may be normalised to [0,1] via EBC/[(N-1)(N-2)]
-%
-%Brandes's modified Dijkstra's algorithm; J Math Sociol (2001) 25:163-177.
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008)
+        Betweenness may be normalised to [0,1] via EBC/[(N-1)(N-2)]
+        
+        Brandes's modified breadth-first search; J Math Sociol (2001) 25:163-177.
+        
+        Mika Rubinov, UNSW, 2007 (last modified July 2008).
+    
+    weighted == True:
 
+        EBC : edge betweenness centrality EBC for weighted directed graph
+        BC : vertex betweenness centrality BC
+        
+        The input matrix must be a mapping from weight to distance (eg. higher
+        correlations may be interpreted as short distances - hence an inverse
+        mapping is appropriate in that case).
+        
+        Betweenness may be normalised to [0,1] via EBC/[(N-1)(N-2)]
+        
+        Brandes's modified Dijkstra's algorithm; J Math Sociol (2001) 25:163-177.
+        
+        Mika Rubinov, UNSW, 2007 (last modified July 2008)
 
     """
     pass
@@ -490,7 +568,6 @@ def erange(cmatrix):
     ----------
     cmatrix : connection/adjacency matrix
     
-    
     Returns
     -------
 
@@ -498,9 +575,9 @@ def erange(cmatrix):
              shortest path from i to j for edge c(i,j) AFTER the edge 
              has been removed from the graph.
 
-%           eta      average range for entire graph.
-%           Eshort   entries are ones for edges that are shortcuts.
-%           fs       fraction of shortcuts in the graph.
+    eta      average range for entire graph.
+    Eshort   entries are ones for edges that are shortcuts.
+    fs       fraction of shortcuts in the graph.
 
     Follows the treatment of 'shortcuts' by Duncan Watts (1999)
     
@@ -569,73 +646,115 @@ def jdegree_od(cmatrix):
     return val
 
 def find_motif34(m,n):
-    """
+    """ Returns all motif isomorphs for a given motif ID and size.
+   
+    Parameters
+    ----------
+    m : motif ID
+    n : size
     
-    function M=find_motif34(m,n)
-%find_motif34; motif description function
-%
-%Returns all motif isomorphs for a given motif ID and class (3 or 4):
-% MOTIF_MATRICES=find_motif34(MOTIF_ID,MOTIF_CLASS)
-%
-%Returns the motif id for a given motif matrix (e.g. [0 1 0; 0 0 1; 1 0 0])
-% MOTIF_ID=find_motif34(MOTIF_MATRIX)
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008)
+    Returns
+    -------
+    MOTIF_MATRICES
+
+    Mika Rubinov, UNSW, 2007 (last modified July 2008)
 
     """
     pass
 
-def findpaths(cmatrix, sources, qmax, savepths):
-    """
-function [Pq,tpath,plq,qstop,allpths,util] = findpaths(CIJ,sources,qmax,savepths)
+def find_motif34_from_matrix(mmatrix):
+    """Returns the motif ID for a given matrix.
+        
+    Parameters
+    ----------
+    mmatrix : ndarray
+            3D motif matrix
+            
+    Returns
+    -------
+    MOTIF_ID
 
-% inputs:
-%           CIJ        connection/adjacency matrix
-%           qmax       maximal path length
-%           sources    source units from which paths are grown
-%           savepths   set to 1 if all paths are to be collected in
-%                      'allpths'
-% outputs:
-%           Pq         3D matrix, with P(i,j,q) = number of paths from
-%                      'i' to 'j' of length 'q'.
-%           tpath      total number of paths found (lengths 1 to 'qmax')
-%           plq        path length distribution as a function of 'q'
-%           qstop      path length at which 'findpaths' is stopped
-%           allpths    a matrix containing all paths up to 'qmax'
-%           util       node use index
-%
-% Note that Pq(:,:,N) can only carry entries on the diagonal, as all "legal"
-% paths of length N-1 must terminate.  Cycles of length N are possible, with
-% all vertices visited exactly once (except for source and target).
-% 'qmax = N' can wreak havoc (due to memory problems).
-%
-% Note: Weights are discarded.
-% Note: I am fairly certain that this algorithm is rather inefficient -
-% suggestions for improvements are welcome.
-%
-% Olaf Sporns, Indiana University, 2002/2007/2008
-% =========================================================================
+    Mika Rubinov, UNSW, 2007 (last modified July 2008)
+
     """
+    pass
+
+def findpaths(cmatrix, sources, qmax):
+    """ Paths are sequences of linked nodes, that never visit a single node more than
+    once. This function finds all paths that start at a set of source vertices,
+    up to a specified length. Warning: very memory-intensive.
+    
+    C++ Comment
+     Finds paths from a set of source nodes up to a given length.  Note that there
+     is no savepths argument; if all paths are desired, pass a valid pointer as
+     he allpths argument.  There is also no tpath argument as its value may
+     overflow a C++ long.  Since 0 is a valid node index in C++, -1 is used as the
+     "filler" value in allpths rather than 0 as in MATLAB.  Pq (the main return),
+     plq, and util are indexed by path length.  They therefore have (qmax + 1)
+     elements and contain no valid data at index 0.
+ 
+    function [Pq,tpath,plq,qstop,allpths,util] = findpaths(CIJ,sources,qmax,savepths)
+
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
+    qmax : maximal path length
+    sources : source units from which paths are grown
+    savepths : set to 1 if all paths are to be collected in
+               'allpths'
+               
+     Results
+     -------
+    Pq : 3D matrix, with P(i,j,q) = number of paths from
+         'i' to 'j' of length 'q'.
+         
+    Not returned by the C++ function:
+    tpath      total number of paths found (lengths 1 to 'qmax')
+    plq        path length distribution as a function of 'q'
+    qstop      path length at which 'findpaths' is stopped
+    allpths    a matrix containing all paths up to 'qmax'
+    util       node use index
+
+    Note that Pq[:,:,N] can only carry entries on the diagonal, as all "legal"
+    paths of length N-1 must terminate.  Cycles of length N are possible, with
+    all vertices visited exactly once (except for source and target).
+    'qmax = N' can wreak havoc (due to memory problems).
+    
+    Note: Weights are discarded.
+    Note: I am fairly certain that this algorithm is rather inefficient -
+    suggestions for improvements are welcome.
+    
+    Olaf Sporns, Indiana University, 2002/2007/2008
+
+    """
+    # work on docstring
     pass
 
 def findwalks(cmatrix):
-    """
-    
-function [Wq,twalk,wlq] = findwalks(CIJ)
+    """ Walks are sequences of linked nodes, that may visit a single node more
+    than once. This function finds the number of walks of a given length, between
+    any two nodes.
+ 
+     Finds walks.  Note that there is no twalk argument as its value may overflow
+     a C++ long.  Wq (the main return) and wlq are indexed by path length.  They
+     therefore contain no valid data at index 0.
 
-% input:  
-%           CIJ       connection/adjacency matrix
-% outputs: 
-%           Wq        3D matrix, with Wq(i,j,q) = number of walks from 
-%                     'i' to 'j' of length 'q'.
-%           twalk     total number of walks found
-%           wlq       walk length distribution as function of 'q'
-%
-% Uses the powers of the adjacency matrix to produce numbers of walks
-% Note that Wq grows very quickly for larger N,K,q.
-% Note: Weights are discarded.
-%
-% Written by Olaf Sporns, Indiana University, 2002/2007/2008
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
+
+    Returns
+    -------
+    Wq : 3D matrix, with Wq(i,j,q) = number of walks from 
+        'i' to 'j' of length 'q'.
+    twalk     total number of walks found
+    wlq       walk length distribution as function of 'q'
+
+    Uses the powers of the adjacency matrix to produce numbers of walks
+    Note that Wq grows very quickly for larger N,K,q.
+    Note: Weights are discarded.
+
+    Written by Olaf Sporns, Indiana University, 2002/2007/2008
 
     """
     pass
@@ -714,59 +833,76 @@ def matching_ind_out(cmatrix):
     bct.gsl_free(mi)
     return np.asarray(minp)
 
-def modularity(cmatrix):
-    """
-function [Ci Q]=modularity_dir(A)
-%[Ci Q]=modularity_dir(A); community detection via optimization of modularity.
-%
-%Input: weighted directed network (adjacency or weights matrix) A.
-%Output: community structure Ci; maximized modularity Q.
-%
-%Algorithm: Newman's spectral optimization method, generalized to directed networks.
-%Reference: Leicht and Newman (2008) Phys Rev Lett.
-%
-%Mika Rubinov, UNSW
-%
-%Modification History:
-%Jul 2008: Original
-%Oct 2008: Positive eigenvalues are now insufficient for division (Jonathan Power, WUSTL)
-%Dec 2008: Fine-tuning is now consistent with Newman's description (Jonathan Power)
-%Dec 2008: Fine-tuning is now vectorized (Mika Rubinov)
+def modularity(cmatrix, edgetype):
+    """ Community detection via optimization of modularity
+    
+    Parameters
+    ----------
+    cmatrix : adjacency or weights matrix
+    edgetype : {'undirected', 'directed'}
+    
+    Returns
+    -------
+    edgetype == 'undirected':
 
-function [Ci Q]=modularity_und(A)
-%[Ci Q]=modularity_und(A); community detection via optimization of modularity.
-%
-%Input: weighted undirected network (adjacency or weights matrix) A.
-%Output: community structure Ci; maximized modularity Q.
-%
-%   Note: use modularity_dir for directed networks
-%
-%Algorithm: Newman's spectral optimization method:
-%References: Newman (2006) -- Phys Rev E 74:036104; PNAS 23:8577-8582.
-%
-%Mika Rubinov, UNSW
-%
-%Modification History:
-%Jul 2008: Original
-%Oct 2008: Positive eigenvalues are now insufficient for division (Jonathan Power, WUSTL)
-%Dec 2008: Fine-tuning is now consistent with Newman's description (Jonathan Power)
-%Dec 2008: Fine-tuning is now vectorized (Mika Rubinov)
+        Ci : community structure Ci
+        Q : maximized modularity Q.
+
+        Algorithm: Newman's spectral optimization method:
+        References: Newman (2006) -- Phys Rev E 74:036104; PNAS 23:8577-8582.
+        
+        Mika Rubinov, UNSW
+        
+        Modification History:
+        Jul 2008: Original
+        Oct 2008: Positive eigenvalues are now insufficient for division (Jonathan Power, WUSTL)
+        Dec 2008: Fine-tuning is now consistent with Newman's description (Jonathan Power)
+        Dec 2008: Fine-tuning is now vectorized (Mika Rubinov)
+    
+    edgetype == 'directed':
+    
+        Ci : community structure Ci
+        Q : maximized modularity Q.
+    
+        Algorithm: Newman's spectral optimization method, generalized to directed networks.
+        Reference: Leicht and Newman (2008) Phys Rev Lett.
+        
+        Mika Rubinov, UNSW
+        
+        Modification History:
+        Jul 2008: Original
+        Oct 2008: Positive eigenvalues are now insufficient for division (Jonathan Power, WUSTL)
+        Dec 2008: Fine-tuning is now consistent with Newman's description (Jonathan Power)
+        Dec 2008: Fine-tuning is now vectorized (Mika Rubinov)
 
     """
     pass
 
-def module_degree_zscore(A,Ci):
-    """
+def module_degree_zscore(cmatrix, Ci):
+    """ Computes 'within module degree z-score'
+    
+    Computes z-score for a binary graph and its corresponding community
+    structure.  For a directed graph, computes out-neighbor z-score.
+     
+    Degree based measures for classifying nodes in the context of community structure.
+    The z-score describes how well the nodes are connected to other nodes within their modules.
+     
+    Note that, for directed networks, these functions compute the measures based on the out-degree.
     function Z=module_degree_zscore(A,Ci)
-%Z=module_degree_zscore(A,Ci); computes "within module degree z-score"
-%
-%Input: binary adjacency matrix A, community structure vector Ci.
-%Output: z-score, Z.
-%Output for directed graphs: "out-neighbor" z-score.
-%
-%Reference: Guimera R, Amaral L. Nature (2005) 433:895-900.
-%
-%Mika Rubinov, UNSW, 2008
+
+    Parameters
+    ---------
+    cmatrix : binary adjacency matrix
+    Ci : community structure vector
+    
+    Returns
+    -------
+    Z : z-score
+        Output for directed graphs: "out-neighbor" z-score.
+
+    Reference: Guimera R, Amaral L. Nature (2005) 433:895-900.
+
+    Mika Rubinov, UNSW, 2008
     """
     pass
 
@@ -866,18 +1002,26 @@ def motif3struct(cmatrix):
     """
     pass
 
-def participation_coef(cmatrix, Ci):
-    """
-    function P=participation_coef(A,Ci)
-%P=participation_coef(A,Ci); computes nodal "participation coefficient".
-%
-%Input: (binary) adjacency matrix A, community structure vector Ci.
-%Output: participation coef P.
-%Output for directed graphs: "out-neighbor" participation coef.
-%
-%Reference: Guimera R, Amaral L. Nature (2005) 433:895-900.
-%
-%Mika Rubinov, UNSW, 2008
+def participation_coef(cmatrix, Ci, weighted = False):
+    """ Computes nodal participation coefficient for a binary graph and its
+    corresponding community structure.  For a directed graph, computes "out-
+    neighbor" participation coefficient.
+ 
+    Parameters
+    ----------
+    cmatrix : adjacency matrix
+    Ci : community structure vector Ci
+    weighted : {True}
+               Only for binary matrices
+         
+    Returns
+    -------
+    P : Participation coefficient
+        Output for directed graphs: "out-neighbor" participation coef 
+
+    Reference: Guimera R, Amaral L. Nature (2005) 433:895-900.
+
+    Mika Rubinov, UNSW, 2008
     """
     pass
 
@@ -904,25 +1048,38 @@ def normalized_path_length(cmatrix, wmax):
     return n
         
 def reachdist(cmatrix):
-    """
-    function  [R,D] = reachdist(CIJ)
+    """ Reachability and distance matrices. For any two nodes u and v,
+    the reachability matrix element (u,v) takes the value of 1 if u and v
+    are connected by a path, and 0 if u and v are disconnected.
+    The distance matrix element (u,v) denotes the length of the shortest
+    path between u and v. Note that this function returns nonzero entries
+    on the main diagonal of the distance matrix, corresponding to the length
+    of the shortest cycles.
 
-% input:  
-%           CIJ     connection/adjacency matrix
-% output: 
-%           R       reachability matrix
-%           D       distance matrix
+    This function yields the reachability matrix and the distance matrix
+    based on the power of the adjacency matrix - this will execute a lot
+    faster for matrices with low average distance between vertices.
+    Another way to get the reachability matrix and the distance matrix uses 
+    breadth-first search (see 'breadthdist').  'reachdist' seems a 
+    little faster most of the time.  However, 'breadthdist' uses less memory 
+    in many cases.
+    
+    Computes reachability and distance matrices based on the power of the
+    adjacency matrix.
+    
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
 
-% This function yields the reachability matrix and the distance matrix
-% based on the power of the adjacency matrix - this will execute a lot
-% faster for matrices with low average distance between vertices.
-% Another way to get the reachability matrix and the distance matrix uses 
-% breadth-first search (see 'breadthdist.m').  'reachdist' seems a 
-% little faster most of the time.  However, 'breadthdist' uses less memory 
-% in many cases.
-%
-% Olaf Sporns, Indiana University, 2002/2007/2008
+    Returns
+    ------- 
+    R : reachability matrix
+    D : distance matrix
+
+
+    Olaf Sporns, Indiana University, 2002/2007/2008
     """
+    # from c code, D is parameter, R is returned
     pass
 
 def reorderMAT(MAT,H,cost):

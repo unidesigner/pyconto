@@ -33,3 +33,5 @@ Want: community detection algorithm for bi-partite community detection
 Community detection as artform: skillful module identification requires knowledge of the subject matter and training.
 
 Hierarchical structure information is a topological property of graphs as well
+
+See http://sites.google.com/site/linegraphs/

@@ -3,17 +3,13 @@ import scipy.stats as stats
 import networkx as netwx
 
 def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
-    """
+    """ Computes the network-based statistic (NBS) as described in [1]. 
     
-    function [PVAL,ADJ,NULL]=nbs(X,Y,THRESH,K,TAIL)
-    
-    Computes the network-based statistic (NBS) as described in [1]. 
-
-    PVAL = NBS(X,Y,THRESH) performs the NBS for populations X and Y for a
+    Performs the NBS for populations X and Y for a
     T-statistic threshold of THRESH. The third dimension of X and Y 
     references a particular member of the populations. The first two 
     dimensions reference the connectivity value of a particular edge 
-    comprising the connectivity matrix. For example, X(i,j,k) stores the 
+    comprising the connectivity matrix. For example, X[i,j,k] stores the 
     connectivity value corresponding to the edge between i and j for the
     kth memeber of the population. PVAL is a vector of corrected p-values 
     for each component identified. If at least one of the p-values is 
@@ -22,28 +18,36 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
     connectivity at each edge comes from distributions of equal mean 
     between the two populations.
     
-    [PVAL,ADJ] = NBS(X,Y,THRESH) also returns an adjacency matrix 
-    identifying the edges comprising each component. Edges corresponding 
-    to the first p-value stored in the vector PVAL are assigned the value
-    1 in the adjacency matrix ADJ, edges corresponding to the second 
-    p-value are assigned the value 2, etc. 
+    Parameters
+    ----------
+    X, Y : ndarray
+    
+    THRES : float
+        
+    K : integer, default = 1000, optional.
+        Enables specification of the number of
+        permutations to be generated to estimate the empirical null
+        distribution of maximal component size. 
 
-    [PVAL,ADJ,NULL] = NBS(X,Y,THRESH) also returns a vector of K samples 
-    from the the null distribution of maximal component size. 
- 
-    [PVAL,ADJ] = NBS(X,Y,THRESH,K) enables specification of the number of
-    permutations to be generated to estimate the empirical null
-    distribution of maximal component size. Default: K=1000. 
-
-    [PVAL,ADJ] = NBS(X,Y,THRESH,K,TAIL) enables specification of the type
-    of alternative hypothesis to test. If TAIL:
-    'equal' - alternative hypothesis is means are not equal (default)
-    'left'  - mean of population X < mean of population Y
-    'right' - mean of population X > mean of population Y 
-
-    This function is dependent on components.m, which is available as
-    part of Matlab BGL: 
-    http://www.stanford.edu/~dgleich/programs/matlab_bgl/
+    TAIL : {'equal', 'left', 'right'}, optional
+        Enables specification of the type
+        of alternative hypothesis to test. If TAIL:
+        'equal' - alternative hypothesis is means are not equal (default)
+        'left'  - mean of population X < mean of population Y
+        'right' - mean of population X > mean of population Y
+            
+    Returns
+    -------
+    
+    ADJ : ndarray
+        Returns an adjacency matrix identifying the edges comprising each component.
+        Edges corresponding to the first p-value stored in the vector PVAL are assigned
+        the value 1 in the adjacency matrix ADJ, edges corresponding to the second 
+        p-value are assigned the value 2, etc. 
+    
+    NULL : ndarray
+        Returns a vector of K samples 
+        from the the null distribution of maximal component size. 
 
     ALGORITHM DESCRIPTION 
     The NBS is a nonparametric statistical test used to isolate the 
@@ -84,7 +88,7 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
         10.1016/j.neuroimage.2010.06.041
 
     Written by: Andrew Zalesky, azalesky@unimelb.edu.au
-    Wrapped in Python: Stephan Gerhard, connectome@unidesign.ch
+    Rewritten for Python: Stephan Gerhard, connectome@unidesign.ch
 
     """
 
@@ -133,7 +137,6 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
         #[a,p_val,c,tmp]=ttest2(cmat(i,:),pmat(i,:)); 
         #t_stat(i)=tmp.tstat;
 
-    
     if TAIL == 'both':
         t_stat = np.abs( t_stat )
     elif TAIL == 'left':
@@ -286,5 +289,4 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
     for i in range( len(sz_links) ):
         PVAL[i] = len( NULL[NULL >= sz_links[i]] ) * 1.0 / K
         
-    
     return (PVAL, ADJ, NULL)
