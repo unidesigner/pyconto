@@ -1,6 +1,17 @@
 import numpy as np
-import scipy.stats as stats
 import networkx as netwx
+from pylab import *
+
+def ttest2(X,Y):
+    """ Compute the two-sided t-statistic of X,Y
+    
+    """
+    t = np.mean(X) - np.mean(Y)
+    n1 = len(X) * 1.
+    n2 = len(Y) * 1.
+    s = np.sqrt( ( (n1-1) * np.var(X,ddof=1) + (n2-1)*np.var(Y,ddof=1) ) / (n1+n2-2.) )
+    t = t / (s*np.sqrt(1/n1+1/n2))
+    return t
 
 def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
     """ Computes the network-based statistic (NBS) as described in [1]. 
@@ -129,13 +140,10 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
     # Perform T-test at each edge
     t_stat = np.zeros( M )
     for i in range(M):
-        # compute ttest2
-        # assume independent random samples
-        t, prob = stats.ttest_ind(cmat[i,:], pmat[i,:], axis=0)
+        # compute ttest2, assume independent random samples
+        t = ttest2(cmat[i,:], pmat[i,:])
     
         t_stat[i] = t
-        #[a,p_val,c,tmp]=ttest2(cmat(i,:),pmat(i,:)); 
-        #t_stat(i)=tmp.tstat;
 
     if TAIL == 'both':
         t_stat = np.abs( t_stat )
@@ -147,7 +155,7 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
         raise('Tail option not recognized')
  
     # Threshold   
-    ind_t = np.nonzero( t_stat > THRESH )
+    ind_t = np.where( t_stat > THRESH )
     
     # Suprathreshold adjacency matrix
     ADJ = np.zeros( (N,N) )
@@ -157,33 +165,31 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
 
     # Find network components
     G = netwx.from_numpy_matrix(ADJ)
-    comp_list = netwx.strongly_connected_component_subgraphs(G)
-    
-    # Return strongly connected components as subgraphs.
-    # The list is ordered from largest connected component to smallest. For undirected graphs only.
-    
-    # number of components with 
-    # array representing the number of edges for each component
+    # Return connected components as subgraphs.
+    comp_list = netwx.connected_component_subgraphs(G)
+
+    # store the number of edges for each subgraph component 
     nr_edges_per_component = np.zeros( len(comp_list) )
+    nr_edges_per_component_bigenough = []
+    
     for idx, componentG in enumerate(comp_list):
         nr_edges_per_component[idx] = componentG.number_of_edges()
         
-    print "nr_edges_per_component: ", nr_edges_per_component
-    
-    # more then one node (= at least one edge)
-    nr_edges_per_component_bigenough = nr_edges_per_component[nr_edges_per_component>0]
+        # if number of edges bigger than zero
+        if nr_edges_per_component[idx] > 0:
+            nr_edges_per_component_bigenough.append(nr_edges_per_component[idx])
+            
+            # store the number of edges of the component as value in the adjacency matrix
+            for f,t in componentG.edges_iter():
+                ADJ[f,t] = ADJ[t,f] = nr_edges_per_component[idx]
     
     # renaming
     sz_links = nr_edges_per_component_bigenough
     
-    print "nr_edges_per_component_bigenough: ", nr_edges_per_component_bigenough
-    
-    if len(nr_edges_per_component_bigenough) > 0:
-        max_sz = np.max(nr_edges_per_component_bigenough)
+    if len(sz_links) > 0:
+        max_sz = np.max(sz_links)
     else:
-        max_sz = 0
-
-    print "number of edges of the biggest component: ", max_sz        
+        max_sz = 0        
 
     if False:
         # additionally, store all the components in the matrix with the value of their number of edges
@@ -205,59 +211,51 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
     
     hit=0.0
     NULL = np.zeros( (K, 1) )
+    # stack matrices for permutation
+    d_stacked = np.hstack( (cmat, pmat) )
+
     for k in range(K):
         # Randomize
-        
-        # stack matrices for permutation
-        d = np.hstack( (cmat, pmat) )
         indperm = np.random.permutation( nx+ny )
-        d = d[:, indperm]
-         
+        d = d_stacked[:, indperm].copy()
+
         #################
         
         # Perform T-test at each edge
         t_stat_perm = np.zeros( M )
         for i in range(M):
-            # compute ttest2
             # assume independent random samples
-            t, prob = stats.ttest_ind(d[i,:nx], d[i,nx:nx+ny], axis=0) # [z1,z2,z3,tmp]=ttest2(d(i,1:nx),d(i,nx+1:nx+ny));
+            t = ttest2(d[i,:nx], d[i,nx:nx+ny])
         
             t_stat_perm[i] = t
-            #[a,p_val,c,tmp]=ttest2(cmat(i,:),pmat(i,:)); 
-            #t_stat(i)=tmp.tstat;
         
         if TAIL == 'both':
             t_stat_perm = np.abs( t_stat_perm )
         elif TAIL == 'left':
-            t_stat_perm = -t_stat
+            t_stat_perm = -t_stat_perm
         elif TAIL == 'right':
             pass
         else:
             raise('Tail option not recognized')
      
         # Threshold   
-        ind_t = np.nonzero( t_stat_perm > THRESH )
+        ind_t = np.where( t_stat_perm > THRESH )
         
         # Suprathreshold adjacency matrix
         adj_perm = np.zeros( (N,N) )
         reledg = ind2ij[ind_t[0]] # relevant edges
         adj_perm[ reledg[:,0], reledg[:,1] ] = 1 # this yields a binary matrix, selecting the edges that are above threshold
         adj_perm = adj_perm + adj_perm.T
-    
+        
         # Find network components
         G = netwx.from_numpy_matrix(adj_perm)
-        comp_list = netwx.strongly_connected_component_subgraphs(G)
+        # Return connected components as subgraphs.
+        comp_list = netwx.connected_component_subgraphs(G)
         
-        # Return strongly connected components as subgraphs.
-        # The list is ordered from largest connected component to smallest. For undirected graphs only.
-        
-        # number of components with 
-        # array representing the number of edges for each component
+        # store the number of edges for each subgraph component 
         nr_edges_per_component = np.zeros( len(comp_list) )
         for idx, componentG in enumerate(comp_list):
             nr_edges_per_component[idx] = componentG.number_of_edges()
-            
-        print "nr_edges_per_component: ", nr_edges_per_component
         
         # more then one node (= at least one edge)
         nr_edges_per_component_bigenough = nr_edges_per_component[nr_edges_per_component>0]
@@ -265,15 +263,12 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
         # renaming
         sz_links_perm = nr_edges_per_component_bigenough
         
-        print "nr_edges_per_component_bigenough: ", nr_edges_per_component_bigenough
-        
-        if len(nr_edges_per_component_bigenough) > 0:
-            sz_links_perm_max = np.max(nr_edges_per_component_bigenough)
+        if len(sz_links_perm) > 0:
+            sz_links_perm_max = np.max(sz_links_perm)
         else:
             sz_links_perm_max = 0
     
-        NULL[k] = sz_links_perm_max
-        print "number of edges of the biggest component for this permutation: ", sz_links_perm_max        
+        NULL[k] = sz_links_perm_max        
 
         # if the component size of this random permutation is bigger than
         # the component size of the group difference computed above, this is a hit
@@ -282,7 +277,6 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
             
         print "Perm %d of %d. Perm max is: %d. Observed max is: %d. P-val estimate is: %0.3f" % ((k+1),K,NULL[k],max_sz,hit/(k+1))
 
-
     # Calculate p-values for each component
     # ??? why like that?
     PVAL = np.zeros( len(sz_links) )
@@ -290,3 +284,61 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
         PVAL[i] = len( NULL[NULL >= sz_links[i]] ) * 1.0 / K
         
     return (PVAL, ADJ, NULL)
+
+
+def setdiff2d(X, Y):
+    """ Differences of two index arrays
+    
+    Parameters
+    ----------
+    X, Y : ndarray
+           (n,2) arrays representing indices
+           
+    Returns
+    -------
+    Z : ndarray
+        array of elements in X, that are not in Y
+    """
+    n = X.shape[0]
+    m = Y.shape[0]
+    Z = []
+    for i in xrange(n):
+        test = X[i,:]
+        hit = 0
+        for j in xrange(m):
+            if test[0] == Y[j,0] and test[1] == Y[j,1]:
+                hit = hit + 1
+            if not hit == 0:
+                break
+        if hit == 0:
+            Z.append(test)
+    return np.array(Z)
+
+def intersect2d(X, Y):
+    """ Intersection of two index arrays
+    
+    Parameters
+    ----------
+    X, Y : ndarray
+           (n,2) arrays representing indices
+           
+    Returns
+    -------
+    Z : ndarray
+        array of elements in X, that are also in Y
+    """
+    n = X.shape[0]
+    m = Y.shape[0]
+    Z = []
+    for i in xrange(n):
+        test = X[i,:]
+        hit = 0
+        for j in xrange(m):
+            if test[0] == Y[j,0] and test[1] == Y[j,1]:
+                hit = hit + 1
+            if not hit == 0:
+                break
+        if not hit == 0:
+            Z.append(test)
+    return np.array(Z)
+
