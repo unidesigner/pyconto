@@ -60,18 +60,26 @@ All network metrics should be compared to metrics extracted from corresponding r
 
 
 def latmio_dir(r, iter):
-    """
-    function R=latmio_dir(R,ITER)
-%R=latmio_dir(G,ITER); 'latticized' graph R, with equivalent degree
-%sequence to the original weighted directed graph G.
-%
-%Each edge is rewired (on average) ITER times. The out-strength (but not
-%the in-strength) distribution is preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%Latticizing algorithm: Sporns and Zwi (2004); Neuroinformatics 2:145
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008).
+    """ Latticized graph
+    
+    Parameters
+    ----------
+    G :
+    iter : scalar
+        Number of rewiring steps for each edge
+        
+    Returns
+    -------
+    R : 'latticized' graph R, with equivalent degree
+    sequence to the original weighted directed graph G.
+
+    Each edge is rewired (on average) ITER times. The out-strength (but not
+    the in-strength) distribution is preserved for weighted graphs.
+
+    Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
+    Latticizing algorithm: Sporns and Zwi (2004); Neuroinformatics 2:145
+
+    Mika Rubinov, UNSW, 2007 (last modified July 2008).
     """
     pass
 
@@ -201,30 +209,37 @@ def make_motif34lib():
     # see bct-cpp:
     pass
 
-def makerandCIJdegreesfixed():
-    """
+def makerandCIJdegreesfixed(in, out):
+    """ Generates a random directed binary graph with the given in-degree and out-
+    degree sequences. Returns NULL if the algorithm failed to generate a graph
+    satisfying the given degree sequences.
+ 
     function [cij,flag] = makerandCIJdegreesfixed(in,out)
 
-% input:
-%    in = indegree vector
-%    out = outdegree vector
-%
-% output:
-%    cij = binary directed connectivity matrix
-%    flag = indicates if the algorithm succeeded ('flag' = 1) or failed
-%    ('flag' = 0).
-%
-% NOTE: necessary conditions include:
-%
-%   length(in) = length(out) = n
-%   sum(in) = sum(out) = k
-%   in(i), out(i) < n-1
-%   in(i) + out(j) < n+2
-%   in(i) + out(i) < n
-%
-% No connections are generated on the main diagonal
-%
-% Aviad Rubinstein, Indiana University 2005/2007
+    Parameters
+    ----------
+    in : numpy array
+        indegree vector
+    out : numpy array
+        outdegree vector
+
+    Returns
+    -------
+    cij : numpy array
+        binary directed connectivity matrix
+%    flag = indicates if the algorithm succeeded ('flag' = 1) or failed ('flag' = 0).
+
+    NOTE: necessary conditions include:
+
+    length(in) = length(out) = n
+    sum(in) = sum(out) = k
+    in(i), out(i) < n-1
+    in(i) + out(j) < n+2
+    in(i) + out(i) < n
+
+    No connections are generated on the main diagonal
+
+    Aviad Rubinstein, Indiana University 2005/2007
     """
     pass
 
@@ -249,16 +264,19 @@ def makerandCIJ_und(N,K):
     """
     function [CIJ] = makerandCIJ_und(N,K)
 
-% inputs:
-%           N = number of vertices
-%           K = number of edges
-% output:
-%           CIJ = random connection matrix, nondirected (symmetrical)
-%
-% This function generates a random binary CIJ matrix, with size (N,K) and
-% no connections on the main diagonal
-%
-% Olaf Sporns, Indiana University, 2007/2008
+    Parameters
+    ----------
+    N : number of vertices
+    K : number of edges
+    
+    Returns
+    -------
+    cmatrix : random connection matrix, nondirected (symmetrical)
+
+    This function generates a random binary CIJ matrix, with size (N,K) and
+    no connections on the main diagonal
+
+    Olaf Sporns, Indiana University, 2007/2008
     """
     pass
 
@@ -266,18 +284,21 @@ def makeringlatticeCIJ(N,K):
     """
     function [CIJ] = makeringlatticeCIJ(N,K)
 
-% inputs:
-%           N        number of vertices
-%           K        number of edges
-% outputs:
-%           CIJ      connection matrix
-%
-% makes one lattice CIJ matrix, with size = N,K. The lattice is made by
-% placing connections as close as possible to the main diagonal, with
-% wrap-around, so it IS a ring. No connections are made on the main
-% diagonal. In/Outdegree is kept approx. constant at K/N
-%
-% Olaf Sporns, Indiana University, 2005/2007
+    Parameters
+    ----------
+    N : number of vertices
+    K : number of edges
+    
+    Returns
+    -------
+    cmatrix : connection matrix
+
+    makes one lattice CIJ matrix, with size = N,K. The lattice is made by
+    placing connections as close as possible to the main diagonal, with
+    wrap-around, so it IS a ring. No connections are made on the main
+    diagonal. In/Outdegree is kept approx. constant at K/N
+
+    Olaf Sporns, Indiana University, 2005/2007
     """
     pass
 
@@ -285,84 +306,121 @@ def maketoeprand(N,K,s):
     """
     function  [CIJ] = maketoeprandCIJ(N,K,s)
 
-% inputs:
-%           N        number of vertices
-%           K        number of edges
-%           s        standard deviation of toeplitz
-% outputs:
-%           CIJ      connection matrix
-%
-% makes one CIJ matrix, with size = N,K, that has K connections arranged in
-% a toeplitz form.
-% NO RING
-% no connections on main diagonal
-%
-% Olaf Sporns, Indiana University, 2005/2007
+    Parameters
+    ----------
+    N : number of vertices
+    K : number of edges
+    s : standard deviation of toeplitz
+
+    Returns
+    -------
+    cmatrix : connection matrix
+
+    Makes one CIJ matrix, with size = N,K, that has K connections arranged in
+    a toeplitz form.
+    
+    NO RING. No connections on main diagonal
+
+    Olaf Sporns, Indiana University, 2005/2007
     """
     pass
 
-def randmio(r, iter):
+def randmio(cmatrix, iter, edgetype):
     """
-    function R=randmio_dir(R, ITER)
-%R=randmio_dir(G,ITER); randomized graph R, with equivalent degree
-%sequence to the original weighted directed graph G.
-%
-%Each edge is rewired (on average) ITER times. The out-strength (but not
-%the in-strength) distribution is preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008).
+    
+    Parameters
+    ----------
+    cmatrix :
+    iter :
+    edgetype : {'undirected', 'directed'}
+        Is the INPUT graph directed?
+        
+    Returns
+    -------
+    edgetype == 'directed':
 
-function R=randmio_und(R, ITER)
-%R=randmio_und(G,ITER); randomized graph R, with equivalent degree
-%sequence to the original weighted undirected graph G.
-%
-%Each edge is rewired (on average) ITER times. The strength distributions 
-%are not preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%
-%Mika Rubinov, UNSW
-%
-%Modification History:
-%Jun 2007: Original
-%Apr 2008: Edge c-d is flipped with 50% probability, allowing to explore
-%          all potential rewirings (Jonathan Power, WUSTL)
+        r : NumPy array
+
+        Randomized graph r, with equivalent degree sequence to the original
+        weighted directed graph cmatrix.
+        
+        Each edge is rewired (on average) ITER times. The out-strength (but not
+        the in-strength) distribution is preserved for weighted graphs.
+        
+        Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
+        
+        Mika Rubinov, UNSW, 2007 (last modified July 2008).
+    
+    edgetype == 'undirected':
+
+        r : NumPy array
+        
+        Randomized graph R, with equivalent degree
+        sequence to the original weighted undirected graph cmatrix.
+        
+        Each edge is rewired (on average) ITER times. The strength distributions 
+        are not preserved for weighted graphs.
+        
+        Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
+        
+        Mika Rubinov, UNSW
+        
+        Modification History:
+        Jun 2007: Original
+        Apr 2008: Edge c-d is flipped with 50% probability, allowing to explore
+                  all potential rewirings (Jonathan Power, WUSTL)
+
     """
     pass
 
-def randmio_connected(r, iter):
+def randmio_connected(cmatrix, iter, edgetype):
     """
-    function R=randmio_dir_connected(R, ITER)
-%R=randmio_dir_connected(G,ITER); randomized graph R, with equivalent degree
-%sequence to the original weighted directed graph G, and with preserved
-%connectedness (hence the input graph must be connected).
-%
-%Each edge is rewired (on average) ITER times. The out-strength (but not
-%the in-strength) distribution is preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008).
 
-function R = randmio_und_connected(R, ITER)
-%R=randmiou_und_connected(G,ITER); 'latticized' graph R, with equivalent degree
-%sequence to the original weighted undirected graph G, and with preserved
-%connectedness (hence the input graph must be connected).
-%
-%Each edge is rewired (on average) ITER times. The strength distributions 
-%are not preserved for weighted graphs.
-%
-%Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
-%Latticizing algorithm: Sporns and Zwi (2004); Neuroinformatics 2:145
-%
-%Mika Rubinov, UNSW
-%
-%Modification History:
-%Jun 2007: Original
-%Apr 2008: Edge c-d is flipped with 50% probability, allowing to explore
-%          all potential rewirings (Jonathan Power, WUSTL)
+    Parameters
+    ----------
+    cmatrix :
+    iter :
+    edgetype : {'undirected', 'directed'}
+        Is the INPUT graph directed?
+        
+    Returns
+    -------
+    edgetype == 'directed':
+
+        R : numpy array
+        
+        Randomized graph R, with equivalent degree
+        sequence to the original weighted directed graph G, and with preserved
+        connectedness (hence the input graph must be connected).
+        
+        Each edge is rewired (on average) ITER times. The out-strength (but not
+        the in-strength) distribution is preserved for weighted graphs.
+        
+        Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
+        
+        Mika Rubinov, UNSW, 2007 (last modified July 2008).
+
+    edgetype == 'undirected':
+
+        R : numpy array
+        
+        'latticized' graph R, with equivalent degree
+        sequence to the original weighted undirected graph G, and with preserved
+        connectedness (hence the input graph must be connected).
+        
+        Each edge is rewired (on average) ITER times. The strength distributions 
+        are not preserved for weighted graphs.
+        
+        Rewiring algorithm: Maslov and Sneppen (2002) Science 296:910
+        Latticizing algorithm: Sporns and Zwi (2004); Neuroinformatics 2:145
+        
+        Mika Rubinov, UNSW
+        
+        Modification History:
+        Jun 2007: Original
+        Apr 2008: Edge c-d is flipped with 50% probability, allowing to explore
+                  all potential rewirings (Jonathan Power, WUSTL)
+
 
     """
     pass
