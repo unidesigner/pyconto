@@ -85,7 +85,7 @@ def degree(cmatrix, edgetype):
     Parameters
     ----------  
     cmatrix : connection/adjacency matrix
-
+    edgetype :
 
     Returns
     -------
@@ -140,7 +140,8 @@ def efficiency(cmatrix, local = False, edgetype = 'undirected', weighted = False
 
     Parameters
     ----------
-    cmatrix : connection/adjacency matrix
+    cmatrix : array_like
+        Two dimensional connection/adjacency matrix
     
     edgetype : {'undirected'} 
 
