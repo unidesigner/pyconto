@@ -21,7 +21,8 @@ fve30 = np.asarray(bct.from_gsl(bct.to_gslm(bct.fve30,30,30)))
 
 '''
       macaque47.mat (BD network).
-      Large scale cortico-cortical connectivity matrix of the visual and sensorimotor areas in the macaque. 47 nodes; 505 links.
+      Large scale cortico-cortical connectivity matrix of the visual and
+      sensorimotor areas in the macaque. 47 nodes; 505 links.
       Used in e.g. Honey et al. (2007). Contributor: RK.
 '''
 macaque47 = np.asarray(bct.from_gsl(bct.to_gslm(bct.macaque47,47,47)))

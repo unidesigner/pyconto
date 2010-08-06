@@ -186,7 +186,6 @@ def efficiency(cmatrix, local = False, edgetype = 'undirected', weighted = False
 def betweenness(cmatrix, edgetype = 'directed', weighted = False):
     """ Betweenness centrality
     
-    
     Parameters
     ----------
     cmatrix : connection/adjacency matrix
@@ -905,7 +904,13 @@ def module_degree_zscore(cmatrix, Ci):
 
     Mika Rubinov, UNSW, 2008
     """
-    pass
+    m = bct.to_gslm(cmatrix.tolist())
+    cil = bct.to_gslv(Ci.tolist())
+    # XXX: error
+    n = bct.module_degree_zscore(m, cil)
+    bct.gsl_free(m)
+    bct.gsl_free(cil)
+    return n
 
 
 # in bct-cpp: utility.cpp
@@ -951,57 +956,104 @@ def number_of_nodes(cmatrix):
     bct.gsl_free(m)
     return n
 
-def motif3funct(cmatrix):
-    """
-    function [f F]=motif3funct_bin(W)
-    %[f F]=motif3funct_bin(G); counts functional motif occurence
-    %
-    %Input: binary graph G.
-    %Output: binary motif count f; binary motif count per vertex F
-    %
-    %Reference: Sporns and Kotter, PLoS Biology 2004, 2:e369
-    %
-    %Mika Rubinov, UNSW, 2008
+def motif3funct(cmatrix, weighted):
+    """ Counts occurrences of three-node functional motifs
+    
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
+        (For weighted graph W(all weights [0,1]) )
+        
+    weighted : {False, True}
+    
+    Returns
+    -------
+    
+    weighted == True:
+    
+        I : Returns intensity and (optionally) coherence and motif counts.
 
-function [I Q F]=motif3funct_wei(W)
-%[I Q F]=motif3funct_wei(W); weighted functional motif metrics.
-%
-%Input: weighted graph W (all weights [0,1]).
-%Output by node: total intensity I, total coherence Q, motif count F.
-%Average intensity and coherence may be obtained as I./F and Q./F.
-%
-%References: Onnela et al. 2005, Phys Rev E 71:065103;
-%Sporns and Kotter, PLoS Biology 2004, 2:e369
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008)
+        Weighted functional motif metrics.
+        
+        References: Onnela et al. 2005, Phys Rev E 71:065103;
+        Sporns and Kotter, PLoS Biology 2004, 2:e369
+        
+        Mika Rubinov, UNSW, 2007 (last modified July 2008)
+
+    
+    weighted == False:
+
+        F : binary motif count per vertex F
+                
+        Counts functional motif occurence
+    
+        Reference: Sporns and Kotter, PLoS Biology 2004, 2:e369
+    
+        Mika Rubinov, UNSW, 2008
+
 
     """
-    pass
+    if weighted:
+        m = bct.to_gslm(cmatrix.tolist())
+        str = bct.motif3funct_wei(m)
+        strnp = bct.from_gsl(str)
+        bct.gsl_free(m)
+        bct.gsl_free(str)
+        return np.asarray(strnp)
+    else:
+        m = bct.to_gslm(cmatrix.tolist())
+        str = bct.motif3funct_bin(m)
+        strnp = bct.from_gsl(str)
+        bct.gsl_free(m)
+        bct.gsl_free(str)
+        return np.asarray(strnp)
 
-def motif3struct(cmatrix):
-    """
-    function [f F]=motif3struct_bin(A)
-%[f F]=motif3struct_bin(G); counts structural motif occurence
-%
-%Input: binary directed graph G
-%Output: binary motif count f; binary motif count per vertex F
-%
-%Reference: Milo et al., 2002, Science
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008)
+def motif3struct(cmatrix, weighted):
+    """ Counts occurrences of three-node structural motifs
+    
+    Parameters
+    ----------
+    cmatrix : connection/adjacency matrix
+        (For weighted graph W(all weights [0,1]) )
+        
+    weighted : {False, True}
+    
+    Returns
+    -------
+    
+    weighted == True:
+    
+        I : Returns intensity and (optionally) coherence and motif counts.
+    
+        Weighted structural motif metrics.
+        
+        Reference: Onnela et al. 2005, Phys Rev E 71:065103;
 
-    function [I Q F]=motif3struct_wei(W)
-%[I Q F]=motif3struct_wei(W); weighted structural motif metrics.
-%
-%Input: weighted graph W (all weights [0,1]).
-%Output by node: total intensity I, total coherence Q, motif count F.
-%Average intensity and coherence may be obtained as I./F and Q./F.
-%
-%Reference: Onnela et al. 2005, Phys Rev E 71:065103;
-%
-%Mika Rubinov, UNSW, 2007 (last modified July 2008)
+        Mika Rubinov, UNSW, 2007 (last modified July 2008)
+    
+    weighted == False:
+    
+        f : binary motif count
+
+        Reference: Milo et al., 2002, Science
+
+        Mika Rubinov, UNSW, 2007 (last modified July 2008)
+
     """
-    pass
+    if weighted:
+        m = bct.to_gslm(cmatrix.tolist())
+        str = bct.motif3struct_wei(m)
+        strnp = bct.from_gsl(str)
+        bct.gsl_free(m)
+        bct.gsl_free(str)
+        return np.asarray(strnp)
+    else:
+        m = bct.to_gslm(cmatrix.tolist())
+        str = bct.motif3struct_bin(m)
+        strnp = bct.from_gsl(str)
+        bct.gsl_free(m)
+        bct.gsl_free(str)
+        return np.asarray(strnp)
 
 def participation_coef(cmatrix, Ci, weighted = False):
     """ Computes nodal participation coefficient for a binary graph and its
@@ -1075,23 +1127,19 @@ def reachdist(cmatrix):
     Returns
     ------- 
     R : reachability matrix
-    D : distance matrix
+   % D : distance matrix (not returned)
 
 
     Olaf Sporns, Indiana University, 2002/2007/2008
     """
     # from c code, D is parameter, R is returned
-    pass
+    m = bct.to_gslm(cmatrix.tolist())
+    str = bct.reachdist(m)
+    strnp = bct.from_gsl(str)
+    bct.gsl_free(m)
+    bct.gsl_free(str)
+    return np.asarray(strnp)
 
-def reorderMAT(MAT,H,cost):
-    """
-    function [MATreordered,MATindices,MATcost] = reorderMAT(MAT,H,cost);
-
-% MAT       input matrix (can be anything...)
-% H         number of reordering attempts
-% cost      either 'line' or 'circ', for shape of lattice (linear or ring)
-    """
-    pass
 
 def strengths(cmatrix, edgetype):
     """ Computes strength for an undirected or directed graph.
