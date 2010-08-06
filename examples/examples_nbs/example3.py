@@ -10,7 +10,8 @@ from pylab import imshow, show, title
 # normal distribution. Each connectivity matrix represents a distinct member
 # of population X. Elements below the main diagonal are never used.
 
-#X = np.random.random( (20,20,10) )
+X = np.random.random( (20,20,10) )
+n = X.shape[0]
 
 # Generate population Y in the same way as population X. However, this time,
 # simulate a difference between the two populations at two distinct 
@@ -19,7 +20,7 @@ from pylab import imshow, show, title
 # standard normal distribution of each edge comprising the component. This
 # gives a contrast-to-noise ratio of c, given that the variance of the noise
 # is unity. 
-#Y =  np.random.random( (20,20,10) )
+Y =  np.random.random( (20,20,10) )
 
 # Additive factor, also equal to the contrast-to-noise ratio 
 c = 2
@@ -33,26 +34,18 @@ set2 = np.array([18,20,18,19,19,20,17,18,16,20,16,17,16,18]) - 1
 set2.resize( (7,2) )                 
 
 # Simulate the component.
-#for i in range(10):
-#    Y[set1[:,0],set1[:,1]] = Y[set1[:,0],set1[:,1]] + c
-#    Y[set2[:,0],set2[:,1]] = Y[set2[:,0],set2[:,1]] + c
-
-# Import example
-import scipy.io as io
-Xmat = io.loadmat('tests/X.mat')
-Ymat = io.loadmat('tests/Y.mat')
-X = Xmat['X']
-Y = Ymat['Y']
-n = X.shape[0]
+for i in range(10):
+    Y[set1[:,0],set1[:,1]] = Y[set1[:,0],set1[:,1]] + c
+    Y[set2[:,0],set2[:,1]] = Y[set2[:,0],set2[:,1]] + c
 
 # Run the NBS with the following parameter options: 
 # Set an appropriate threshold. It is difficult to provide a rule of thumb 
 # to guide the choice of this threshold. Trial-and-error is always an option
 # with the number of permutations generated per trial set low. 
 THRESH=3; 
-# Generate 10 permuations. Many more permutations are required in practice
+# Generate 100 permuations. Many more permutations are required in practice
 # to yield a reliable estimate. 
-K=10;
+K=100;
 # Set TAIL to left, and thus test the alternative hypothesis that mean of 
 # population X < mean of population Y
 TAIL='left'; 

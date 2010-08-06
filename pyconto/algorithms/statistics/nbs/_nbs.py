@@ -180,8 +180,10 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
             nr_edges_per_component_bigenough.append(nr_edges_per_component[idx])
             
             # store the number of edges of the component as value in the adjacency matrix
-            for f,t in componentG.edges_iter():
-                ADJ[f,t] = ADJ[t,f] = nr_edges_per_component[idx]
+            for ed in componentG.edges():
+                ADJ[ed[0],ed[1]] = ADJ[ed[1],ed[0]] = idx + 1
+                # if we would like to store the number of edges per component
+                # ADJ[ed[0],ed[1]] = ADJ[ed[1],ed[0]] = nr_edges_per_component[idx]
     
     # renaming
     sz_links = nr_edges_per_component_bigenough
@@ -304,13 +306,12 @@ def setdiff2d(X, Y):
     Z = []
     for i in xrange(n):
         test = X[i,:]
-        hit = 0
+        hit = False
         for j in xrange(m):
             if test[0] == Y[j,0] and test[1] == Y[j,1]:
-                hit = hit + 1
-            if not hit == 0:
+                hit = True
                 break
-        if hit == 0:
+        if not hit:
             Z.append(test)
     return np.array(Z)
 
@@ -332,13 +333,12 @@ def intersect2d(X, Y):
     Z = []
     for i in xrange(n):
         test = X[i,:]
-        hit = 0
+        hit = False
         for j in xrange(m):
             if test[0] == Y[j,0] and test[1] == Y[j,1]:
-                hit = hit + 1
-            if not hit == 0:
+                hit = True
                 break
-        if not hit == 0:
+        if hit:
             Z.append(test)
     return np.array(Z)
 
