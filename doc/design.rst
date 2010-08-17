@@ -38,6 +38,7 @@ Compare to Matlab Toolboxes:
 - Functional Connectivity Toolbox
 - Chronux (Mitra Lab)
 
-
+Network Architecture: Randomness, Modular, Heterogenity
+see solé and valverde paper
 
 
