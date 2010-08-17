@@ -94,4 +94,5 @@ http://www.biomedcentral.com/1471-2105/11/233/abstract
 # - network analysis tree with processing steps & visualizations
 # - employ parallel processing capabilities
 
-
+using a minimum spanning tree to binarize, it could be per subject
+community finding for reordering of the network
