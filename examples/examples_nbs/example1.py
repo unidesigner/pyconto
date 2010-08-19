@@ -6,8 +6,8 @@ from pylab import imshow, show, title
 
 # Import test data
 import scipy.io as io
-Xmat = io.loadmat('tests/X.mat')
-Ymat = io.loadmat('tests/Y.mat')
+Xmat = io.loadmat('X.mat')
+Ymat = io.loadmat('Y.mat')
 X = Xmat['X']
 Y = Ymat['Y']
 n = X.shape[0]

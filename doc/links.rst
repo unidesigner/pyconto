@@ -43,6 +43,7 @@ Social Network Analysis
 Dynamic network software:
 * `SoNIA <http://www.stanford.edu/group/sonia/index.html>`_
 * `Dynamical Network Analysis <http://en.wikipedia.org/wiki/Dynamic_network_analysis>`_
+* `About SoNIA <http://www.cmu.edu/joss/content/articles/volume7/deMollMcFarland/>`_
 
 Libraries
 ---------
