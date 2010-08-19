@@ -1,6 +1,5 @@
 import numpy as np
 import networkx as netwx
-from pylab import *
 
 def ttest2(X,Y):
     """ Compute the two-sided t-statistic of X,Y
@@ -49,7 +48,9 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
             
     Returns
     -------
-    
+    PVAL : ndarray
+        p-values for each component
+        
     ADJ : ndarray
         Returns an adjacency matrix identifying the edges comprising each component.
         Edges corresponding to the first p-value stored in the vector PVAL are assigned
@@ -280,7 +281,6 @@ def compute_nbs(X, Y, THRESH, K = 1000, TAIL = 'both'):
         print "Perm %d of %d. Perm max is: %d. Observed max is: %d. P-val estimate is: %0.3f" % ((k+1),K,NULL[k],max_sz,hit/(k+1))
 
     # Calculate p-values for each component
-    # ??? why like that?
     PVAL = np.zeros( len(sz_links) )
     for i in range( len(sz_links) ):
         PVAL[i] = len( NULL[NULL >= sz_links[i]] ) * 1.0 / K

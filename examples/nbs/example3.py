@@ -1,7 +1,7 @@
 """ This script provides a toy example of the NBS """
 
 import numpy as np
-import nbs
+import pyconto.algorithms.statistics.nbs as nbs
 from pylab import imshow, show, title
 
 # Generate simulated data.
@@ -42,13 +42,16 @@ for i in range(10):
 # Set an appropriate threshold. It is difficult to provide a rule of thumb 
 # to guide the choice of this threshold. Trial-and-error is always an option
 # with the number of permutations generated per trial set low. 
-THRESH=3; 
-# Generate 100 permuations. Many more permutations are required in practice
+THRESH=3
+
+# Generate 100 permutations. Many more permutations are required in practice
 # to yield a reliable estimate. 
-K=100;
+K=100
+
 # Set TAIL to left, and thus test the alternative hypothesis that mean of 
 # population X < mean of population Y
-TAIL='left'; 
+TAIL='left'
+
 # Run the NBS
 PVAL, ADJ, NULL = nbs.compute_nbs(X,Y,THRESH,K,TAIL); 
 

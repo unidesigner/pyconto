@@ -3,12 +3,14 @@ functions and neuroanatomical data sets useful in the analysis of structural
 or functional brain networks.
 
 See <http://www.brain-connectivity-toolbox.net/> for more information.
+For the BCT C++ port source code, see <...>
 
 See LICENSE for information about bct-cpp's license.
 
+Wrapped to Python by Stephan Gerhard <info@connectomics.org>, EPFL/UNIL-CHUV, 2010
 
 How to build the library for 32-bit and 64-bit Linux?
-
+-----------------------------------------------------
 0. Install Python, Python-dev(el), libgsl, libgsl-dev(el)
 1. Checkout Source from http://code.google.com/p/bct-cpp/source/checkout
 2. Modification to Makefile for

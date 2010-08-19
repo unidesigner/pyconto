@@ -1,4 +1,4 @@
-import bct
+import _bct as bct
 import numpy as np
 
 def threshold_absolute(cmatrix, threshold):

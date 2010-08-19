@@ -2,9 +2,9 @@
 NumPy arrays """
 
 # this information is almost useless if one has not a rough idea of
-# what the nodes mean
+# what the nodes mean, i.e. what brain regions they correspond to
 
-import bct
+import _bct as bct
 import numpy as np
 
 '''
