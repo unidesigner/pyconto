@@ -1,64 +1,53 @@
 """ The measures of the Brain Connectivity Toolbox with an unified
-and simplified interface. Memory management."""
+and simplified API and memory management """
 
 # Wrapped to Python by Stephan Gerhard, EPFL/UNIL-CHUV, 2010
 
-# use for docstring
-# - page http://sites.google.com/a/brain-connectivity-toolbox.net/bct/metrics/list-of-measures
-# - what is inside the matlab function
-# - what is inside the c++ function
-
-# questions
-# - what does wmax mean in normalized_path_length(const gsl_matrix* D, double wmax)  ?
-# - compare with networkx measures (problem with e.g. degree)
-# - what to do with parameter return variables? findwalks, findpaths, ...
-
-import bct
+import _bct as bct
 import numpy as np
+import logging
 
 def set_safe_mode(status):
     """ Validity of cmatrix tested
     
     By default, bct-cpp checks the status of any connection matrix passed
-    to a specialized function (i.e., one such as bct::clustering_coef_bu
+    to a specialized function (i.e., one such as `bct.clustering_coef_bu`
     which is only intended to work on binary undirected matrices).
     If this status check fails, a message is printed to stderr, but the
     function still attempts to complete the calculation. To disable this behavior
-    and avoid the minor computational overhead, call bct::set_safe_mode(false). 
-    
+    and avoid the minor computational overhead, call `bct.set_safe_mode(False)`. 
     """
     bct.set_safe_mode(status)
 
-def assortativity(cmatrix, edgetype = 'undirected', weighted = False):
-    """ Assortativity coefficient. Essentially, the assortativity a correlation
+def assortativity(cmatrix, directed = False):
+    """ Assortativity coefficient. Essentially, the assortativity is a correlation
     coefficient for the degrees of linked nodes. A positive assortativity coefficient
     indicates that nodes tend to link to other nodes with the same or similar degree.
+    
     The function accepts weighted networks, but the connection weights are ignored.
     
     Parameters
     ----------
-    
-    cmatrix : connection matrix
-   
-    edgetype : {'undirected', 'directed'} 
-   
+    cmatrix : ndarray (N,N)
+        Connection/Adjacency matrix
+    directed : boolean
+        Is the network directed?
    
     Returns
     -------
-
-    r : assortativity
-     
-        
+    r : array_like
+        Assortativity
+   
     Computed after Newman (2003)
     
-    Note: Weights are discarded, no edges on main diagonal
+    Note
+    ----
+    Weights are discarded, no edges on main diagonal.
     
     Olaf Sporns, Indiana University, 2007/2008
     Vassilis Tsiaras, University of Crete, 2009
-    
     """
-    
-    if edgetype == 'undirected':
+    if not directed:
         m = bct.to_gslm(cmatrix.tolist())
         ass = bct.assortativity_und(m)
         r = bct.from_gsl(ass)
@@ -77,35 +66,38 @@ def assortativity(cmatrix, edgetype = 'undirected', weighted = False):
         bct.gsl_free(ass)
         return r
     
-def degree(cmatrix, edgetype):
-    """ In an undirected graph, the degree is the number of connections for individual nodes.
-    In a directed graph, the indegree (outdegree) is the number of incoming (outgoing) connections
-    for individual nodes.  The degree is the sum of indegree and outdegree.Connection weights are ignored.
+# XXX: how to get the in/out degree?
+def degree(cmatrix, directed):
+    """ In an undirected graph, the degree is the number of connections
+    for individual nodes.
+    
+    In a directed graph, the indegree (outdegree) is the number of incoming
+    (outgoing) connections for individual nodes.  The degree is the sum of
+    indegree and outdegree.Connection weights are ignored.
     
     Parameters
     ----------  
-    cmatrix : connection/adjacency matrix
-    edgetype :
+    cmatrix : ndarray (N,N)
+        Connection/Adjacency matrix
+    directed : boolean
+        Is the network directed?
 
     Returns
     -------
+    directed == True:
+        deg : ndarray
+            Degree for all vertices
     
-    edgetype == 'directed':
-    
-        id   = indegree for all vertices
-        od   = outdegree for all vertices
-        deg  = degree for all vertices
-    
-        Computes the indegree, outdegree, and degree (indegree + outdegree) for a
+        Computes the and degree (indegree + outdegree) for a
         directed binary matrix.  Weights are discarded.
     
         Note: Inputs of CIJ are assumed to be on the columns of the matrix.
     
         Olaf Sporns, Indiana University, 2002/2006/2008
 
-    edgetype == 'undirected'
-  
-        deg : degree for all vertices
+    directed == False:
+        deg : ndarray
+            Degree for all vertices
     
         Computes the degree for a nondirected binary matrix.  Weights are
         discarded.
@@ -113,7 +105,7 @@ def degree(cmatrix, edgetype):
         Olaf Sporns, Indiana University, 2002/2006/2008
 
     """
-    if edgetype == 'undirected':
+    if not directed:
         m = bct.to_gslm(cmatrix.tolist())
         deg = bct.degrees_und(m)
         rdeg = bct.from_gsl(deg)
@@ -183,15 +175,15 @@ def efficiency(cmatrix, local = False, edgetype = 'undirected', weighted = False
             bct.gsl_free(eloc)
             return np.asarray(elocnp)
 
-def betweenness(cmatrix, edgetype = 'directed', weighted = False):
+def betweenness(cmatrix, weighted = False):
     """ Betweenness centrality
+    
+    Only for directed networks.
     
     Parameters
     ----------
     cmatrix : connection/adjacency matrix
     
-    edgetype : {'directed'} 
-
     weighted : {False, True}
     
     Returns
@@ -223,15 +215,28 @@ def betweenness(cmatrix, edgetype = 'directed', weighted = False):
         Mika Rubinov, UNSW, 2007 (last modified July 2008)
         
     """
-    pass
+    if weighted:
+        m = bct.to_gslm(cmatrix.tolist())
+        dist = bct.betweenness_wei(m)
+        distnp = bct.from_gsl(dist)
+        bct.gsl_free(m)
+        bct.gsl_free(dist)
+        return np.asarray(distnp)
+    else:
+        m = bct.to_gslm(cmatrix.tolist())
+        dist = bct.betweenness_bin(m)
+        distnp = bct.from_gsl(dist)
+        bct.gsl_free(m)
+        bct.gsl_free(dist)
+        return np.asarray(distnp)
 
 def breadth(cmatrix, source):
     """ Breadth-first search tree
     
-     Performs a breadth-first search starting at the source node.  Because C++
-     indexing is zero-based, a value of 0 at branch(i) could mean either that node
-     0 precedes node i or that node i is unreachable.  Check distance(i) for
-     GSL_POSINF to differentiate between these two cases.
+    Performs a breadth-first search starting at the source node.  Because C++
+    indexing is zero-based, a value of 0 at branch(i) could mean either that node
+    0 precedes node i or that node i is unreachable.  Check distance(i) for
+    GSL_POSINF to differentiate between these two cases.
  
     Parameters
     ----------
@@ -241,7 +246,6 @@ def breadth(cmatrix, source):
     
     Returns
     -------
-    
     distance : distance between 'source' and i'th vertex
                (0 for source vertex)
     branch : vertex that precedes i in the breadth-first search tree
@@ -254,7 +258,12 @@ def breadth(cmatrix, source):
     
     Olaf Sporns, Indiana University, 2002/2007/2008
     """
-    pass
+    m = bct.to_gslm(cmatrix.tolist())
+    str = bct.breadth(m, source)
+    strnp = bct.from_gsl(str)
+    bct.gsl_free(m)
+    bct.gsl_free(str)
+    return np.asarray(strnp)
 
 def breadthdist(cmatrix):
     """ Computes reachability and distance matrices using breadth-first search.
@@ -273,34 +282,61 @@ def breadthdist(cmatrix):
     
     Olaf Sporns, Indiana University, 2002/2007/2008
     """
-    pass
-
+    m = bct.to_gslm(cmatrix.tolist())
+    str = bct.breadthdist(m)
+    strnp = bct.from_gsl(str)
+    bct.gsl_free(m)
+    bct.gsl_free(str)
+    return np.asarray(strnp)
+                                                                                      
+def charpath_lambda(D):
+    """ Given a distance matrix, computes characteristic path length.
+    
+    // lambda = sum(sum(D(D~=Inf)))/length(nonzeros(D~=Inf));
+    
+    """
+    m = bct.to_gslm(D.tolist())
+    str = bct.charpath_lambda(m)
+    bct.gsl_free(m)
+    return str
+                                                                              
 def charpath(D):
     """ Distance based measures
 
     This function outputs four distance based measures. Characteristic path length
     is the average shortest path length. Node eccentricity is the maximal shortest
     path length between a node and any other node. Network radius is the minimum 
-    ccentricity, while network diameter is the maximum eccentricity.
+    eccentricity, while network diameter is the maximum eccentricity.
 
+    Characteristic path length is calculated as the global mean of the
+    distance matrix D, not taking into account any 'Infs' but including the
+    distances on the main diagonal.
+    
     Parameters
     ----------
     D : distance matrix
     
     Returns
     -------
-    lambda : characteristic path length
     ecc : eccentricity (for each vertex)
-    radius : radius of graph
-    diameter : diameter of graph
     
-    Characteristic path length is calculated as the global mean of the
-    distance matrix D, not taking into account any 'Infs' but including the
-    distances on the main diagonal.
+    Notes
+    -----
+    The radius of the graph is min(ecc)
+    The diameter of the graph is max(ecc)
+        
+    See Also
+    --------
+    charpath_lambda(D) for characteristic path length
     
     Olaf Sporns, Indiana University, 2002/2007/2008
     """
-    pass
+    m = bct.to_gslm(D.tolist())
+    str = bct.charpath_ecc(m)
+    strnp = bct.from_gsl(str)
+    bct.gsl_free(m)
+    bct.gsl_free(str)
+    return np.asarray(strnp)
 
 def clustering_coef(cmatrix, edgetype, weighted):
     """ Clustering coefficient C
@@ -371,10 +407,38 @@ def clustering_coef(cmatrix, edgetype, weighted):
             Thus the maximum possible number of triangles = 
               = (2 edges)*([ALL PAIRS] - [FALSE PAIRS]) =
               = 2 * (K(K-1)/2 - diag(A^2)) = K(K-1) - 2(diag(A^2))
-
-
+              
     """
-    pass
+    if edgetype == 'directed':
+        if weighted:
+            m = bct.to_gslm(cmatrix.tolist())
+            str = bct.clustering_coef_wd(m)
+            strnp = bct.from_gsl(str)
+            bct.gsl_free(m)
+            bct.gsl_free(str)
+            return np.asarray(strnp)
+        else:
+            m = bct.to_gslm(cmatrix.tolist())
+            str = bct.clustering_coef_bd(m)
+            strnp = bct.from_gsl(str)
+            bct.gsl_free(m)
+            bct.gsl_free(str)
+            return np.asarray(strnp)
+    else:
+        if weighted:
+            m = bct.to_gslm(cmatrix.tolist())
+            str = bct.clustering_coef_wu(m)
+            strnp = bct.from_gsl(str)
+            bct.gsl_free(m)
+            bct.gsl_free(str)
+            return np.asarray(strnp)
+        else:
+            m = bct.to_gslm(cmatrix.tolist())
+            str = bct.clustering_coef_bu(m)
+            strnp = bct.from_gsl(str)
+            bct.gsl_free(m)
+            bct.gsl_free(str)
+            return np.asarray(strnp)            
 
 def cycprob(Py):
     """ Cycle probability
@@ -440,7 +504,6 @@ def density(cmatrix, edgetype):
         val =  bct.density_und(m)
         bct.gsl_free(m)
         return val
-
     elif edgetype == 'directed':
         m = bct.to_gslm(cmatrix.tolist())
         val = bct.density_dir(m)
@@ -556,7 +619,20 @@ def edge_betweenness(cmatrix, weighted):
         Mika Rubinov, UNSW, 2007 (last modified July 2008)
 
     """
-    pass
+    if weighted:
+        m = bct.to_gslm(cmatrix.tolist())
+        dist = bct.edge_betweenness_wei(m)
+        distnp = bct.from_gsl(dist)
+        bct.gsl_free(m)
+        bct.gsl_free(dist)
+        return np.asarray(distnp)
+    else:
+        m = bct.to_gslm(cmatrix.tolist())
+        dist = bct.edge_betweenness_bin(m)
+        distnp = bct.from_gsl(dist)
+        bct.gsl_free(m)
+        bct.gsl_free(dist)
+        return np.asarray(distnp)
 
 def erange(cmatrix):
     """ Computes the range for each edge (i.e., the shortest path length between the
@@ -660,7 +736,11 @@ def find_motif34(m,n):
     Mika Rubinov, UNSW, 2007 (last modified July 2008)
 
     """
-    pass
+    mi = bct.find_motif34(m,n)
+    minp = bct.from_gsl(mi)
+    logging.error("What to do with std::vector<gsl_matrix*> ??")
+    bct.gsl_free(m)
+    return np.asarray(minp)
 
 def find_motif34_from_matrix(mmatrix):
     """Returns the motif ID for a given matrix.
@@ -677,7 +757,7 @@ def find_motif34_from_matrix(mmatrix):
     Mika Rubinov, UNSW, 2007 (last modified July 2008)
 
     """
-    pass
+    raise NotImplementedError("This functionality is not implemented in C++ version")
 
 def findpaths(cmatrix, sources, qmax):
     """ Paths are sequences of linked nodes, that never visit a single node more than
@@ -703,7 +783,7 @@ def findpaths(cmatrix, sources, qmax):
     savepths : set to 1 if all paths are to be collected in
                'allpths'
                
-     Results
+     Returns
      -------
     Pq : 3D matrix, with P(i,j,q) = number of paths from
          'i' to 'j' of length 'q'.
@@ -728,7 +808,17 @@ def findpaths(cmatrix, sources, qmax):
 
     """
     # work on docstring
-    pass
+    m = bct.to_gslm(cmatrix.tolist())
+    cil = bct.to_gslv(sources.tolist())
+    str = bct.findpaths(m, cil, qmax)
+    logging.error("What to do with std::vector<gsl_matrix*> ??")
+    return
+
+    strnp = bct.from_gsl(str)
+    bct.gsl_free(m)
+    bct.gsl_free(str)
+    return np.asarray(strnp)
+
 
 def findwalks(cmatrix):
     """ Walks are sequences of linked nodes, that may visit a single node more
@@ -757,7 +847,15 @@ def findwalks(cmatrix):
     Written by Olaf Sporns, Indiana University, 2002/2007/2008
 
     """
-    pass
+    logging.error("from_gsl seems not work work")
+    return
+    m = bct.to_gslm(cmatrix.tolist())
+    mi = bct.findwalks(m)
+    print mi
+    minp = bct.from_gsl(mi)
+    bct.gsl_free(m)
+    bct.gsl_free(mi)
+    return np.asarray(minp)
 
 def matching_ind(cmatrix):
     """ Matching index. For any two nodes u and v, the matching index computes
@@ -876,7 +974,16 @@ def modularity(cmatrix, edgetype):
         Dec 2008: Fine-tuning is now vectorized (Mika Rubinov)
 
     """
-    pass
+    if edgetype == 'undirected':
+        m = bct.to_gslm(cmatrix.tolist())
+        strr = bct.modularity_und(m)
+        bct.gsl_free(m)
+        return strr
+    else:
+        m = bct.to_gslm(cmatrix.tolist())
+        strr = bct.modularity_dir(m)
+        bct.gsl_free(m)
+        return strr
 
 def module_degree_zscore(cmatrix, Ci):
     """ Computes 'within module degree z-score'
@@ -904,13 +1011,16 @@ def module_degree_zscore(cmatrix, Ci):
 
     Mika Rubinov, UNSW, 2008
     """
+    logging.warn("This function produces a Segmentation Fault. Fix it.")
+    return
+
     m = bct.to_gslm(cmatrix.tolist())
     cil = bct.to_gslv(Ci.tolist())
-    # XXX: error
-    n = bct.module_degree_zscore(m, cil)
+    str = bct.module_degree_zscore(m, cil)
+    strnp = bct.from_gsl(str)
     bct.gsl_free(m)
-    bct.gsl_free(cil)
-    return n
+    bct.gsl_free(str)
+    return np.asarray(strnp)
 
 
 # in bct-cpp: utility.cpp
@@ -1055,17 +1165,17 @@ def motif3struct(cmatrix, weighted):
         bct.gsl_free(str)
         return np.asarray(strnp)
 
-def participation_coef(cmatrix, Ci, weighted = False):
+def participation_coef(cmatrix, Ci):
     """ Computes nodal participation coefficient for a binary graph and its
     corresponding community structure.  For a directed graph, computes "out-
     neighbor" participation coefficient.
+    
+    Only for binary networks.
  
     Parameters
     ----------
     cmatrix : adjacency matrix
     Ci : community structure vector Ci
-    weighted : {True}
-               Only for binary matrices
          
     Returns
     -------
@@ -1075,26 +1185,27 @@ def participation_coef(cmatrix, Ci, weighted = False):
     Reference: Guimera R, Amaral L. Nature (2005) 433:895-900.
 
     Mika Rubinov, UNSW, 2008
-    """
-    pass
+    """    
+    m = bct.to_gslm(cmatrix.tolist())
+    cil = bct.to_gslv(Ci.tolist())
+    str = bct.participation_coef(m, cil)
+    strnp = bct.from_gsl(str)
+    bct.gsl_free(m)
+    bct.gsl_free(str)
+    return np.asarray(strnp)
 
-def normalized_path_length(cmatrix, wmax):
+def normalized_path_length(cmatrix):
     """ Given a distance matrix, computes the normalized shortest path length.
 
     Parameters
     ----------
     cmatrix : connection/adjacency matrix
     
-    wmax : double
-           ???
-    
-    Results
-    -------
-    
+    Returns
+    -------    
     n : normalized shortest path length
     
     """
-
     m = bct.to_gslm(cmatrix.tolist())
     n = bct.normalized_path_length(m)
     bct.gsl_free(m)
@@ -1178,15 +1289,15 @@ def strengths(cmatrix, edgetype):
     """
     if edgetype == 'undirected':
         m = bct.to_gslm(cmatrix.tolist())
-        str = bct.strengths_und(m)
-        strnp = bct.from_gsl(str)
+        strr = bct.strengths_und(m)
+        strnp = bct.from_gsl(strr)
         bct.gsl_free(m)
-        bct.gsl_free(str)
+        bct.gsl_free(strr)
         return np.asarray(strnp)
     else:
         m = bct.to_gslm(cmatrix.tolist())
-        str = bct.strengths_dir(m)
-        strnp = bct.from_gsl(str)
+        strr = bct.strengths_dir(m)
+        strnp = bct.from_gsl(strr)
         bct.gsl_free(m)
-        bct.gsl_free(str)
+        bct.gsl_free(strr)
         return np.asarray(strnp)

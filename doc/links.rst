@@ -36,6 +36,8 @@ Systems Biology
 * `BioLayout <http://www.biolayout.org/>`_
 * `PATIKA <http://www.patika.org/>`_
 
+* Others: NAViGaTOR, Osprey, Ondex, PathwayLab, Interviewer3, Geomi, Forg3d
+
 Social Network Analysis
 ^^^^^^^^^^^^^^^^^^^^^^^
 * `vizster <http://hci.stanford.edu/jheer/projects/vizster/>`_

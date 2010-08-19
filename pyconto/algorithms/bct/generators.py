@@ -1,3 +1,5 @@
+import _bct as bct
+
 """ Generator function for synthetic connection networks
 and graph randomization algorithms 
 
