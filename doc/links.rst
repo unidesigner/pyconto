@@ -105,6 +105,7 @@ Layouting
 * `iGraph Layouting <http://www.cs.rhul.ac.uk/home/tamas/development/igraph/tutorial/tutorial.html#layouts-and-plotting>`_
 * `Diagram Layouting Research <http://www.csse.monash.edu.au/~mwybrow/#publications>`_
 * `Chair of Sytems Design ETH <http://www.sg.ethz.ch/research/graphlayout>`_
+* `FragViz layouting <http://www.biomedcentral.com/1471-2105/11/475/abstract>`_
 
 Varia
 -----

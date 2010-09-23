@@ -1011,9 +1011,6 @@ def module_degree_zscore(cmatrix, Ci):
 
     Mika Rubinov, UNSW, 2008
     """
-    logging.warn("This function produces a Segmentation Fault. Fix it.")
-    return
-
     m = bct.to_gslm(cmatrix.tolist())
     cil = bct.to_gslv(Ci.tolist())
     str = bct.module_degree_zscore(m, cil)
