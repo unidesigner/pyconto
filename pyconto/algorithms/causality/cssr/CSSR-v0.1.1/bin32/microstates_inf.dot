@@ -1,0 +1,12 @@
+digraph microstates {
+size = "6,8.5";
+ratio = "fill";
+node [shape = circle];
+node [fontsize = 24];
+edge [fontsize = 24];
+0 -> 1 [label = "2: 1        "];
+1 -> 2 [label = "3: 1        "];
+2 -> 2 [label = "4: 0.9831   "];
+2 -> 3 [label = "5: 0.01689  "];
+3 -> 0 [label = "1: 1        "];
+}

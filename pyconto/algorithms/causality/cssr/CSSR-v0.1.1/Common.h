@@ -11,12 +11,15 @@
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
-#include <fstream.h>
+#include <fstream>
 #include <stdio.h>
-#include <iostream.h>
-#include <iomanip.h>
+#include <iostream>
+#include <iomanip>
 #include <string.h>
 #include <ctype.h>
+
+using namespace std;
+
 
 #define INCREMENT 10     //size of array growth
 #define INITIAL_SIZE 50  //intial size of array of states

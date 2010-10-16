@@ -1,0 +1,35 @@
+State number: 0
+451
+4451
+distribution: P(1) = 0	P(2) = 1	P(3) = 0	P(4) = 0	P(5) = 0	
+transitions: T(1) = NULL	T(2) = 1	T(3) = NULL	T(4) = NULL	T(5) = NULL	
+P(state): 0.0108696
+
+State number: 1
+512
+4512
+distribution: P(1) = 0	P(2) = 0	P(3) = 1	P(4) = 0	P(5) = 0	
+transitions: T(1) = NULL	T(2) = NULL	T(3) = 2	T(4) = NULL	T(5) = NULL	
+P(state): 0.0108696
+
+State number: 2
+123
+234
+344
+444
+1234
+2344
+3444
+4444
+5123
+distribution: P(1) = 0	P(2) = 0	P(3) = 0	P(4) = 0.983107	P(5) = 0.0168935	
+transitions: T(1) = NULL	T(2) = NULL	T(3) = NULL	T(4) = 2	T(5) = 3	
+P(state): 0.961957
+
+State number: 3
+445
+4445
+distribution: P(1) = 1	P(2) = 0	P(3) = 0	P(4) = 0	P(5) = 0	
+transitions: T(1) = 0	T(2) = NULL	T(3) = NULL	T(4) = NULL	T(5) = NULL	
+P(state): 0.0163043
+
