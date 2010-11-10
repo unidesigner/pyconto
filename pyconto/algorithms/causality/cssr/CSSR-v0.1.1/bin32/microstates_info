@@ -1,13 +1,13 @@
 Alphabet File: microstate_classes
 Data File: microstates
-History Length: 4
+History Length: 7
 Significance Level: 0.001
-Multiline Mode: true
+Multiline Mode: false
 Chi-squared test used: false
 Alphabet Size: 5
 Relative Entropy: 0
-Relative Entropy Rate: 0.000210694
-Statistical Complexity: 0.292469
-Entropy Rate: 0.118921
-Variation: 0.802275
-Number of Inferred States: 4
+Relative Entropy Rate: 0
+Statistical Complexity: 2.58458
+Entropy Rate: -0
+Variation: 0.0206186
+Number of Inferred States: 6

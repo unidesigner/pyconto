@@ -66,248 +66,316 @@ except AttributeError:
     _newclass = 0
 
 
-class SwigPyIterator(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, SwigPyIterator, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, SwigPyIterator, name)
-    def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined - class is abstract")
-    __repr__ = _swig_repr
-    __swig_destroy__ = _bct.delete_SwigPyIterator
-    __del__ = lambda self : None;
-    def value(self): return _bct.SwigPyIterator_value(self)
-    def incr(self, n = 1): return _bct.SwigPyIterator_incr(self, n)
-    def decr(self, n = 1): return _bct.SwigPyIterator_decr(self, n)
-    def distance(self, *args): return _bct.SwigPyIterator_distance(self, *args)
-    def equal(self, *args): return _bct.SwigPyIterator_equal(self, *args)
-    def copy(self): return _bct.SwigPyIterator_copy(self)
-    def next(self): return _bct.SwigPyIterator_next(self)
-    def __next__(self): return _bct.SwigPyIterator___next__(self)
-    def previous(self): return _bct.SwigPyIterator_previous(self)
-    def advance(self, *args): return _bct.SwigPyIterator_advance(self, *args)
-    def __eq__(self, *args): return _bct.SwigPyIterator___eq__(self, *args)
-    def __ne__(self, *args): return _bct.SwigPyIterator___ne__(self, *args)
-    def __iadd__(self, *args): return _bct.SwigPyIterator___iadd__(self, *args)
-    def __isub__(self, *args): return _bct.SwigPyIterator___isub__(self, *args)
-    def __add__(self, *args): return _bct.SwigPyIterator___add__(self, *args)
-    def __sub__(self, *args): return _bct.SwigPyIterator___sub__(self, *args)
-    def __iter__(self): return self
-SwigPyIterator_swigregister = _bct.SwigPyIterator_swigregister
-SwigPyIterator_swigregister(SwigPyIterator)
-
-class bct_exception(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, bct_exception, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, bct_exception, name)
-    __repr__ = _swig_repr
-    def __init__(self, *args): 
-        this = _bct.new_bct_exception(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    __swig_destroy__ = _bct.delete_bct_exception
-    __del__ = lambda self : None;
-bct_exception_swigregister = _bct.bct_exception_swigregister
-bct_exception_swigregister(bct_exception)
-
 
 def assortativity_dir(*args):
+  """assortativity_dir(gsl_matrix CIJ) -> double"""
   return _bct.assortativity_dir(*args)
-assortativity_dir = _bct.assortativity_dir
 
 def assortativity_und(*args):
+  """assortativity_und(gsl_matrix CIJ) -> double"""
   return _bct.assortativity_und(*args)
-assortativity_und = _bct.assortativity_und
+
+def degrees_dir(*args):
+  """degrees_dir(gsl_matrix CIJ) -> gsl_vector"""
+  return _bct.degrees_dir(*args)
 
 def degrees_und(*args):
+  """degrees_und(gsl_matrix CIJ) -> gsl_vector"""
   return _bct.degrees_und(*args)
-degrees_und = _bct.degrees_und
 
 def density_dir(*args):
+  """density_dir(gsl_matrix CIJ) -> double"""
   return _bct.density_dir(*args)
-density_dir = _bct.density_dir
 
 def density_und(*args):
+  """density_und(gsl_matrix CIJ) -> double"""
   return _bct.density_und(*args)
-density_und = _bct.density_und
 
 def jdegree(*args):
+  """jdegree(gsl_matrix CIJ) -> gsl_matrix"""
   return _bct.jdegree(*args)
-jdegree = _bct.jdegree
 
 def jdegree_bl(*args):
+  """jdegree_bl(gsl_matrix J) -> int"""
   return _bct.jdegree_bl(*args)
-jdegree_bl = _bct.jdegree_bl
 
 def jdegree_id(*args):
+  """jdegree_id(gsl_matrix J) -> int"""
   return _bct.jdegree_id(*args)
-jdegree_id = _bct.jdegree_id
 
 def jdegree_od(*args):
+  """jdegree_od(gsl_matrix J) -> int"""
   return _bct.jdegree_od(*args)
-jdegree_od = _bct.jdegree_od
 
 def matching_ind(*args):
+  """matching_ind(gsl_matrix CIJ) -> gsl_matrix"""
   return _bct.matching_ind(*args)
-matching_ind = _bct.matching_ind
 
 def matching_ind_in(*args):
+  """matching_ind_in(gsl_matrix CIJ) -> gsl_matrix"""
   return _bct.matching_ind_in(*args)
-matching_ind_in = _bct.matching_ind_in
 
 def matching_ind_out(*args):
+  """matching_ind_out(gsl_matrix CIJ) -> gsl_matrix"""
   return _bct.matching_ind_out(*args)
-matching_ind_out = _bct.matching_ind_out
+
+def strengths_dir(*args):
+  """strengths_dir(gsl_matrix CIJ) -> gsl_vector"""
+  return _bct.strengths_dir(*args)
 
 def strengths_und(*args):
+  """strengths_und(gsl_matrix CIJ) -> gsl_vector"""
   return _bct.strengths_und(*args)
-strengths_und = _bct.strengths_und
 
 def clustering_coef_bd(*args):
+  """clustering_coef_bd(gsl_matrix A) -> gsl_vector"""
   return _bct.clustering_coef_bd(*args)
-clustering_coef_bd = _bct.clustering_coef_bd
 
 def clustering_coef_bu(*args):
+  """clustering_coef_bu(gsl_matrix G) -> gsl_vector"""
   return _bct.clustering_coef_bu(*args)
-clustering_coef_bu = _bct.clustering_coef_bu
 
 def clustering_coef_wd(*args):
+  """clustering_coef_wd(gsl_matrix W) -> gsl_vector"""
   return _bct.clustering_coef_wd(*args)
-clustering_coef_wd = _bct.clustering_coef_wd
 
 def clustering_coef_wu(*args):
+  """clustering_coef_wu(gsl_matrix W) -> gsl_vector"""
   return _bct.clustering_coef_wu(*args)
-clustering_coef_wu = _bct.clustering_coef_wu
 
 def efficiency_local(*args):
+  """efficiency_local(gsl_matrix G) -> gsl_vector"""
   return _bct.efficiency_local(*args)
-efficiency_local = _bct.efficiency_local
+
+def breadth(*args):
+  """breadth(gsl_matrix CIJ, int source) -> gsl_vector"""
+  return _bct.breadth(*args)
+
+def breadthdist(*args):
+  """breadthdist(gsl_matrix CIJ) -> gsl_matrix"""
+  return _bct.breadthdist(*args)
+
+def charpath_ecc(*args):
+  """charpath_ecc(gsl_matrix D) -> gsl_vector"""
+  return _bct.charpath_ecc(*args)
 
 def charpath_lambda(*args):
+  """charpath_lambda(gsl_matrix D) -> double"""
   return _bct.charpath_lambda(*args)
-charpath_lambda = _bct.charpath_lambda
 
 def connectivity_length(*args):
+  """connectivity_length(gsl_matrix D) -> double"""
   return _bct.connectivity_length(*args)
-connectivity_length = _bct.connectivity_length
 
 def cycprob_fcyc(*args):
+  """cycprob_fcyc(std::vector<(p.gsl_matrix)> Pq) -> gsl_vector"""
   return _bct.cycprob_fcyc(*args)
-cycprob_fcyc = _bct.cycprob_fcyc
 
 def cycprob_pcyc(*args):
+  """cycprob_pcyc(std::vector<(p.gsl_matrix)> Pq) -> gsl_vector"""
   return _bct.cycprob_pcyc(*args)
-cycprob_pcyc = _bct.cycprob_pcyc
 
 def distance_bin(*args):
+  """distance_bin(gsl_matrix G) -> gsl_matrix"""
   return _bct.distance_bin(*args)
-distance_bin = _bct.distance_bin
 
 def distance_wei(*args):
+  """distance_wei(gsl_matrix G) -> gsl_matrix"""
   return _bct.distance_wei(*args)
-distance_wei = _bct.distance_wei
 
 def efficiency_global(*args):
+  """efficiency_global(gsl_matrix G) -> gsl_matrix"""
   return _bct.efficiency_global(*args)
-efficiency_global = _bct.efficiency_global
+
+def findpaths(*args):
+  """findpaths(gsl_matrix CIJ, gsl_vector sources, int qmax) -> std::vector<(p.gsl_matrix)>"""
+  return _bct.findpaths(*args)
+
+def findwalks(*args):
+  """findwalks(gsl_matrix CIJ) -> std::vector<(p.gsl_matrix)>"""
+  return _bct.findwalks(*args)
+
+def reachdist(*args):
+  """reachdist(gsl_matrix CIJ) -> gsl_matrix"""
+  return _bct.reachdist(*args)
 
 def betweenness_bin(*args):
+  """betweenness_bin(gsl_matrix G) -> gsl_vector"""
   return _bct.betweenness_bin(*args)
-betweenness_bin = _bct.betweenness_bin
 
 def betweenness_wei(*args):
+  """betweenness_wei(gsl_matrix G) -> gsl_vector"""
   return _bct.betweenness_wei(*args)
-betweenness_wei = _bct.betweenness_wei
+
+def edge_betweenness_bin(*args):
+  """edge_betweenness_bin(gsl_matrix G) -> gsl_matrix"""
+  return _bct.edge_betweenness_bin(*args)
+
+def edge_betweenness_wei(*args):
+  """edge_betweenness_wei(gsl_matrix G) -> gsl_matrix"""
+  return _bct.edge_betweenness_wei(*args)
+
+def erange(*args):
+  """erange(gsl_matrix CIJ) -> gsl_matrix"""
+  return _bct.erange(*args)
 MILO = _bct.MILO
 SPORNS = _bct.SPORNS
 
 def get_motif_mode():
+  """get_motif_mode() -> motif_mode_enum"""
   return _bct.get_motif_mode()
-get_motif_mode = _bct.get_motif_mode
 
 def set_motif_mode(*args):
+  """set_motif_mode(motif_mode_enum motif_mode)"""
   return _bct.set_motif_mode(*args)
-set_motif_mode = _bct.set_motif_mode
+
+def motif3funct_bin(*args):
+  """motif3funct_bin(gsl_matrix W) -> gsl_vector"""
+  return _bct.motif3funct_bin(*args)
+
+def motif3funct_wei(*args):
+  """motif3funct_wei(gsl_matrix W) -> gsl_matrix"""
+  return _bct.motif3funct_wei(*args)
+
+def motif3funct_wei_v(*args):
+  """motif3funct_wei_v(gsl_matrix W) -> gsl_vector"""
+  return _bct.motif3funct_wei_v(*args)
+
+def motif3generate():
+  """motif3generate() -> gsl_matrix"""
+  return _bct.motif3generate()
+
+def motif3struct_bin(*args):
+  """motif3struct_bin(gsl_matrix A) -> gsl_vector"""
+  return _bct.motif3struct_bin(*args)
+
+def motif3struct_wei(*args):
+  """motif3struct_wei(gsl_matrix W) -> gsl_matrix"""
+  return _bct.motif3struct_wei(*args)
+
+def motif3struct_wei_v(*args):
+  """motif3struct_wei_v(gsl_matrix W) -> gsl_vector"""
+  return _bct.motif3struct_wei_v(*args)
+
+def motif4generate():
+  """motif4generate() -> gsl_matrix"""
+  return _bct.motif4generate()
+
+def motif4funct_bin(*args):
+  """motif4funct_bin(gsl_matrix W) -> gsl_vector"""
+  return _bct.motif4funct_bin(*args)
+
+def motif4funct_wei(*args):
+  """motif4funct_wei(gsl_matrix W) -> gsl_matrix"""
+  return _bct.motif4funct_wei(*args)
+
+def motif4funct_wei_v(*args):
+  """motif4funct_wei_v(gsl_matrix W) -> gsl_vector"""
+  return _bct.motif4funct_wei_v(*args)
+
+def motif4struct_bin(*args):
+  """motif4struct_bin(gsl_matrix A) -> gsl_vector"""
+  return _bct.motif4struct_bin(*args)
+
+def motif4struct_wei(*args):
+  """motif4struct_wei(gsl_matrix W) -> gsl_matrix"""
+  return _bct.motif4struct_wei(*args)
+
+def motif4struct_wei_v(*args):
+  """motif4struct_wei_v(gsl_matrix W) -> gsl_vector"""
+  return _bct.motif4struct_wei_v(*args)
+
+def modularity_dir(*args):
+  """modularity_dir(gsl_matrix A) -> double"""
+  return _bct.modularity_dir(*args)
+
+def modularity_und(*args):
+  """modularity_und(gsl_matrix A) -> double"""
+  return _bct.modularity_und(*args)
 
 def module_degree_zscore(*args):
+  """module_degree_zscore(gsl_matrix A, gsl_vector Ci) -> gsl_vector"""
   return _bct.module_degree_zscore(*args)
-module_degree_zscore = _bct.module_degree_zscore
 
 def participation_coef(*args):
+  """participation_coef(gsl_matrix A, gsl_vector Ci) -> gsl_vector"""
   return _bct.participation_coef(*args)
-participation_coef = _bct.participation_coef
 
 def makeevenCIJ(*args):
+  """makeevenCIJ(int N, int K, int sz_cl) -> gsl_matrix"""
   return _bct.makeevenCIJ(*args)
-makeevenCIJ = _bct.makeevenCIJ
+
+def makefractalCIJ(*args):
+  """makefractalCIJ(int mx_lvl, double E, int sz_cl) -> gsl_matrix"""
+  return _bct.makefractalCIJ(*args)
 
 def makelatticeCIJ(*args):
+  """makelatticeCIJ(int N, int K) -> gsl_matrix"""
   return _bct.makelatticeCIJ(*args)
-makelatticeCIJ = _bct.makelatticeCIJ
 
 def makerandCIJ_bd(*args):
+  """makerandCIJ_bd(int N, int K) -> gsl_matrix"""
   return _bct.makerandCIJ_bd(*args)
-makerandCIJ_bd = _bct.makerandCIJ_bd
 
 def makerandCIJ_bu(*args):
+  """makerandCIJ_bu(int N, int K) -> gsl_matrix"""
   return _bct.makerandCIJ_bu(*args)
-makerandCIJ_bu = _bct.makerandCIJ_bu
 
 def makerandCIJ_wd(*args):
+  """makerandCIJ_wd(int N, int K, double wmin, double wmax) -> gsl_matrix"""
   return _bct.makerandCIJ_wd(*args)
-makerandCIJ_wd = _bct.makerandCIJ_wd
 
 def makerandCIJ_wd_wp(*args):
+  """makerandCIJ_wd_wp(gsl_matrix m) -> gsl_matrix"""
   return _bct.makerandCIJ_wd_wp(*args)
-makerandCIJ_wd_wp = _bct.makerandCIJ_wd_wp
 
 def makerandCIJ_wu(*args):
+  """makerandCIJ_wu(int N, int K, double wmin, double wmax) -> gsl_matrix"""
   return _bct.makerandCIJ_wu(*args)
-makerandCIJ_wu = _bct.makerandCIJ_wu
 
 def makerandCIJ_wu_wp(*args):
+  """makerandCIJ_wu_wp(gsl_matrix m) -> gsl_matrix"""
   return _bct.makerandCIJ_wu_wp(*args)
-makerandCIJ_wu_wp = _bct.makerandCIJ_wu_wp
 
 def makeringlatticeCIJ(*args):
+  """makeringlatticeCIJ(int N, int K) -> gsl_matrix"""
   return _bct.makeringlatticeCIJ(*args)
-makeringlatticeCIJ = _bct.makeringlatticeCIJ
 
 def maketoeplitzCIJ(*args):
+  """maketoeplitzCIJ(int N, int K, double s) -> gsl_matrix"""
   return _bct.maketoeplitzCIJ(*args)
-maketoeplitzCIJ = _bct.maketoeplitzCIJ
 
 def latmio_dir(*args):
+  """latmio_dir(gsl_matrix R, int ITER) -> gsl_matrix"""
   return _bct.latmio_dir(*args)
-latmio_dir = _bct.latmio_dir
 
 def latmio_dir_connected(*args):
+  """latmio_dir_connected(gsl_matrix R, int ITER) -> gsl_matrix"""
   return _bct.latmio_dir_connected(*args)
-latmio_dir_connected = _bct.latmio_dir_connected
 
 def latmio_und(*args):
+  """latmio_und(gsl_matrix R, int ITER) -> gsl_matrix"""
   return _bct.latmio_und(*args)
-latmio_und = _bct.latmio_und
 
 def latmio_und_connected(*args):
+  """latmio_und_connected(gsl_matrix R, int ITER) -> gsl_matrix"""
   return _bct.latmio_und_connected(*args)
-latmio_und_connected = _bct.latmio_und_connected
 
 def randmio_dir(*args):
+  """randmio_dir(gsl_matrix R, int ITER) -> gsl_matrix"""
   return _bct.randmio_dir(*args)
-randmio_dir = _bct.randmio_dir
 
 def randmio_dir_connected(*args):
+  """randmio_dir_connected(gsl_matrix R, int ITER) -> gsl_matrix"""
   return _bct.randmio_dir_connected(*args)
-randmio_dir_connected = _bct.randmio_dir_connected
 
 def randmio_und(*args):
+  """randmio_und(gsl_matrix R, int ITER) -> gsl_matrix"""
   return _bct.randmio_und(*args)
-randmio_und = _bct.randmio_und
 
 def randmio_und_connected(*args):
+  """randmio_und_connected(gsl_matrix R, int ITER) -> gsl_matrix"""
   return _bct.randmio_und_connected(*args)
-randmio_und_connected = _bct.randmio_und_connected
 SQUARE = _bct.SQUARE
 RECTANGULAR = _bct.RECTANGULAR
 UNDIRECTED = _bct.UNDIRECTED
@@ -320,242 +388,318 @@ NO_LOOPS = _bct.NO_LOOPS
 LOOPS = _bct.LOOPS
 
 def get_safe_mode():
+  """get_safe_mode() -> bool"""
   return _bct.get_safe_mode()
-get_safe_mode = _bct.get_safe_mode
 
 def set_safe_mode(*args):
+  """set_safe_mode(bool safe_mode)"""
   return _bct.set_safe_mode(*args)
-set_safe_mode = _bct.set_safe_mode
 
 def check_status(*args):
+  """check_status(gsl_matrix m, int flags, string text) -> bool"""
   return _bct.check_status(*args)
-check_status = _bct.check_status
 
 def is_square(*args):
+  """is_square(gsl_matrix m) -> bool"""
   return _bct.is_square(*args)
-is_square = _bct.is_square
 
 def is_rectangular(*args):
+  """is_rectangular(gsl_matrix m) -> bool"""
   return _bct.is_rectangular(*args)
-is_rectangular = _bct.is_rectangular
 
 def is_undirected(*args):
+  """is_undirected(gsl_matrix m) -> bool"""
   return _bct.is_undirected(*args)
-is_undirected = _bct.is_undirected
 
 def is_directed(*args):
+  """is_directed(gsl_matrix m) -> bool"""
   return _bct.is_directed(*args)
-is_directed = _bct.is_directed
 
 def is_binary(*args):
+  """is_binary(gsl_matrix m) -> bool"""
   return _bct.is_binary(*args)
-is_binary = _bct.is_binary
 
 def is_weighted(*args):
+  """is_weighted(gsl_matrix m) -> bool"""
   return _bct.is_weighted(*args)
-is_weighted = _bct.is_weighted
 
 def is_positive(*args):
+  """is_positive(gsl_matrix m) -> bool"""
   return _bct.is_positive(*args)
-is_positive = _bct.is_positive
 
 def is_signed(*args):
+  """is_signed(gsl_matrix m) -> bool"""
   return _bct.is_signed(*args)
-is_signed = _bct.is_signed
 
 def has_loops(*args):
+  """has_loops(gsl_matrix m) -> bool"""
   return _bct.has_loops(*args)
-has_loops = _bct.has_loops
 
 def has_no_loops(*args):
+  """has_no_loops(gsl_matrix m) -> bool"""
   return _bct.has_no_loops(*args)
-has_no_loops = _bct.has_no_loops
 
 def invert_elements(*args):
+  """invert_elements(gsl_matrix m) -> gsl_matrix"""
   return _bct.invert_elements(*args)
-invert_elements = _bct.invert_elements
 
 def remove_loops(*args):
+  """remove_loops(gsl_matrix m) -> gsl_matrix"""
   return _bct.remove_loops(*args)
-remove_loops = _bct.remove_loops
 
 def to_binary(*args):
+  """to_binary(gsl_matrix m) -> gsl_matrix"""
   return _bct.to_binary(*args)
-to_binary = _bct.to_binary
 
 def to_positive(*args):
+  """to_positive(gsl_matrix m) -> gsl_matrix"""
   return _bct.to_positive(*args)
-to_positive = _bct.to_positive
 
 def to_undirected_bin(*args):
+  """to_undirected_bin(gsl_matrix m) -> gsl_matrix"""
   return _bct.to_undirected_bin(*args)
-to_undirected_bin = _bct.to_undirected_bin
 
 def to_undirected_wei(*args):
+  """to_undirected_wei(gsl_matrix m) -> gsl_matrix"""
   return _bct.to_undirected_wei(*args)
-to_undirected_wei = _bct.to_undirected_wei
 
 def gsl_error_handler(*args):
+  """gsl_error_handler(char reason, char file, int line, int gsl_errno)"""
   return _bct.gsl_error_handler(*args)
-gsl_error_handler = _bct.gsl_error_handler
 
 def init():
+  """init()"""
   return _bct.init()
-init = _bct.init
 
 def number_of_edges_dir(*args):
+  """number_of_edges_dir(gsl_matrix m) -> int"""
   return _bct.number_of_edges_dir(*args)
-number_of_edges_dir = _bct.number_of_edges_dir
 
 def number_of_edges_und(*args):
+  """number_of_edges_und(gsl_matrix m) -> int"""
   return _bct.number_of_edges_und(*args)
-number_of_edges_und = _bct.number_of_edges_und
 
 def number_of_nodes(*args):
+  """number_of_nodes(gsl_matrix m) -> int"""
   return _bct.number_of_nodes(*args)
-number_of_nodes = _bct.number_of_nodes
 
 def threshold_absolute(*args):
+  """threshold_absolute(gsl_matrix W, double thr) -> gsl_matrix"""
   return _bct.threshold_absolute(*args)
-threshold_absolute = _bct.threshold_absolute
 
 def threshold_proportional_dir(*args):
+  """threshold_proportional_dir(gsl_matrix W, double p) -> gsl_matrix"""
   return _bct.threshold_proportional_dir(*args)
-threshold_proportional_dir = _bct.threshold_proportional_dir
 
 def threshold_proportional_und(*args):
+  """threshold_proportional_und(gsl_matrix W, double p) -> gsl_matrix"""
   return _bct.threshold_proportional_und(*args)
-threshold_proportional_und = _bct.threshold_proportional_und
 
+def to_gsl3dm(*args):
+  """to_gsl3dm(PyObject list) -> std::vector<(p.gsl_matrix)>"""
+  return _bct.to_gsl3dm(*args)
 
-def degrees_dir(*args):
-  return _bct.degrees_dir(*args)
-degrees_dir = _bct.degrees_dir
+def inv(*args):
+  """inv(gsl_matrix m) -> gsl_matrix"""
+  return _bct.inv(*args)
 
-def strengths_dir(*args):
-  return _bct.strengths_dir(*args)
-strengths_dir = _bct.strengths_dir
+def randperm(*args):
+  """randperm(int size) -> gsl_permutation"""
+  return _bct.randperm(*args)
 
-def breadth(*args):
-  return _bct.breadth(*args)
-breadth = _bct.breadth
+def div_left(*args):
+  """div_left(gsl_matrix m1, gsl_matrix m2) -> gsl_matrix"""
+  return _bct.div_left(*args)
 
-def breadthdist(*args):
-  return _bct.breadthdist(*args)
-breadthdist = _bct.breadthdist
+def div_right(*args):
+  """div_right(gsl_matrix m1, gsl_matrix m2) -> gsl_matrix"""
+  return _bct.div_right(*args)
 
-def charpath_ecc(*args):
-  return _bct.charpath_ecc(*args)
-charpath_ecc = _bct.charpath_ecc
+def get_gsl_rng():
+  """get_gsl_rng() -> gsl_rng"""
+  return _bct.get_gsl_rng()
 
-def findpaths(*args):
-  return _bct.findpaths(*args)
-findpaths = _bct.findpaths
+def seed_rng(*args):
+  """seed_rng(gsl_rng rng, unsigned long seed)"""
+  return _bct.seed_rng(*args)
 
-def findwalks(*args):
-  return _bct.findwalks(*args)
-findwalks = _bct.findwalks
+def nonzeros(*args):
+  """nonzeros(gsl_matrix m) -> gsl_vector"""
+  return _bct.nonzeros(*args)
+
+def normpdf(*args):
+  """normpdf(gsl_vector v, double mean, double stdev) -> gsl_vector"""
+  return _bct.normpdf(*args)
+
+def ones_vector_double(*args):
+  """ones_vector_double(int size) -> gsl_vector"""
+  return _bct.ones_vector_double(*args)
+
+def rand_vector_double(*args):
+  """rand_vector_double(int size) -> gsl_vector"""
+  return _bct.rand_vector_double(*args)
+
+def reverse(*args):
+  """reverse(gsl_vector v) -> gsl_vector"""
+  return _bct.reverse(*args)
+
+def setxor(*args):
+  """setxor(gsl_vector v1, gsl_vector v2) -> gsl_vector"""
+  return _bct.setxor(*args)
+
+def unique_rows(*args):
+  """unique_rows(gsl_matrix m, string first_or_last) -> gsl_matrix"""
+  return _bct.unique_rows(*args)
+
+def zeros_vector_double(*args):
+  """zeros_vector_double(int size) -> gsl_vector"""
+  return _bct.zeros_vector_double(*args)
+
+def mul(*args):
+  """mul(gsl_matrix m1, gsl_matrix m2) -> gsl_matrix"""
+  return _bct.mul(*args)
+
+def pow(*args):
+  """pow(gsl_matrix m, int power) -> gsl_matrix"""
+  return _bct.pow(*args)
+
+def fp_compare(*args):
+  """fp_compare(double x, double y) -> int"""
+  return _bct.fp_compare(*args)
+
+def fp_zero(*args):
+  """fp_zero(double x) -> bool"""
+  return _bct.fp_zero(*args)
+
+def fp_nonzero(*args):
+  """fp_nonzero(double x) -> bool"""
+  return _bct.fp_nonzero(*args)
+
+def fp_equal(*args):
+  """fp_equal(double x, double y) -> bool"""
+  return _bct.fp_equal(*args)
+
+def fp_not_equal(*args):
+  """fp_not_equal(double x, double y) -> bool"""
+  return _bct.fp_not_equal(*args)
+
+def fp_less(*args):
+  """fp_less(double x, double y) -> bool"""
+  return _bct.fp_less(*args)
+
+def fp_less_or_equal(*args):
+  """fp_less_or_equal(double x, double y) -> bool"""
+  return _bct.fp_less_or_equal(*args)
+
+def fp_greater(*args):
+  """fp_greater(double x, double y) -> bool"""
+  return _bct.fp_greater(*args)
+
+def fp_greater_or_equal(*args):
+  """fp_greater_or_equal(double x, double y) -> bool"""
+  return _bct.fp_greater_or_equal(*args)
+
+def compare_vectors(*args):
+  """compare_vectors(gsl_vector v1, gsl_vector v2) -> int"""
+  return _bct.compare_vectors(*args)
+
+def vector_less(*args):
+  """vector_less(gsl_vector v1, gsl_vector v2) -> bool"""
+  return _bct.vector_less(*args)
+
+def compare_matrices(*args):
+  """compare_matrices(gsl_matrix m1, gsl_matrix m2) -> int"""
+  return _bct.compare_matrices(*args)
+
+def matrix_less(*args):
+  """matrix_less(gsl_matrix m1, gsl_matrix m2) -> bool"""
+  return _bct.matrix_less(*args)
+
+def ord_log_index(*args):
+  """ord_log_index(gsl_matrix m, gsl_vector rows, gsl_vector logical_columns) -> gsl_matrix"""
+  return _bct.ord_log_index(*args)
+
+def log_ord_index(*args):
+  """log_ord_index(gsl_matrix m, gsl_vector logical_rows, gsl_vector columns) -> gsl_matrix"""
+  return _bct.log_ord_index(*args)
+
+def to_array(*args):
+  """to_array(gsl_vector v, double array)"""
+  return _bct.to_array(*args)
+
+def to_vector_float(*args):
+  """to_vector_float(gsl_vector v) -> gsl_vector_float"""
+  return _bct.to_vector_float(*args)
+
+def to_vector_long_double(*args):
+  """to_vector_long_double(gsl_vector v) -> gsl_vector_long_double"""
+  return _bct.to_vector_long_double(*args)
+
+def to_vector(*args):
+  """to_vector(gsl_matrix m) -> gsl_vector"""
+  return _bct.to_vector(*args)
+
+def to_matrix_float(*args):
+  """to_matrix_float(gsl_matrix m) -> gsl_matrix_float"""
+  return _bct.to_matrix_float(*args)
+
+def to_matrix_double(*args):
+  """to_matrix_double(gsl_matrix m) -> gsl_matrix"""
+  return _bct.to_matrix_double(*args)
+
+def to_matrix_long_double(*args):
+  """to_matrix_long_double(gsl_matrix m) -> gsl_matrix_long_double"""
+  return _bct.to_matrix_long_double(*args)
+
+def to_column_matrix(*args):
+  """to_column_matrix(gsl_vector v) -> gsl_matrix"""
+  return _bct.to_column_matrix(*args)
+
+def to_row_matrix(*args):
+  """to_row_matrix(gsl_vector v) -> gsl_matrix"""
+  return _bct.to_row_matrix(*args)
+
+def to_permutation(*args):
+  """to_permutation(gsl_vector v) -> gsl_permutation"""
+  return _bct.to_permutation(*args)
+
+def permute_columns(*args):
+  """permute_columns(gsl_permutation p, gsl_matrix m) -> gsl_matrix"""
+  return _bct.permute_columns(*args)
+
+def permute_rows(*args):
+  """permute_rows(gsl_permutation p, gsl_matrix m) -> gsl_matrix"""
+  return _bct.permute_rows(*args)
+
 
 def normalized_path_length(*args):
+  """
+    normalized_path_length(gsl_matrix D, double wmax = 1.0) -> double
+    normalized_path_length(gsl_matrix D) -> double
+    """
   return _bct.normalized_path_length(*args)
-normalized_path_length = _bct.normalized_path_length
-
-def reachdist(*args):
-  return _bct.reachdist(*args)
-reachdist = _bct.reachdist
-
-def edge_betweenness_bin(*args):
-  return _bct.edge_betweenness_bin(*args)
-edge_betweenness_bin = _bct.edge_betweenness_bin
-
-def edge_betweenness_wei(*args):
-  return _bct.edge_betweenness_wei(*args)
-edge_betweenness_wei = _bct.edge_betweenness_wei
-
-def erange(*args):
-  return _bct.erange(*args)
-erange = _bct.erange
 cvar = _bct.cvar
 
 def find_motif34(*args):
+  """
+    find_motif34(int m, int n) -> std::vector<(p.gsl_matrix)>
+    find_motif34(gsl_matrix m) -> int
+    """
   return _bct.find_motif34(*args)
-find_motif34 = _bct.find_motif34
-
-def motif3funct_bin(*args):
-  return _bct.motif3funct_bin(*args)
-motif3funct_bin = _bct.motif3funct_bin
-
-def motif3funct_wei(*args):
-  return _bct.motif3funct_wei(*args)
-motif3funct_wei = _bct.motif3funct_wei
-
-def motif3funct_wei_v(*args):
-  return _bct.motif3funct_wei_v(*args)
-motif3funct_wei_v = _bct.motif3funct_wei_v
-
-def motif3generate(arg0 = None, arg1 = None):
-  return _bct.motif3generate(arg0, arg1)
-motif3generate = _bct.motif3generate
-
-def motif3struct_bin(*args):
-  return _bct.motif3struct_bin(*args)
-motif3struct_bin = _bct.motif3struct_bin
-
-def motif3struct_wei(*args):
-  return _bct.motif3struct_wei(*args)
-motif3struct_wei = _bct.motif3struct_wei
-
-def motif3struct_wei_v(*args):
-  return _bct.motif3struct_wei_v(*args)
-motif3struct_wei_v = _bct.motif3struct_wei_v
-
-def motif4generate(arg0 = None, arg1 = None):
-  return _bct.motif4generate(arg0, arg1)
-motif4generate = _bct.motif4generate
-
-def motif4funct_bin(*args):
-  return _bct.motif4funct_bin(*args)
-motif4funct_bin = _bct.motif4funct_bin
-
-def motif4funct_wei(*args):
-  return _bct.motif4funct_wei(*args)
-motif4funct_wei = _bct.motif4funct_wei
-
-def motif4funct_wei_v(*args):
-  return _bct.motif4funct_wei_v(*args)
-motif4funct_wei_v = _bct.motif4funct_wei_v
-
-def motif4struct_bin(*args):
-  return _bct.motif4struct_bin(*args)
-motif4struct_bin = _bct.motif4struct_bin
-
-def motif4struct_wei(*args):
-  return _bct.motif4struct_wei(*args)
-motif4struct_wei = _bct.motif4struct_wei
-
-def motif4struct_wei_v(*args):
-  return _bct.motif4struct_wei_v(*args)
-motif4struct_wei_v = _bct.motif4struct_wei_v
-
-def modularity_dir(*args):
-  return _bct.modularity_dir(*args)
-modularity_dir = _bct.modularity_dir
-
-def modularity_und(*args):
-  return _bct.modularity_und(*args)
-modularity_und = _bct.modularity_und
 
 def modularity_und_louvain(*args):
+  """
+    modularity_und_louvain(gsl_matrix W, int N = 100) -> double
+    modularity_und_louvain(gsl_matrix W) -> double
+    """
   return _bct.modularity_und_louvain(*args)
-modularity_und_louvain = _bct.modularity_und_louvain
-
-def makefractalCIJ(*args):
-  return _bct.makefractalCIJ(*args)
-makefractalCIJ = _bct.makefractalCIJ
 
 def makerandCIJdegreesfixed(*args):
+  """
+    makerandCIJdegreesfixed(gsl_vector _in, gsl_vector out) -> gsl_matrix
+    makerandCIJdegreesfixed(gsl_matrix m) -> gsl_matrix
+    """
   return _bct.makerandCIJdegreesfixed(*args)
-makerandCIJdegreesfixed = _bct.makerandCIJdegreesfixed
 cat_all = cvar.cat_all
 cat_ctx = cvar.cat_ctx
 fve30 = cvar.fve30
@@ -564,30 +708,408 @@ macaque47 = cvar.macaque47
 macaque71 = cvar.macaque71
 
 def gsl_free(*args):
+  """
+    gsl_free(gsl_vector v)
+    gsl_free(gsl_matrix m)
+    gsl_free(std::vector<(p.gsl_matrix)> m)
+    """
   return _bct.gsl_free(*args)
-gsl_free = _bct.gsl_free
-
-def mean(*args):
-  return _bct.mean(*args)
-mean = _bct.mean
-
-def std(*args):
-  return _bct.std(*args)
-std = _bct.std
 
 def printf(*args):
+  """
+    printf(gsl_vector v, string format)
+    printf(gsl_matrix m, string format)
+    printf(gsl_permutation p, string format)
+    """
   return _bct.printf(*args)
-printf = _bct.printf
 
 def from_gsl(*args):
+  """
+    from_gsl(gsl_vector v) -> PyObject
+    from_gsl(gsl_matrix m) -> PyObject
+    from_gsl(std::vector<(p.gsl_matrix)> m) -> PyObject
+    """
   return _bct.from_gsl(*args)
-from_gsl = _bct.from_gsl
 
 def to_gslv(*args):
+  """
+    to_gslv(double array, int size) -> gsl_vector
+    to_gslv(PyObject list) -> gsl_vector
+    """
   return _bct.to_gslv(*args)
-to_gslv = _bct.to_gslv
 
 def to_gslm(*args):
+  """
+    to_gslm(double array, int size1, int size2) -> gsl_matrix
+    to_gslm(PyObject list) -> gsl_matrix
+    """
   return _bct.to_gslm(*args)
-to_gslm = _bct.to_gslm
+
+def dec2bin(*args):
+  """
+    dec2bin(int n) -> string
+    dec2bin(int n, int len) -> string
+    """
+  return _bct.dec2bin(*args)
+
+def abs(*args):
+  """
+    abs(gsl_vector v) -> gsl_vector
+    abs(gsl_matrix m) -> gsl_matrix
+    """
+  return _bct.abs(*args)
+
+def all(*args):
+  """
+    all(gsl_vector v) -> int
+    all(gsl_matrix m, int dim = 1) -> gsl_vector
+    all(gsl_matrix m) -> gsl_vector
+    """
+  return _bct.all(*args)
+
+def any(*args):
+  """
+    any(gsl_vector v) -> int
+    any(gsl_matrix m, int dim = 1) -> gsl_vector
+    any(gsl_matrix m) -> gsl_vector
+    """
+  return _bct.any(*args)
+
+def diag(*args):
+  """
+    diag(gsl_vector v, int k = 0) -> gsl_matrix
+    diag(gsl_vector v) -> gsl_matrix
+    diag(gsl_matrix m, int k = 0) -> gsl_vector
+    diag(gsl_matrix m) -> gsl_vector
+    """
+  return _bct.diag(*args)
+
+def eye_double(*args):
+  """
+    eye_double(int size) -> gsl_matrix
+    eye_double(int size1, int size2) -> gsl_matrix
+    """
+  return _bct.eye_double(*args)
+
+def find(*args):
+  """
+    find(gsl_vector v, int n = std::numeric_limits< int >::max(), 
+        string direction = "first") -> gsl_vector
+    find(gsl_vector v, int n = std::numeric_limits< int >::max()) -> gsl_vector
+    find(gsl_vector v) -> gsl_vector
+    find(gsl_matrix m, int n = std::numeric_limits< int >::max(), 
+        string direction = "first") -> gsl_vector
+    find(gsl_matrix m, int n = std::numeric_limits< int >::max()) -> gsl_vector
+    find(gsl_matrix m) -> gsl_vector
+    """
+  return _bct.find(*args)
+
+def find_ij(*args):
+  """
+    find_ij(gsl_matrix m, int n = std::numeric_limits< int >::max(), 
+        string direction = "first") -> gsl_matrix
+    find_ij(gsl_matrix m, int n = std::numeric_limits< int >::max()) -> gsl_matrix
+    find_ij(gsl_matrix m) -> gsl_matrix
+    """
+  return _bct.find_ij(*args)
+
+def hist(*args):
+  """
+    hist(gsl_vector v, int n = 10) -> gsl_vector
+    hist(gsl_vector v) -> gsl_vector
+    hist(gsl_vector v, gsl_vector centers) -> gsl_vector
+    """
+  return _bct.hist(*args)
+
+def length(*args):
+  """
+    length(gsl_vector v) -> int
+    length(gsl_matrix m) -> int
+    """
+  return _bct.length(*args)
+
+def max(*args):
+  """
+    max(double x, double y) -> double
+    max(gsl_vector v) -> double
+    max(gsl_matrix m, int dim = 1) -> gsl_vector
+    max(gsl_matrix m) -> gsl_vector
+    """
+  return _bct.max(*args)
+
+def mean(*args):
+  """
+    mean(gsl_vector v, string opt = "a") -> double
+    mean(gsl_vector v) -> double
+    mean(gsl_matrix m, int dim = 1, string opt = "a") -> gsl_vector
+    mean(gsl_matrix m, int dim = 1) -> gsl_vector
+    mean(gsl_matrix m) -> gsl_vector
+    """
+  return _bct.mean(*args)
+
+def min(*args):
+  """
+    min(double x, double y) -> double
+    min(gsl_vector v) -> double
+    min(gsl_matrix m, int dim = 1) -> gsl_vector
+    min(gsl_matrix m) -> gsl_vector
+    """
+  return _bct.min(*args)
+
+def nnz(*args):
+  """
+    nnz(gsl_vector v) -> int
+    nnz(gsl_matrix m) -> int
+    """
+  return _bct.nnz(*args)
+
+def ones_double(*args):
+  """
+    ones_double(int size) -> gsl_matrix
+    ones_double(int size1, int size2) -> gsl_matrix
+    """
+  return _bct.ones_double(*args)
+
+def prod(*args):
+  """
+    prod(gsl_vector v) -> double
+    prod(gsl_matrix m, int dim = 1) -> gsl_vector
+    prod(gsl_matrix m) -> gsl_vector
+    """
+  return _bct.prod(*args)
+
+def rand_double(*args):
+  """
+    rand_double(int size) -> gsl_matrix
+    rand_double(int size1, int size2) -> gsl_matrix
+    """
+  return _bct.rand_double(*args)
+
+def sort(*args):
+  """
+    sort(gsl_vector v, string mode) -> gsl_vector
+    sort(gsl_matrix m, int dim, string mode) -> gsl_matrix
+    """
+  return _bct.sort(*args)
+
+def sortrows(*args):
+  """
+    sortrows(gsl_vector v) -> gsl_vector
+    sortrows(gsl_matrix m) -> gsl_matrix
+    """
+  return _bct.sortrows(*args)
+
+def std(*args):
+  """
+    std(gsl_vector v, int opt = 0) -> double
+    std(gsl_vector v) -> double
+    std(gsl_matrix m, int opt = 0, int dim = 1) -> gsl_vector
+    std(gsl_matrix m, int opt = 0) -> gsl_vector
+    std(gsl_matrix m) -> gsl_vector
+    """
+  return _bct.std(*args)
+
+def sum(*args):
+  """
+    sum(gsl_vector v) -> double
+    sum(gsl_matrix m, int dim = 1) -> gsl_vector
+    sum(gsl_matrix m) -> gsl_vector
+    """
+  return _bct.sum(*args)
+
+def toeplitz(*args):
+  """
+    toeplitz(gsl_vector column, gsl_vector row = None) -> gsl_matrix
+    toeplitz(gsl_vector column) -> gsl_matrix
+    """
+  return _bct.toeplitz(*args)
+
+def tril(*args):
+  """
+    tril(gsl_matrix m, int k = 0) -> gsl_matrix
+    tril(gsl_matrix m) -> gsl_matrix
+    """
+  return _bct.tril(*args)
+
+def triu(*args):
+  """
+    triu(gsl_matrix m, int k = 0) -> gsl_matrix
+    triu(gsl_matrix m) -> gsl_matrix
+    """
+  return _bct.triu(*args)
+
+def unique(*args):
+  """
+    unique(gsl_vector v, string first_or_last) -> gsl_vector
+    unique(gsl_matrix m, string first_or_last) -> gsl_vector
+    """
+  return _bct.unique(*args)
+
+def zeros_double(*args):
+  """
+    zeros_double(int size) -> gsl_matrix
+    zeros_double(int size1, int size2) -> gsl_matrix
+    """
+  return _bct.zeros_double(*args)
+
+def concatenate(*args):
+  """
+    concatenate(gsl_vector v, double x) -> gsl_vector
+    concatenate(double x, gsl_vector v) -> gsl_vector
+    concatenate(gsl_vector v1, gsl_vector v2) -> gsl_vector
+    """
+  return _bct.concatenate(*args)
+
+def concatenate_columns(*args):
+  """
+    concatenate_columns(gsl_vector v1, gsl_vector v2) -> gsl_matrix
+    concatenate_columns(gsl_matrix m, gsl_vector v) -> gsl_matrix
+    concatenate_columns(gsl_vector v, gsl_matrix m) -> gsl_matrix
+    concatenate_columns(gsl_matrix m1, gsl_matrix m2) -> gsl_matrix
+    """
+  return _bct.concatenate_columns(*args)
+
+def concatenate_rows(*args):
+  """
+    concatenate_rows(gsl_vector v1, gsl_vector v2) -> gsl_matrix
+    concatenate_rows(gsl_matrix m, gsl_vector v) -> gsl_matrix
+    concatenate_rows(gsl_vector v, gsl_matrix m) -> gsl_matrix
+    concatenate_rows(gsl_matrix m1, gsl_matrix m2) -> gsl_matrix
+    """
+  return _bct.concatenate_rows(*args)
+
+def copy(*args):
+  """
+    copy(gsl_vector v) -> gsl_vector
+    copy(gsl_matrix m) -> gsl_matrix
+    """
+  return _bct.copy(*args)
+
+def logical_and(*args):
+  """
+    logical_and(gsl_vector v1, gsl_vector v2) -> gsl_vector
+    logical_and(gsl_matrix m1, gsl_matrix m2) -> gsl_matrix
+    """
+  return _bct.logical_and(*args)
+
+def logical_not(*args):
+  """
+    logical_not(gsl_vector v) -> gsl_vector
+    logical_not(gsl_matrix m) -> gsl_matrix
+    """
+  return _bct.logical_not(*args)
+
+def logical_or(*args):
+  """
+    logical_or(gsl_vector v1, gsl_vector v2) -> gsl_vector
+    logical_or(gsl_matrix m1, gsl_matrix m2) -> gsl_matrix
+    """
+  return _bct.logical_or(*args)
+
+def pow_elements(*args):
+  """
+    pow_elements(gsl_vector v, double power) -> gsl_vector
+    pow_elements(gsl_vector v, gsl_vector powers) -> gsl_vector
+    pow_elements(gsl_matrix m, double power) -> gsl_matrix
+    pow_elements(gsl_matrix m, gsl_matrix powers) -> gsl_matrix
+    """
+  return _bct.pow_elements(*args)
+
+def sequence_double(*args):
+  """
+    sequence_double(int start, int end) -> gsl_vector
+    sequence_double(int start, int step, int end) -> gsl_vector
+    """
+  return _bct.sequence_double(*args)
+
+def compare_elements(*args):
+  """
+    compare_elements(gsl_vector v, fp_cmp_fn_double compare, double x) -> gsl_vector
+    compare_elements(gsl_vector v1, fp_cmp_fn_double compare, gsl_vector v2) -> gsl_vector
+    compare_elements(gsl_matrix m, fp_cmp_fn_double compare, double x) -> gsl_matrix
+    compare_elements(gsl_matrix m1, fp_cmp_fn_double compare, gsl_matrix m2) -> gsl_matrix
+    """
+  return _bct.compare_elements(*args)
+
+def ord_log_index_assign(*args):
+  """
+    ord_log_index_assign(gsl_matrix m, gsl_vector rows, gsl_vector logical_columns, 
+        double value)
+    ord_log_index_assign(gsl_matrix m, gsl_vector rows, gsl_vector logical_columns, 
+        gsl_matrix values)
+    """
+  return _bct.ord_log_index_assign(*args)
+
+def log_ord_index_assign(*args):
+  """
+    log_ord_index_assign(gsl_matrix m, gsl_vector logical_rows, gsl_vector columns, 
+        double value)
+    log_ord_index_assign(gsl_matrix m, gsl_vector logical_rows, gsl_vector columns, 
+        gsl_matrix values)
+    """
+  return _bct.log_ord_index_assign(*args)
+
+def ordinal_index(*args):
+  """
+    ordinal_index(gsl_vector v, gsl_vector indices) -> gsl_vector
+    ordinal_index(gsl_matrix m, int index) -> double
+    ordinal_index(gsl_matrix m, gsl_vector indices) -> gsl_vector
+    ordinal_index(gsl_matrix m, gsl_vector rows, gsl_vector columns) -> gsl_matrix
+    ordinal_index(gsl_matrix m, gsl_matrix indices) -> gsl_matrix
+    """
+  return _bct.ordinal_index(*args)
+
+def ordinal_index_assign(*args):
+  """
+    ordinal_index_assign(gsl_vector v, gsl_vector indices, double value)
+    ordinal_index_assign(gsl_vector v, gsl_vector indices, gsl_vector values)
+    ordinal_index_assign(gsl_matrix m, int index, double value)
+    ordinal_index_assign(gsl_matrix m, gsl_vector indices, double value)
+    ordinal_index_assign(gsl_matrix m, gsl_vector indices, gsl_vector values)
+    ordinal_index_assign(gsl_matrix m, gsl_vector rows, gsl_vector columns, 
+        double value)
+    ordinal_index_assign(gsl_matrix m, gsl_vector rows, gsl_vector columns, 
+        gsl_matrix values)
+    ordinal_index_assign(gsl_matrix m, gsl_matrix indices, double value)
+    ordinal_index_assign(gsl_matrix m, gsl_matrix indices, gsl_matrix values)
+    """
+  return _bct.ordinal_index_assign(*args)
+
+def logical_index(*args):
+  """
+    logical_index(gsl_vector v, gsl_vector logical_v) -> gsl_vector
+    logical_index(gsl_matrix m, gsl_vector logical_v) -> gsl_vector
+    logical_index(gsl_matrix m, gsl_vector logical_rows, gsl_vector logical_columns) -> gsl_matrix
+    logical_index(gsl_matrix m, gsl_matrix logical_m) -> gsl_vector
+    """
+  return _bct.logical_index(*args)
+
+def logical_index_assign(*args):
+  """
+    logical_index_assign(gsl_vector v, gsl_vector logical_v, double values)
+    logical_index_assign(gsl_vector v, gsl_vector logical_v, gsl_vector values)
+    logical_index_assign(gsl_matrix m, gsl_vector logical_v, double value)
+    logical_index_assign(gsl_matrix m, gsl_vector logical_v, gsl_vector values)
+    logical_index_assign(gsl_matrix m, gsl_vector logical_rows, gsl_vector logical_columns, 
+        double value)
+    logical_index_assign(gsl_matrix m, gsl_vector logical_rows, gsl_vector logical_columns, 
+        gsl_matrix values)
+    logical_index_assign(gsl_matrix m, gsl_matrix logical_m, double value)
+    logical_index_assign(gsl_matrix m, gsl_matrix logical_m, gsl_vector values)
+    """
+  return _bct.logical_index_assign(*args)
+
+def to_bool(*args):
+  """
+    to_bool(gsl_vector v) -> bool
+    to_bool(gsl_matrix m) -> bool
+    """
+  return _bct.to_bool(*args)
+
+def to_vector_double(*args):
+  """
+    to_vector_double(gsl_vector v) -> gsl_vector
+    to_vector_double(gsl_permutation p) -> gsl_vector
+    """
+  return _bct.to_vector_double(*args)
 

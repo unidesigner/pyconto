@@ -66,7 +66,6 @@ def assortativity(cmatrix, directed = False):
         bct.gsl_free(ass)
         return r
     
-# XXX: how to get the in/out degree?
 def degree(cmatrix, directed):
     """ In an undirected graph, the degree is the number of connections
     for individual nodes.
@@ -87,6 +86,10 @@ def degree(cmatrix, directed):
     directed == True:
         deg : ndarray
             Degree for all vertices
+        deg_in : ndarray
+            In-Degree for all vertices
+        deg_out : ndarray
+            Out-Degree for all vertices
     
         Computes the and degree (indegree + outdegree) for a
         directed binary matrix.  Weights are discarded.
@@ -98,24 +101,31 @@ def degree(cmatrix, directed):
     directed == False:
         deg : ndarray
             Degree for all vertices
-    
+        deg_in : ndarray
+            In-Degree for all vertices
+        deg_out : ndarray
+            Out-Degree for all vertices
+                
         Computes the degree for a nondirected binary matrix.  Weights are
         discarded.
     
         Olaf Sporns, Indiana University, 2002/2006/2008
 
     """
-    if not directed:
+    if directed:
         m = bct.to_gslm(cmatrix.tolist())
-        deg = bct.degrees_und(m)
+        deg, deg_in, deg_out = bct.degrees_dir(m)
         rdeg = bct.from_gsl(deg)
+        rdeg_in = bct.from_gsl(deg)
+        rdeg_out = bct.from_gsl(deg)
         bct.gsl_free(m)
         bct.gsl_free(deg)
-        return rdeg
+        bct.gsl_free(deg_in)
+        bct.gsl_free(deg_out)
+        return (rdeg, rdeg_in, rdeg_out)
     else:
         m = bct.to_gslm(cmatrix.tolist())
-        deg = bct.degrees_dir(m)
-        # XXX how are multiple return values handle in this case?
+        deg = bct.degrees_und(m)
         rdeg = bct.from_gsl(deg)
         bct.gsl_free(m)
         bct.gsl_free(deg)
@@ -621,18 +631,22 @@ def edge_betweenness(cmatrix, weighted):
     """
     if weighted:
         m = bct.to_gslm(cmatrix.tolist())
-        dist = bct.edge_betweenness_wei(m)
-        distnp = bct.from_gsl(dist)
+        ebc,bc = bct.edge_betweenness_wei(m)
+        ebcret = np.asarray(bct.from_gsl(ebc))
+        bcret = np.asarray(bct.from_gsl(bc))
         bct.gsl_free(m)
-        bct.gsl_free(dist)
-        return np.asarray(distnp)
+        bct.gsl_free(ebc)
+        bct.gsl_free(bc)
+        return (ebcret, bcret)
     else:
         m = bct.to_gslm(cmatrix.tolist())
-        dist = bct.edge_betweenness_bin(m)
-        distnp = bct.from_gsl(dist)
+        ebc,bc = bct.edge_betweenness_bin(m)
+        ebcret = np.asarray(bct.from_gsl(ebc))
+        bcret = np.asarray(bct.from_gsl(bc))
         bct.gsl_free(m)
-        bct.gsl_free(dist)
-        return np.asarray(distnp)
+        bct.gsl_free(ebc)
+        bct.gsl_free(bc)
+        return (ebcret, bcret)
 
 def erange(cmatrix):
     """ Computes the range for each edge (i.e., the shortest path length between the
@@ -807,17 +821,25 @@ def findpaths(cmatrix, sources, qmax):
     Olaf Sporns, Indiana University, 2002/2007/2008
 
     """
-    # work on docstring
+    # XXX: work on docstring
     m = bct.to_gslm(cmatrix.tolist())
     cil = bct.to_gslv(sources.tolist())
-    str = bct.findpaths(m, cil, qmax)
-    logging.error("What to do with std::vector<gsl_matrix*> ??")
+    pq, plq, qstop, allpths, util = bct.findpaths(m, cil, qmax)
+    pqret = bct.from_gsl(pq)
+    print pqret[0]
+    print np.asarray(pqret[1])
+    print plq
+    print qstop
+    print allpths
+    print util
+    bct.gsl_free(m)
+    bct.gsl_free(pq)
+    bct.gsl_free(plq)
+    bct.gsl_free(allpths)
+    bct.gsl_free(util)
+    #logging.error("What to do with std::vector<gsl_matrix*> ??")
     return
 
-    strnp = bct.from_gsl(str)
-    bct.gsl_free(m)
-    bct.gsl_free(str)
-    return np.asarray(strnp)
 
 
 def findwalks(cmatrix):
