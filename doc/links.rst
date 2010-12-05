@@ -118,6 +118,7 @@ https://www.kitware.com/InfovisWiki/index.php/Graph_Algorithms_Roadmap
 http://www.cmol.nbi.dk/javaapp.php
 http://eigenfactor.org/methods.htm
 http://www.tp.umu.se/~rosvall/livemod.html
+http://homepage.lnu.se/staff/akemsi/
 
 Dynamical networks
 ------------------
@@ -143,4 +144,5 @@ Visualization tools
 * `Interactorium <http://www.interactorium.net>`_
 * `Visual Molecular Dynamics <http://www.ks.uiuc.edu/Research/vmd/>`_
 * `Sonia <http://www.stanford.edu/group/sonia/>`_
+* `ExtraVis <http://www.win.tue.nl/~dholten/extravis/index.htm`_
 
