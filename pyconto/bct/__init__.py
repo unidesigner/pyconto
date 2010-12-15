@@ -20,4 +20,4 @@ import operations
 import generators
 
 import logging
-logging.warn("These functions have not been tested extensively.")
+logging.warn("BCT functions need more testing. Please double-check with the Matlab version and help improving PyConTo BCT")

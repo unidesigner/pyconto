@@ -14,17 +14,20 @@ def set_safe_mode(status):
     to a specialized function (i.e., one such as `bct.clustering_coef_bu`
     which is only intended to work on binary undirected matrices).
     If this status check fails, a message is printed to stderr, but the
-    function still attempts to complete the calculation. To disable this behavior
-    and avoid the minor computational overhead, call `bct.set_safe_mode(False)`. 
+    function still attempts to complete the calculation. To disable this
+    behavior and avoid the minor computational overhead, call
+    `bct.set_safe_mode(False)`. 
     """
     bct.set_safe_mode(status)
 
 def assortativity(cmatrix, directed = False):
-    """ Assortativity coefficient. Essentially, the assortativity is a correlation
-    coefficient for the degrees of linked nodes. A positive assortativity coefficient
-    indicates that nodes tend to link to other nodes with the same or similar degree.
+    """ Assortativity coefficient. Essentially, the assortativity is a
+    correlation coefficient for the degrees of linked nodes. A positive
+    assortativity coefficient indicates that nodes tend to link to other
+    nodes with the same or similar degree.
     
-    The function accepts weighted networks, but the connection weights are ignored.
+    The function accepts weighted networks, but the connection weights
+    are ignored.
     
     Parameters
     ----------
@@ -132,13 +135,16 @@ def degree(cmatrix, directed):
         return rdeg
         
 def efficiency(cmatrix, local = False, edgetype = 'undirected', weighted = False):
-    """ A measure similar to the clustering coefficient, based upon the calculation of the harmonic mean
-    of neighbor-neighbor distances. For directed networks, this function works on the out-degree.
+    """ A measure similar to the clustering coefficient, based upon the
+    calculation of the harmonic mean of neighbor-neighbor distances.
+    For directed networks, this function works on the out-degree.
     
-    A global efficiency matrix is the inverse of the distance matrix (with self-self distances set to 0).
-    Calculating the global efficiency is advantageous over distance in disconnected networks:
-    the efficiency between disconnected pairs of nodes is set to 0 (the inverse of infinity),
-    hence enabling the calculation of network wide averages (which become meaningless on distance matrices).
+    A global efficiency matrix is the inverse of the distance matrix
+    (with self-self distances set to 0). Calculating the global efficiency
+    is advantageous over distance in disconnected networks:
+    the efficiency between disconnected pairs of nodes is set to 0
+    (the inverse of infinity), hence enabling the calculation of network
+    wide averages (which become meaningless on distance matrices).
 
     Parameters
     ----------
@@ -155,12 +161,14 @@ def efficiency(cmatrix, local = False, edgetype = 'undirected', weighted = False
     local == True:
     
         Eglob : outputs the inverse distance matrix: the mean of this
-                matrix (excluding main diagonal) is equivalent to the global efficiency.
+                matrix (excluding main diagonal) is equivalent to the global
+                efficiency.
     
     local == False:
     
         Eloc : outputs individual nodal local efficiency.
-               For directed networks, local efficiency works with the out-degree. 
+               For directed networks, local efficiency works with the
+               out-degree. 
                
                
     Reference: Latora and Marchiori, 2001, Phys Rev Lett 87:198701.
@@ -209,7 +217,8 @@ def betweenness(cmatrix, weighted = False):
         
         Betweenness may be normalised to [0,1] via BC/[(N-1)(N-2)]
         
-        Brandes's modified Dijkstra's algorithm; J Math Sociol (2001) 25:163-177.
+        Brandes's modified Dijkstra's algorithm; J Math Sociol (2001)
+        25:163-177.
         
         Mika Rubinov, UNSW, 2007 (last modified July 2008)
     
@@ -244,9 +253,9 @@ def breadth(cmatrix, source):
     """ Breadth-first search tree
     
     Performs a breadth-first search starting at the source node.  Because C++
-    indexing is zero-based, a value of 0 at branch(i) could mean either that node
-    0 precedes node i or that node i is unreachable.  Check distance(i) for
-    GSL_POSINF to differentiate between these two cases.
+    indexing is zero-based, a value of 0 at branch(i) could mean either that
+    node 0 precedes node i or that node i is unreachable.  Check distance(i)
+    for GSL_POSINF to differentiate between these two cases.
  
     Parameters
     ----------
@@ -313,10 +322,11 @@ def charpath_lambda(D):
 def charpath(D):
     """ Distance based measures
 
-    This function outputs four distance based measures. Characteristic path length
-    is the average shortest path length. Node eccentricity is the maximal shortest
-    path length between a node and any other node. Network radius is the minimum 
-    eccentricity, while network diameter is the maximum eccentricity.
+    This function outputs four distance based measures. Characteristic path
+    length is the average shortest path length. Node eccentricity is the
+    maximal shortest path length between a node and any other node. Network
+    radius is the minimum eccentricity, while network diameter is the maximum
+    eccentricity.
 
     Characteristic path length is calculated as the global mean of the
     distance matrix D, not taking into account any 'Infs' but including the
@@ -395,7 +405,8 @@ def clustering_coef(cmatrix, edgetype, weighted):
 
             See comments for clustering_coef_bd
             The weighted modification is as follows:
-            - The numerator: adjacency matrix is replaced with weights matrix ^ 1/3
+            - The numerator: adjacency matrix is replaced with weights
+              matrix^1/3
             - The denominator: no changes from the binary version
             
             The above reduces to symmetric and/or binary versions of the
@@ -476,8 +487,9 @@ def cycprob(Py):
     pass
 
 def density(cmatrix, edgetype):
-    """ Density is the proportion of the number of present connections in the network,
-    to the maximum possible number of connections.  Connection weights are ignored.
+    """ Density is the proportion of the number of present connections in the
+    network, to the maximum possible number of connections.  Connection
+    weights are ignored.
     
     Parameters
     ----------
@@ -489,10 +501,13 @@ def density(cmatrix, edgetype):
     
     edgetype == 'undirected':
 
-        kden : connection density, number of connections present out of all possible (N^2-N)
+        kden : connection density, number of connections present out of all
+               possible (N^2-N)
 
-        Note: Assumes that cmatrix is undirected and that there are no self-connections.
-        Note: Function always returns average binary density, regardless of weights.
+        Note: Assumes that cmatrix is undirected and that there are no
+              self-connections.
+        Note: Function always returns average binary density, regardless
+              of weights.
         
         Olaf Sporns, Indiana University, 2002/2007/2008
 
@@ -501,10 +516,13 @@ def density(cmatrix, edgetype):
 
     edgetype == 'directed'
 
-        kden : connection density, number of connections present out of all possible (N^2-N)
+        kden : connection density, number of connections present out of all
+               possible (N^2-N)
     
-        Note: Assumes that cmatrix is directed and that there are no self-connections.
-        Note: Function always returns average binary density, regardless of weights.
+        Note: Assumes that cmatrix is directed and that there are no
+              self-connections.
+        Note: Function always returns average binary density, regardless of
+              weights.
     
         Olaf Sporns, Indiana University, 2002/2007/2008
 
@@ -523,13 +541,16 @@ def density(cmatrix, edgetype):
 def distance(cmatrix, weighted):
     """ Computes the distance matrix for a weighted or binary graph.
     
-    Distance matrix for weighted networks. The input matrix must be a mapping from weight to distance.
-    For instance, in a weighted correlation network, higher correlations are more naturally interpreted
-    as shorter distances. Consequently, in this case, the input matrix should be some inverse of the connectivity matrix.
+    Distance matrix for weighted networks. The input matrix must be a mapping
+    from weight to distance. For instance, in a weighted correlation network,
+    higher correlations are more naturally interpreted as shorter distances.
+    Consequently, in this case, the input matrix should be some inverse of
+    the connectivity matrix.
     
-    Distance matrix for binary graphs. If any two nodes u and v are disconnected,
-    the value of the entry (u,v) is set to infinity. The value of self-self distances (u,u)
-    is set to 0. Consequently, two nodes are connected if they have a finite non-zero distance.
+    Distance matrix for binary graphs. If any two nodes u and v are
+    disconnected, the value of the entry (u,v) is set to infinity.
+    The value of self-self distances (u,u) is set to 0. Consequently,
+    two nodes are connected if they have a finite non-zero distance.
     
     Parameters
     ----------
@@ -537,7 +558,8 @@ def distance(cmatrix, weighted):
     cmatrix : connection/adjacency matrix
     
     weighted : {True, False}
-               Apply the distance computation for weighted or unweighted (binary) matrices
+               Apply the distance computation for weighted or unweighted
+               (binary) matrices
     
     Returns
     -------
@@ -547,8 +569,9 @@ def distance(cmatrix, weighted):
         D : distance matrix for a weighted directed graph -
             the mean distance is the characteristic path length.
     
-        The input matrix must be a mapping from weight to distance (eg. higher
-        correlations may be interpreted as short distances via an inverse mapping).
+        The input matrix must be a mapping from weight to distance (eg.
+        higher correlations may be interpreted as short distances via
+        an inverse mapping).
     
         Dijkstra's Algorithm.
     
@@ -561,7 +584,8 @@ def distance(cmatrix, weighted):
     weighted == False:
 
         D : distance matrix for binary undirected graph G
-            Mean distance (excluding the main diagonal) equals the characteristic path length
+            Mean distance (excluding the main diagonal) equals the
+            characteristic path length
     
         Algebraic shortest path algorithm.
     
@@ -586,11 +610,12 @@ def distance(cmatrix, weighted):
 def edge_betweenness(cmatrix, weighted):
     """ Edge betweenness centrality
     
-    The fraction of all shortest paths in the network that traverse a given edge (link).
-    This function outputs an edge betweenness matrix. Note that zero entries may
-    correspond to an absence of an edge, or to an edge with betweenness of 0 -- a
-    comparison with the connectivity matrix will clear up potential confusion.
-    This function may also return nodal betweenness centrality.
+    The fraction of all shortest paths in the network that traverse a
+    given edge (link). This function outputs an edge betweenness matrix.
+    Note that zero entries may correspond to an absence of an edge, or to
+    an edge with betweenness of 0 -- a comparison with the connectivity
+    matrix will clear up potential confusion. This function may also return
+    nodal betweenness centrality.
     
     Parameters
     ----------
@@ -609,7 +634,8 @@ def edge_betweenness(cmatrix, weighted):
 
         Betweenness may be normalised to [0,1] via EBC/[(N-1)(N-2)]
         
-        Brandes's modified breadth-first search; J Math Sociol (2001) 25:163-177.
+        Brandes's modified breadth-first search; J Math Sociol (2001)
+        25:163-177.
         
         Mika Rubinov, UNSW, 2007 (last modified July 2008).
     
@@ -624,7 +650,8 @@ def edge_betweenness(cmatrix, weighted):
         
         Betweenness may be normalised to [0,1] via EBC/[(N-1)(N-2)]
         
-        Brandes's modified Dijkstra's algorithm; J Math Sociol (2001) 25:163-177.
+        Brandes's modified Dijkstra's algorithm; J Math Sociol (2001)
+        25:163-177.
         
         Mika Rubinov, UNSW, 2007 (last modified July 2008)
 
@@ -649,10 +676,11 @@ def edge_betweenness(cmatrix, weighted):
         return (ebcret, bcret)
 
 def erange(cmatrix):
-    """ Computes the range for each edge (i.e., the shortest path length between the
-    nodes it connects after the edge has been removed from the graph).
-    Shorcuts are links which significantly reduce the characteristic path length
-    This function detects shortcuts, hence being a variant of edge betweenness centrality.
+    """ Computes the range for each edge (i.e., the shortest path length
+    between the nodes it connects after the edge has been removed from the
+    graph). Shorcuts are links which significantly reduce the characteristic
+    path length. This function detects shortcuts, hence being a variant of
+    edge betweenness centrality.
     
     Parameters
     ----------
@@ -682,9 +710,10 @@ def erange(cmatrix):
     return np.asarray(eranp)
 
 def jdegree(cmatrix, edgetype = 'directed'):
-    """ Joint degree distribution. This function returns a matrix, in which the value of each 
-    element (u,v) corresponds to the number of nodes that have u outgoing connections and v incoming connections.
-    Connection weights are ignored.
+    """ Joint degree distribution. This function returns a matrix, in which
+    the value of each element (u,v) corresponds to the number of nodes that
+    have u outgoing connections and v incoming connections. Connection weights
+    are ignored.
 
     Parameters
     ----------
@@ -709,8 +738,8 @@ def jdegree(cmatrix, edgetype = 'directed'):
     return np.asarray(jdegnp)
 
 def jdegree_bl(cmatrix):
-    """ Given a joint degree distribution matrix, returns the number of nodes with
-    in-degree = out-degree.
+    """ Given a joint degree distribution matrix, returns the number of nodes
+    with in-degree = out-degree.
     """
     m = bct.to_gslm(cmatrix.tolist())
     val = bct.jdegree_bl(m)
@@ -718,8 +747,8 @@ def jdegree_bl(cmatrix):
     return val
 
 def jdegree_id(cmatrix):
-    """ Given a joint degree distribution matrix, returns the number of nodes with
-    in-degree > out-degree.
+    """ Given a joint degree distribution matrix, returns the number of
+    nodes with in-degree > out-degree.
     """
     m = bct.to_gslm(cmatrix.tolist())
     val = bct.jdegree_id(m)
@@ -727,8 +756,8 @@ def jdegree_id(cmatrix):
     return val
 
 def jdegree_od(cmatrix):
-    """ Given a joint degree distribution matrix, returns the number of nodes with
-    out-degree > in-degree.
+    """ Given a joint degree distribution matrix, returns the number of
+    nodes with out-degree > in-degree.
     """
     m = bct.to_gslm(cmatrix.tolist())
     val = bct.jdegree_od(m)
@@ -774,20 +803,23 @@ def find_motif34_from_matrix(mmatrix):
     raise NotImplementedError("This functionality is not implemented in C++ version")
 
 def findpaths(cmatrix, sources, qmax):
-    """ Paths are sequences of linked nodes, that never visit a single node more than
-    once. This function finds all paths that start at a set of source vertices,
-    up to a specified length. Warning: very memory-intensive.
+    """ Paths are sequences of linked nodes, that never visit a single
+    node more than once. This function finds all paths that start at a
+    set of source vertices, up to a specified length. Warning: very
+    memory-intensive.
     
     C++ Comment
-     Finds paths from a set of source nodes up to a given length.  Note that there
-     is no savepths argument; if all paths are desired, pass a valid pointer as
-     he allpths argument.  There is also no tpath argument as its value may
-     overflow a C++ long.  Since 0 is a valid node index in C++, -1 is used as the
-     "filler" value in allpths rather than 0 as in MATLAB.  Pq (the main return),
-     plq, and util are indexed by path length.  They therefore have (qmax + 1)
-     elements and contain no valid data at index 0.
+     Finds paths from a set of source nodes up to a given length.  Note that
+     there is no savepths argument; if all paths are desired, pass a valid
+     pointer as he allpths argument.  There is also no tpath argument as its
+     value may overflow a C++ long.  Since 0 is a valid node index in C++, -1
+     is used as the "filler" value in allpths rather than 0 as in MATLAB. 
+     Pq (the main return), plq, and util are indexed by path length.
+     They therefore have (qmax + 1) elements and contain no valid data
+     at index 0.
  
-    function [Pq,tpath,plq,qstop,allpths,util] = findpaths(CIJ,sources,qmax,savepths)
+    function [Pq,tpath,plq,qstop,allpths,util] = 
+        findpaths(CIJ,sources,qmax,savepths)
 
     Parameters
     ----------
@@ -844,12 +876,12 @@ def findpaths(cmatrix, sources, qmax):
 
 def findwalks(cmatrix):
     """ Walks are sequences of linked nodes, that may visit a single node more
-    than once. This function finds the number of walks of a given length, between
-    any two nodes.
+    than once. This function finds the number of walks of a given length,
+    between any two nodes.
  
-     Finds walks.  Note that there is no twalk argument as its value may overflow
-     a C++ long.  Wq (the main return) and wlq are indexed by path length.  They
-     therefore contain no valid data at index 0.
+     Finds walks.  Note that there is no twalk argument as its value may
+     overflow a C++ long.  Wq (the main return) and wlq are indexed by path
+     length.  They therefore contain no valid data at index 0.
 
     Parameters
     ----------
@@ -869,8 +901,8 @@ def findwalks(cmatrix):
     Written by Olaf Sporns, Indiana University, 2002/2007/2008
 
     """
-    logging.error("from_gsl seems not work work")
-    return
+#    logging.error("from_gsl seems not work work")
+#    return
     m = bct.to_gslm(cmatrix.tolist())
     mi = bct.findwalks(m)
     print mi
@@ -881,11 +913,12 @@ def findwalks(cmatrix):
 
 def matching_ind(cmatrix):
     """ Matching index. For any two nodes u and v, the matching index computes
-    the amount of overlap in the connection patterns of u and v. Self-connections
-    and cross-connections between u and v are ignored.  For undirected networks,
-    all outputs of this function are identical.  The matching index is a symmetric
-    quantity, similar to a correlation or a dot product, the function returns only
-    the upper triangle of the matching matrix.
+    the amount of overlap in the connection patterns of u and v.
+    Self-connections and cross-connections between u and v are ignored.
+    For undirected networks, all outputs of this function are identical.
+    The matching index is a symmetric quantity, similar to a correlation
+    or a dot product, the function returns only the upper triangle of the
+    matching matrix.
     
     Parameters
     ----------
@@ -975,8 +1008,10 @@ def modularity(cmatrix, edgetype):
         
         Modification History:
         Jul 2008: Original
-        Oct 2008: Positive eigenvalues are now insufficient for division (Jonathan Power, WUSTL)
-        Dec 2008: Fine-tuning is now consistent with Newman's description (Jonathan Power)
+        Oct 2008: Positive eigenvalues are now insufficient for division
+                  (Jonathan Power, WUSTL)
+        Dec 2008: Fine-tuning is now consistent with Newman's description
+                  (Jonathan Power)
         Dec 2008: Fine-tuning is now vectorized (Mika Rubinov)
     
     edgetype == 'directed':
@@ -984,15 +1019,18 @@ def modularity(cmatrix, edgetype):
         Ci : community structure Ci
         Q : maximized modularity Q.
     
-        Algorithm: Newman's spectral optimization method, generalized to directed networks.
+        Algorithm: Newman's spectral optimization method, generalized to
+                   directed networks.
         Reference: Leicht and Newman (2008) Phys Rev Lett.
         
         Mika Rubinov, UNSW
         
         Modification History:
         Jul 2008: Original
-        Oct 2008: Positive eigenvalues are now insufficient for division (Jonathan Power, WUSTL)
-        Dec 2008: Fine-tuning is now consistent with Newman's description (Jonathan Power)
+        Oct 2008: Positive eigenvalues are now insufficient for division
+                  (Jonathan Power, WUSTL)
+        Dec 2008: Fine-tuning is now consistent with Newman's description
+                  (Jonathan Power)
         Dec 2008: Fine-tuning is now vectorized (Mika Rubinov)
 
     """
@@ -1013,10 +1051,13 @@ def module_degree_zscore(cmatrix, Ci):
     Computes z-score for a binary graph and its corresponding community
     structure.  For a directed graph, computes out-neighbor z-score.
      
-    Degree based measures for classifying nodes in the context of community structure.
-    The z-score describes how well the nodes are connected to other nodes within their modules.
+    Degree based measures for classifying nodes in the context of community
+    structure. The z-score describes how well the nodes are connected to other
+    nodes within their modules.
      
-    Note that, for directed networks, these functions compute the measures based on the out-degree.
+    Note that, for directed networks, these functions compute the measures
+    based on the out-degree.
+    
     function Z=module_degree_zscore(A,Ci)
 
     Parameters
@@ -1074,7 +1115,8 @@ def number_of_edges_dir(cmatrix):
     return n
 
 def number_of_nodes(cmatrix):
-    """ Returns the number of nodes in a graph, assuming the given connection matrix is square.
+    """ Returns the number of nodes in a graph, assuming the given connection
+    matrix is square.
     
     Parameters
     ----------

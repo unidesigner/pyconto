@@ -3,11 +3,13 @@ functions and neuroanatomical data sets useful in the analysis of structural
 or functional brain networks.
 
 See <http://www.brain-connectivity-toolbox.net/> for more information.
-For the BCT C++ port source code, see <...>
+For the BCT C++ port source code, see <http://code.google.com/p/bct-cpp/>
+
+The C++ port is developed by Larry Yaeger, Steven Williams, Shuaixinzju
 
 See LICENSE for information about bct-cpp's license.
 
-Wrapped to Python by Stephan Gerhard <info@connectomics.org>, EPFL/UNIL-CHUV, 2010
+Wrapped for Python by Stephan Gerhard <info@connectomics.org>, EPFL/UNIL-CHUV, 2010
 
 How to build the library for 32-bit and 64-bit Linux?
 -----------------------------------------------------
